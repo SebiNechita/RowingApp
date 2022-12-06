@@ -1,0 +1,10 @@
+rootProject.name = 'RowingApplication'
+
+include 'authentication-microservice'
+include 'example-microservice'
+include 'users-microservice'
+include 'user-microservice'
+include 'activity-microservice'
+include 'activity-match-microservice'
+include 'rowing-info-microservice'
+
