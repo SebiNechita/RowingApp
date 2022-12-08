@@ -56,9 +56,10 @@ public abstract class ActivityOffer {
     private String boatCertificate;
 
     @Getter
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private TypesOfActivities type;
+    //private TypesOfActivities type;
+    private String type;
 
     /**
      * Initialises an ActivityOffer without an Id.
@@ -77,7 +78,8 @@ public abstract class ActivityOffer {
                          @NonNull LocalDateTime endTime,
                          @NonNull String ownerId,
                          String boatCertificate,
-                         TypesOfActivities type) {
+                         //TypesOfActivities type
+                         String type) {
         this.position = position;
         this.isActive = isActive;
         this.startTime = startTime;

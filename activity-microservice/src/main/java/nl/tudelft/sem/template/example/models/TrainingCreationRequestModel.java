@@ -12,7 +12,8 @@ public class TrainingCreationRequestModel {
     private LocalDateTime endTime;
     private String ownerId;
     private String boatCertificate;
-    private TypesOfActivities type;
+    //private TypesOfActivities type;
+    private String type;
 
 
 }

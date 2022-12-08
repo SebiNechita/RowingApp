@@ -35,8 +35,8 @@ public class ActivityOfferService {
             LocalDateTime endTime = request.getEndTime();
             String ownerId = request.getOwnerId();
             String boatCertificate = request.getBoatCertificate();
-            TypesOfActivities type = request.getType();
-
+            //            TypesOfActivities type = request.getType();
+            String type = request.getType();
             TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
                     ownerId, boatCertificate, type);
             activityOfferRepository.save(training);

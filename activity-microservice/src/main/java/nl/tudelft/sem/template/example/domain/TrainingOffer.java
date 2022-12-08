@@ -27,7 +27,8 @@ public class TrainingOffer extends ActivityOffer {
                          @NonNull LocalDateTime endTime,
                          @NonNull String ownerId,
                          String boatCertificate,
-                         TypesOfActivities type) {
+                         //TypesOfActivities type
+                         String type) {
         super(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
     }
 }
