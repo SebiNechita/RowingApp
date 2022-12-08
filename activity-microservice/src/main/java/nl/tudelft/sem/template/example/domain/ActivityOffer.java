@@ -60,4 +60,30 @@ public abstract class ActivityOffer {
     @Column(name = "type", nullable = false)
     private TypesOfActivities type;
 
+    /**
+     * Initialises an ActivityOffer without an Id.
+     *
+     * @param position position
+     * @param isActive isActive
+     * @param startTime startTime
+     * @param endTime endTime
+     * @param ownerId ownerId
+     * @param boatCertificate boatCertificate
+     * @param type type
+     */
+    public ActivityOffer(@NonNull String position,
+                         boolean isActive,
+                         @NonNull LocalDateTime startTime,
+                         @NonNull LocalDateTime endTime,
+                         @NonNull String ownerId,
+                         String boatCertificate,
+                         TypesOfActivities type) {
+        this.position = position;
+        this.isActive = isActive;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.ownerId = ownerId;
+        this.boatCertificate = boatCertificate;
+        this.type = type;
+    }
 }
