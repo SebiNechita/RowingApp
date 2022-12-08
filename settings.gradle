@@ -7,4 +7,4 @@ include 'user-microservice'
 include 'activity-microservice'
 include 'activity-match-microservice'
 include 'rowing-info-microservice'
-
+include 'gateway-microservice'

@@ -3,3 +3,7 @@
 
 # ignore .gradle folder
 .gradle
+
+# ignore built files
+bin/
+build/
