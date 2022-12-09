@@ -1,6 +1,9 @@
 package nl.tudelft.sem.template.user.controllers;
 
 import nl.tudelft.sem.template.user.authentication.AuthManager;
+import nl.tudelft.sem.template.user.domain.NetId;
+import nl.tudelft.sem.template.user.domain.Password;
+import nl.tudelft.sem.template.user.modules.SetAccountDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,16 +37,16 @@ public class UserController {
      * @return the example found in the database with the given id
      */
     @PostMapping ("/setAccountDetails")
-    /*public ResponseEntity setAccountDetails(@RequestBody RegistrationRequestModel request) throws Exception {
+    public ResponseEntity setAccountDetails(@RequestBody SetAccountDetailsModel request) throws Exception {
 
         try {
             NetId netId = new NetId(request.getNetId());
             Password password = new Password(request.getPassword());
-            registrationService.registerUser(netId, password);
+            
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
         return ResponseEntity.ok().build();
-    }*/
+    }
 }
