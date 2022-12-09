@@ -29,4 +29,12 @@ public class AppUser {
     @ElementCollection
     @Column(name = "certificates", nullable = false)
     private List<Certificates> certificates;
+
+    public AppUser(NetId netId, HashedPassword password, String gender, List<Certificates> certificates) {
+        this.netId = netId;
+        this.password = password;
+        this.gender = gender;
+        this.certificates = certificates;
+        this.recordThat(new UserWasCreatedEvent(netId));
+    }
 }
