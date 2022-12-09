@@ -1,8 +1,10 @@
 package nl.tudelft.sem.template.user.domain;
 
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CollectionType;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,4 +25,8 @@ public class AppUser {
 
     @Column(name = "gender", nullable = false)
     private String gender;
+
+    @ElementCollection
+    @Column(name = "certificates", nullable = false)
+    private List<Certificates> certificates;
 }
