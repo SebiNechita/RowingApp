@@ -1,13 +1,12 @@
 package nl.tudelft.sem.template.example.domain;
 
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import javax.persistence.Entity;
+import lombok.*;
 
 
 @NoArgsConstructor
+@Entity
 public class TrainingOffer extends ActivityOffer {
 
     /**
@@ -30,5 +29,9 @@ public class TrainingOffer extends ActivityOffer {
                          //TypesOfActivities type
                          String type) {
         super(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
+    }
+
+    public String toString() {
+        return super.toString();
     }
 }

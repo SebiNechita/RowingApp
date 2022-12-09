@@ -41,7 +41,8 @@ public class ActivityOfferService {
                     ownerId, boatCertificate, type);
             activityOfferRepository.save(training);
         } catch (Exception e) {
-            throw new Exception("Error while creating ActivityOffer " + e.getMessage());
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
         }
 
     }

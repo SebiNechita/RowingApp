@@ -36,6 +36,7 @@ public class ActivityOfferController {
         try {
             activityOfferService.createTrainingOffer(request);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
