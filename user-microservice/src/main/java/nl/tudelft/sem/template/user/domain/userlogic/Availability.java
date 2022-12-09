@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.user.domain;
+package nl.tudelft.sem.template.user.domain.userlogic;
 
 import lombok.NoArgsConstructor;
 

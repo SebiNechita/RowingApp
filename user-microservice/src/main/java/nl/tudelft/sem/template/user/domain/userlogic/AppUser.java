@@ -1,7 +1,7 @@
-package nl.tudelft.sem.template.user.domain;
+package nl.tudelft.sem.template.user.domain.userlogic;
 
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CollectionType;
+import nl.tudelft.sem.template.user.domain.HasEvents;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-public class AppUser {
+public class AppUser extends HasEvents {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
