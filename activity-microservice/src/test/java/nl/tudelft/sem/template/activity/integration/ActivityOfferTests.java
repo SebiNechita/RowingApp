@@ -76,7 +76,6 @@ public class ActivityOfferTests {
         when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
-        System.out.println(JsonUtil.serialize(requestModel));
         ResultActions resultActions = mockMvc.perform(
                 post("/create/training")
                         .contentType(MediaType.APPLICATION_JSON)
