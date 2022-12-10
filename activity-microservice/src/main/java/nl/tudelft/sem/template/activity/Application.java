@@ -1,10 +1,10 @@
-package nl.tudelft.sem.template.example;
+package nl.tudelft.sem.template.activity;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Example microservice application.
+ * Activity microservice application.
  */
 @SpringBootApplication
 public class Application {

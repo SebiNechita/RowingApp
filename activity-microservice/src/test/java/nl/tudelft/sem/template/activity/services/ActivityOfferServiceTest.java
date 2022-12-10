@@ -1,13 +1,14 @@
-package nl.tudelft.sem.template.example.services;
+package nl.tudelft.sem.template.activity.services;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import nl.tudelft.sem.template.example.domain.ActivityOffer;
-import nl.tudelft.sem.template.example.domain.TypesOfActivities;
-import nl.tudelft.sem.template.example.models.TrainingCreationRequestModel;
-import nl.tudelft.sem.template.example.repositories.ActivityOfferRepository;
-import static org.assertj.core.api.Assertions.assertThat;
+import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
+import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,12 +50,13 @@ public class ActivityOfferServiceTest {
         this.ownerId = "papiez";
         this.boatCertificate = "C4";
         this.type = TypesOfActivities.TRAINING;
-        this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
+        this.requestModel = new TrainingCreationRequestModel(position, isActive,
+                startTime, endTime, ownerId, boatCertificate, type);
 
     }
 
     @Test
-    public void createActivity_withValidData_worksCorrectly() throws Exception{
+    public void createActivity_withValidData_worksCorrectly() throws Exception {
         // Act
         activityService.createTrainingOffer(requestModel);
 

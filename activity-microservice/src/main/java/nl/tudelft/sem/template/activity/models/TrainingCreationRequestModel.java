@@ -1,9 +1,9 @@
-package nl.tudelft.sem.template.example.models;
+package nl.tudelft.sem.template.activity.models;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import nl.tudelft.sem.template.example.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 
 @Data
 @AllArgsConstructor

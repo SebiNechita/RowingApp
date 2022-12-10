@@ -1,7 +1,7 @@
-package nl.tudelft.sem.template.example.repositories;
+package nl.tudelft.sem.template.activity.repositories;
 
 import java.util.Optional;
-import nl.tudelft.sem.template.example.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

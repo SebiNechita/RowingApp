@@ -1,7 +1,7 @@
-package nl.tudelft.sem.template.example.controllers;
+package nl.tudelft.sem.template.activity.controllers;
 
-import nl.tudelft.sem.template.example.models.TrainingCreationRequestModel;
-import nl.tudelft.sem.template.example.services.ActivityOfferService;
+import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
+import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

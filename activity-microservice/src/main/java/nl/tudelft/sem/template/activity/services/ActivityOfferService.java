@@ -1,10 +1,10 @@
-package nl.tudelft.sem.template.example.services;
+package nl.tudelft.sem.template.activity.services;
 
 import java.time.LocalDateTime;
-import nl.tudelft.sem.template.example.domain.TrainingOffer;
-import nl.tudelft.sem.template.example.domain.TypesOfActivities;
-import nl.tudelft.sem.template.example.models.TrainingCreationRequestModel;
-import nl.tudelft.sem.template.example.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.activity.domain.TrainingOffer;
+import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
+import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.springframework.stereotype.Service;
 
 @Service
