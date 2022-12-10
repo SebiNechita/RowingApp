@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.user.domain.HasEvents;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,14 +28,14 @@ public class AppUser extends HasEvents {
     private String gender;
 
     @ElementCollection
-    @Column(name = "certificates", nullable = false)
+    @Column(name = "certificates")
     private List<Certificates> certificates;
 
     public AppUser(NetId netId, HashedPassword password, String gender, List<Certificates> certificates) {
         this.netId = netId;
         this.password = password;
         this.gender = gender;
-        this.certificates = certificates;
+        this.certificates = new ArrayList<>();
         this.recordThat(new UserWasCreatedEvent(netId));
     }
 }

@@ -2,7 +2,10 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * A DDD service for registering a new user.
@@ -10,16 +13,24 @@ import java.util.List;
 @Service
 public class SetAccountDetailsService {
     private final transient UserRepository userRepository;
+    private final transient PasswordHashingService passwordHashingService;
 
-    public SetAccountDetailsService(UserRepository userRepository) {
+    /**
+     * Instantiates a new UserService.
+     *
+     * @param userRepository  the user repository
+     * @param passwordHashingService the password encoder
+     */
+    public SetAccountDetailsService(UserRepository userRepository, PasswordHashingService passwordHashingService) {
         this.userRepository = userRepository;
+        this.passwordHashingService = passwordHashingService;
     }
 
-    public AppUser setAccountDetailsUser(NetId netId,
-                                         Password password,
-                                         String gender,
-                                         List<Availability> availabilities,
-                                         List<Certificates> certificates) {
+    public AppUser setAccountDetails(NetId netId,
+                                     Password password,
+                                     String gender,
+                                     TreeMap<LocalTime, LocalTime> availabilities,
+                                     List<Certificates> certificates) throws Exception {
         if (checkNetIdIsUnique(netId)) {
             // Hash password
             HashedPassword hashedPassword = passwordHashingService.hash(password);

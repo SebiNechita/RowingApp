@@ -1,9 +1,7 @@
 package nl.tudelft.sem.template.user.controllers;
 
 import nl.tudelft.sem.template.user.authentication.AuthManager;
-import nl.tudelft.sem.template.user.domain.userlogic.NetId;
-import nl.tudelft.sem.template.user.domain.userlogic.Password;
-import nl.tudelft.sem.template.user.domain.userlogic.SetAccountDetailsService;
+import nl.tudelft.sem.template.user.domain.userlogic.*;
 import nl.tudelft.sem.template.user.modules.SetAccountDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 
 @RestController
 public class UserController {
@@ -41,10 +42,17 @@ public class UserController {
 
         try {
             NetId netId = new NetId(request.getNetId());
+            //System.out.println(netId);
             Password password = new Password(request.getPassword());
-            List<String> availabilitiesAsStrings = request.getAvailabilities();
-            List<String> certificates = request.getCertificates();
-            setAccountDetailsService.
+            //System.out.println(password);
+            String gender = request.getGender();
+            //System.out.println(gender);
+            TreeMap<LocalTime, LocalTime> availabilities =
+                    Availability.generateAvailabilities(request.getAvailabilities());
+            //System.out.println(availabilities);
+            List<Certificates> certificates = Certificates.generateCertificates(request.getCertificates());
+            //System.out.println(certificates);
+            setAccountDetailsService.setAccountDetails(netId, password, gender, availabilities, certificates);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

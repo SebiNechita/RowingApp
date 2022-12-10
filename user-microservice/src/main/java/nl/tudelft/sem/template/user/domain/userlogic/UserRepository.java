@@ -19,5 +19,3 @@ import java.util.Optional;
          */
         boolean existsByNetId(NetId netId);
     }
-
-}
