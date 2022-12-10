@@ -35,11 +35,11 @@ public class ActivityOfferService {
             LocalDateTime endTime = request.getEndTime();
             String ownerId = request.getOwnerId();
             String boatCertificate = request.getBoatCertificate();
-            //            TypesOfActivities type = request.getType();
-            String type = request.getType();
+            TypesOfActivities type = request.getType();
             TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
                     ownerId, boatCertificate, type);
             activityOfferRepository.save(training);
+            System.out.println("Training " + training.toString() + " has been added to the database");
         } catch (Exception e) {
             System.out.println("Exception in the service");
             throw new Exception("Error while creating ActivityOffer. " + e.getMessage());

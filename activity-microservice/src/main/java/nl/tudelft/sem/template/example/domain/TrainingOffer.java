@@ -2,8 +2,8 @@ package nl.tudelft.sem.template.example.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import lombok.*;
-
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @NoArgsConstructor
 @Entity
@@ -26,8 +26,7 @@ public class TrainingOffer extends ActivityOffer {
                          @NonNull LocalDateTime endTime,
                          @NonNull String ownerId,
                          String boatCertificate,
-                         //TypesOfActivities type
-                         String type) {
+                         TypesOfActivities type) {
         super(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
     }
 

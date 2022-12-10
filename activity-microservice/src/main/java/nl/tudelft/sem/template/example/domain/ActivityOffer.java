@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.example.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,8 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,21 +58,21 @@ public abstract class ActivityOffer {
     private String boatCertificate;
 
     @Getter
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    //private TypesOfActivities type;
-    private String type;
+    @Convert(converter = TypeOfActivityConverter.class)
+    private TypesOfActivities type;
 
     /**
      * Initialises an ActivityOffer without an Id.
      *
-     * @param position position
-     * @param isActive isActive
-     * @param startTime startTime
-     * @param endTime endTime
-     * @param ownerId ownerId
+     * @param position        position
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
      * @param boatCertificate boatCertificate
-     * @param type type
+     * @param type            type
      */
     public ActivityOffer(@NonNull String position,
                          boolean isActive,
@@ -76,8 +80,7 @@ public abstract class ActivityOffer {
                          @NonNull LocalDateTime endTime,
                          @NonNull String ownerId,
                          String boatCertificate,
-                         //TypesOfActivities type
-                         String type) {
+                         TypesOfActivities type) {
         this.position = position;
         this.isActive = isActive;
         this.startTime = startTime;
