@@ -36,6 +36,7 @@ repositories {
 }
 
 dependencies {
+	compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0"
 
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'

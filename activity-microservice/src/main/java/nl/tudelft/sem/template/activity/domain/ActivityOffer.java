@@ -1,6 +1,8 @@
 package nl.tudelft.sem.template.activity.domain;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -40,11 +42,13 @@ public abstract class ActivityOffer {
 
     @Getter
     @NonNull
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "startTime", nullable = false)
     private LocalDateTime startTime;
 
     @Getter
     @NonNull
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "endTime", nullable = false)
     private LocalDateTime endTime;
 
