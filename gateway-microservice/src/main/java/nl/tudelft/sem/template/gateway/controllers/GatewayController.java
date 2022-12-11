@@ -1,20 +1,36 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
+import nl.tudelft.sem.template.authentication.models.AuthenticationRequestModel;
+import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import nl.tudelft.sem.template.authentication.models.AuthenticationResponseModel;
 
 /**
- * Hello World example controller.
- * <p>
- * This controller shows how you can extract information from the JWT token.
- * </p>
+ * Gateway controller.
  */
 @RestController
 public class GatewayController {
+
+    AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter;
 
     /**
      * Instantiates a new GatewayController.
      */
     @Autowired
     public GatewayController() {}
+
+    /**
+     * Gateway endpoint for authentication.
+     *
+     * @param request The login model
+     * @return JWT token if the login is successful
+     */
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponseModel> authenticate(@RequestBody AuthenticationRequestModel request) {
+        return authenticationMicroserviceAdapter.authenticate(request);
+    }
 }
