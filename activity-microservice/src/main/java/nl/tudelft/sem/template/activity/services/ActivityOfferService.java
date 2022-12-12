@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.activity.services;
 import java.time.LocalDateTime;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class ActivityOfferService {
      */
     public void createTrainingOffer(TrainingCreationRequestModel request) throws Exception {
         try {
-            String position = request.getPosition();
+            TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
             LocalDateTime startTime = request.getStartTime();
             LocalDateTime endTime = request.getEndTime();

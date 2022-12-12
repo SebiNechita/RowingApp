@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import nl.tudelft.sem.template.activity.authentication.JwtTokenVerifier;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
@@ -45,7 +46,7 @@ public class ActivityOfferTests {
     private transient JwtTokenVerifier mockJwtTokenVerifier;
 
     private TrainingCreationRequestModel requestModel;
-    private String position;
+    private TypesOfPositions position;
     private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -56,17 +57,15 @@ public class ActivityOfferTests {
     @BeforeEach
     void setup() {
         // Arrange
-        this.position = "cox";
+        this.position = TypesOfPositions.COX;
         this.isActive = false;
-        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
-                LocalTime.of(10, 0, 0));
-        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
-                LocalTime.of(12, 0, 0));
+        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(10, 0, 0));
+        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(12, 0, 0));
         this.ownerId = "JohnP2";
         this.boatCertificate = "4+";
         this.type = TypesOfActivities.TRAINING;
-        this.requestModel = new TrainingCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type);
+        this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime,
+                ownerId, boatCertificate, type);
 
     }
 
@@ -76,11 +75,11 @@ public class ActivityOfferTests {
         when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
-        ResultActions resultActions = mockMvc.perform(
-                post("/create/training")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.serialize(requestModel))
-                        .header("Authorization", "Bearer MockedToken"));
+        ResultActions resultActions = mockMvc.perform(post("/create/training")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
 
         // Assert
         resultActions.andExpect(status().isOk());

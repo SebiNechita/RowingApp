@@ -32,7 +32,7 @@ public abstract class ActivityOffer {
     @Getter
     @NonNull
     @Column(name = "position", nullable = false)
-    private String position;
+    private TypesOfPositions position;
 
     @Getter
     @Column(name = "isActive", nullable = false)
@@ -74,7 +74,7 @@ public abstract class ActivityOffer {
      * @param boatCertificate boatCertificate
      * @param type            type
      */
-    public ActivityOffer(@NonNull String position,
+    public ActivityOffer(@NonNull TypesOfPositions position,
                          boolean isActive,
                          @NonNull LocalDateTime startTime,
                          @NonNull LocalDateTime endTime,

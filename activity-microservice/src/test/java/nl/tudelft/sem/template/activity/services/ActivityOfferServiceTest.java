@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +31,7 @@ public class ActivityOfferServiceTest {
     private transient ActivityOfferRepository activityOfferRepository;
 
     private TrainingCreationRequestModel requestModel;
-    private String position;
+    private TypesOfPositions position;
     private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -41,7 +42,7 @@ public class ActivityOfferServiceTest {
     @BeforeEach
     void setup() {
         // Arrange
-        this.position = "coach";
+        this.position = TypesOfPositions.COACH;
         this.isActive = true;
         this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
                 LocalTime.of(10, 0, 0));
