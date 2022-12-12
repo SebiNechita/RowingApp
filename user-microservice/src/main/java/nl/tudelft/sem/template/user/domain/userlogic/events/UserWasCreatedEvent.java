@@ -1,4 +1,6 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.events;
+
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 
 public class UserWasCreatedEvent {
     private final NetId netId;

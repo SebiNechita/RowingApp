@@ -1,5 +1,7 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.repos;
 
+import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

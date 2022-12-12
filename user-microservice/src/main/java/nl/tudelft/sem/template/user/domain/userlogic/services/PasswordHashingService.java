@@ -1,5 +1,7 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.services;
 
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**

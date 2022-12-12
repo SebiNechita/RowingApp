@@ -1,4 +1,6 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.exceptions;
+
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 
 /**
  * Exception to indicate the NetID is already in use.

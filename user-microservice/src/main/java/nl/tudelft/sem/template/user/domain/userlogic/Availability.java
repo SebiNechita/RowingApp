@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,26 +25,25 @@ public class Availability {
     NetId netId;
 
     @Column(name = "start", nullable = false)
-    LocalTime start;
+    LocalDateTime start;
 
     @Column(name = "end", nullable = false)
-    LocalTime end;
+    LocalDateTime end;
 
-    public Availability(NetId netId, LocalTime start, LocalTime end) {
+    public Availability(NetId netId, LocalDateTime start, LocalDateTime end) {
         this.netId = netId;
         this.start = start;
         this.end = end;
     }
 
-    public static TreeMap<LocalTime, LocalTime> generateAvailabilities(List<Tuple<String, String>> availabilitiesAsStrings) throws Exception{
-        TreeMap<LocalTime, LocalTime> availabilities = new TreeMap<>();
-        String pattern = "HH:mm";
+    public static TreeMap<LocalDateTime, LocalDateTime> generateAvailabilities(List<Tuple<String, String>> availabilitiesAsStrings) throws Exception{
+        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
+        String pattern = "yyyy-MM-dd'T'HH:mm";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-
         try {
             for (Tuple<String, String> currentStringTuple : availabilitiesAsStrings) {
-                LocalTime start = LocalTime.parse(currentStringTuple.getFirst(), formatter);
-                LocalTime end = LocalTime.parse(currentStringTuple.getSecond(), formatter);
+                LocalDateTime start = LocalDateTime.parse(currentStringTuple.getFirst(), formatter);
+                LocalDateTime end = LocalDateTime.parse(currentStringTuple.getSecond(), formatter);
                 availabilities.put(start, end);
             }
         } catch (Exception e) {

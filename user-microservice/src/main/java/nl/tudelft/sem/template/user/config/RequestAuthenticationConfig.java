@@ -2,10 +2,9 @@ package nl.tudelft.sem.template.user.config;
 
 import nl.tudelft.sem.template.user.authentication.JwtAuthenticationEntryPoint;
 import nl.tudelft.sem.template.user.authentication.JwtRequestFilter;
-import nl.tudelft.sem.template.user.domain.userlogic.PasswordHashingService;
+import nl.tudelft.sem.template.user.domain.userlogic.services.PasswordHashingService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;

@@ -2,10 +2,9 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.user.domain.HasEvents;
+import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
