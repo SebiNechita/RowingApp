@@ -1,6 +1,9 @@
 package nl.tudelft.sem.template.activity.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
@@ -46,4 +49,15 @@ public class ActivityOfferService {
         }
 
     }
+
+    public List<ActivityOffer> getAllTrainingOffers() throws Exception {
+        try{
+            return activityOfferRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+        }
+//        return activityOfferRepository.findAll();
+    }
+
 }
