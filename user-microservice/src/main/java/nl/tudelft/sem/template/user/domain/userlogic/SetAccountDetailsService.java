@@ -3,7 +3,6 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -30,7 +29,7 @@ public class SetAccountDetailsService {
                                      Password password,
                                      String gender,
                                      TreeMap<LocalTime, LocalTime> availabilities,
-                                     List<Certificates> certificates) throws Exception {
+                                     List<UserCertificate> certificates) throws Exception {
         if (checkNetIdIsUnique(netId)) {
             // Hash password
             HashedPassword hashedPassword = passwordHashingService.hash(password);

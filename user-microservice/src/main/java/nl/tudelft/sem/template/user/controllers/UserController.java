@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -42,16 +41,11 @@ public class UserController {
 
         try {
             NetId netId = new NetId(request.getNetId());
-            //System.out.println(netId);
             Password password = new Password(request.getPassword());
-            //System.out.println(password);
             String gender = request.getGender();
-            //System.out.println(gender);
             TreeMap<LocalTime, LocalTime> availabilities =
                     Availability.generateAvailabilities(request.getAvailabilities());
-            //System.out.println(availabilities);
-            List<Certificates> certificates = Certificates.generateCertificates(request.getCertificates());
-            //System.out.println(certificates);
+            List<UserCertificate> certificates = UserCertificate.generateUserCertificates(request.getCertificates());
             setAccountDetailsService.setAccountDetails(netId, password, gender, availabilities, certificates);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

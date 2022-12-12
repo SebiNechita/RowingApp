@@ -27,15 +27,10 @@ public class AppUser extends HasEvents {
     @Column(name = "gender", nullable = false)
     private String gender;
 
-    @ElementCollection
-    @Column(name = "certificates")
-    private List<Certificates> certificates;
-
-    public AppUser(NetId netId, HashedPassword password, String gender, List<Certificates> certificates) {
+    public AppUser(NetId netId, HashedPassword password, String gender) {
         this.netId = netId;
         this.password = password;
         this.gender = gender;
-        this.certificates = new ArrayList<>();
         this.recordThat(new UserWasCreatedEvent(netId));
     }
 }
