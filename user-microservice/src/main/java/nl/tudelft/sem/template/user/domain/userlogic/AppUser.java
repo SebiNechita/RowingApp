@@ -1,10 +1,16 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.user.domain.HasEvents;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
-import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +32,13 @@ public class AppUser extends HasEvents {
     @Column(name = "gender", nullable = false)
     private String gender;
 
+    /**
+     * Create new application user.
+     *
+     * @param netId The NetId for the new user
+     * @param password The password for the new user
+     * @param gender The gender of the user
+     */
     public AppUser(NetId netId, HashedPassword password, String gender) {
         this.netId = netId;
         this.password = password;

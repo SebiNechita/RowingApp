@@ -1,14 +1,18 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "availabilities")
@@ -31,13 +35,29 @@ public class Availability {
     @Column(name = "end", nullable = false)
     LocalDateTime end;
 
+    /**
+     * Create new user availability.
+     *
+     * @param netId The NetId for the new user
+     * @param start The start of the interval when a user is available for training/competing
+     * @param end The start of the interval when a user is available for training/competing
+     */
     public Availability(NetId netId, LocalDateTime start, LocalDateTime end) {
         this.netId = netId;
         this.start = start;
         this.end = end;
     }
 
-    public static TreeMap<LocalDateTime, LocalDateTime> generateAvailabilities(List<Tuple<String, String>> availabilitiesAsStrings) throws Exception{
+    /**
+     * Parse a list of string tuples representing user's availabilities
+     * into a TreeMap of LocalDateTimes.
+     * I chose a TreeMap as it is an efficient way to store intervals
+     *
+     * @param availabilitiesAsStrings the List of  user's availabilities, as a List of String Tuples
+     */
+    public static TreeMap<LocalDateTime, LocalDateTime> generateAvailabilities(
+            List<Tuple<String, String>> availabilitiesAsStrings)
+            throws Exception {
         TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
         String pattern = "yyyy-MM-dd'T'HH:mm";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
@@ -49,18 +69,25 @@ public class Availability {
             }
         } catch (Exception e) {
             String errorMessage = e.getMessage();
-            // Display or log the error message
             System.out.println("An error occurred: " + errorMessage);
         }
         return availabilities;
     }
 
+    /**
+     * This method iterates over the three and checks weather there are any overlaps
+     * in the intervals given in the TreeMap or not.
+     *
+     * @param availabilities the List of  user's availabilities as a TreeMap
+     */
     public static boolean overlap(TreeMap<LocalDateTime, LocalDateTime> availabilities) {
         for (Map.Entry<LocalDateTime, LocalDateTime> interval : availabilities.entrySet()) {
             LocalDateTime start = interval.getKey();
             for (Map.Entry<LocalDateTime, LocalDateTime> previous : availabilities.headMap(start).entrySet()) {
                 LocalDateTime previousEnd = previous.getValue();
-                if (previousEnd.isAfter(start)) return true;
+                if (previousEnd.isAfter(start)) {
+                    return true;
+                }
             }
         }
         return false;

@@ -1,17 +1,23 @@
 package nl.tudelft.sem.template.user.domain.userlogic.services;
 
-import nl.tudelft.sem.template.user.controllers.UserController;
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
+import nl.tudelft.sem.template.user.domain.userlogic.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
+import nl.tudelft.sem.template.user.domain.userlogic.UserCertificate;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUseException;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.HTMLDocument;
-import java.time.LocalDateTime;
-import java.util.*;
 
 /**
  * A DDD service for registering a new user.
@@ -39,6 +45,15 @@ public class AccountDetailsService {
         this.userCertificatesRepository = userCertificatesRepository;
     }
 
+    /**
+     * The method for setting the details of a user account.
+     *
+     * @param netId  user's netId
+     * @param password user's password
+     * @param gender user's gender
+     * @param availabilities user's availabilities
+     * @param certificates user's certificates
+     */
     public AppUser setAccountDetails(NetId netId,
                                      Password password,
                                      String gender,
@@ -63,8 +78,7 @@ public class AccountDetailsService {
                     UserCertificate userCertificate = new UserCertificate(netId, certificate);
                     userCertificatesRepository.save(userCertificate);
                 }
-            }
-            else {
+            } else {
                 throw new AvailabilityOverlapException();
             }
             return user;

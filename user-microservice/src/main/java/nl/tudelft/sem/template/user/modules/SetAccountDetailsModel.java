@@ -1,10 +1,8 @@
 package nl.tudelft.sem.template.user.modules;
 
+import java.util.List;
 import lombok.Data;
 import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
-
-import java.util.List;
-import java.util.Map;
 
 @Data
 public class SetAccountDetailsModel {

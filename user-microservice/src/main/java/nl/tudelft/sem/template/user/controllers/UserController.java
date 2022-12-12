@@ -1,7 +1,12 @@
 package nl.tudelft.sem.template.user.controllers;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.TreeMap;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import nl.tudelft.sem.template.user.domain.userlogic.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
 import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
 import nl.tudelft.sem.template.user.modules.SetAccountDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.TreeMap;
 
 @RestController
 public class UserController {
