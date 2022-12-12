@@ -1,7 +1,8 @@
 package nl.tudelft.sem.template.activity.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ class TypeOfActivityConverterTest {
     private TypeOfActivityConverter converter;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         this.converter = new TypeOfActivityConverter();
         this.type = TypesOfActivities.TRAINING;
     }
