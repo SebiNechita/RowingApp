@@ -49,6 +49,7 @@ public class UserController {
             List<String> certificates = request.getCertificates();
             setAccountDetailsService.setAccountDetails(netId, password, gender, availabilities, certificates);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
