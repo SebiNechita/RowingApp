@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 @Entity
@@ -52,5 +53,16 @@ public class Availability {
             System.out.println("An error occurred: " + errorMessage);
         }
         return availabilities;
+    }
+
+    public static boolean overlap(TreeMap<LocalDateTime, LocalDateTime> availabilities) {
+        for (Map.Entry<LocalDateTime, LocalDateTime> interval : availabilities.entrySet()) {
+            LocalDateTime start = interval.getKey();
+            for (Map.Entry<LocalDateTime, LocalDateTime> previous : availabilities.headMap(start).entrySet()) {
+                LocalDateTime previousEnd = previous.getValue();
+                if (previousEnd.isAfter(start)) return true;
+            }
+        }
+        return false;
     }
 }
