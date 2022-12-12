@@ -17,7 +17,7 @@ import java.util.Objects;
  * The H2 config.
  */
 @Configuration
-@EnableJpaRepositories("nl.tudelft.sem.template.user.domain.userlogic")
+@EnableJpaRepositories("nl.tudelft.sem.template.user.domain.userlogic.repos")
 @PropertySource("classpath:application-dev.properties")
 @EnableTransactionManagement
 public class H2Config {
