@@ -59,31 +59,33 @@ public class AccountDetailsService {
                                      String gender,
                                      TreeMap<LocalDateTime, LocalDateTime> availabilities,
                                      List<String> certificates) throws Exception {
-        if (checkNetIdIsUnique(netId)) {
-            // Hash password
-            HashedPassword hashedPassword = passwordHashingService.hash(password);
-            // Create new account
-            AppUser user = new AppUser(netId, hashedPassword, gender);
-            if (!Availability.overlap(availabilities)) {
-                userRepository.save(user);
-                for (Map.Entry<LocalDateTime, LocalDateTime> entry : availabilities.entrySet()) {
-                    LocalDateTime start = entry.getKey();
-                    LocalDateTime end = entry.getValue();
-                    Availability availability = new Availability(netId, start, end);
 
-                    availabilityRepository.save(availability);
-                }
-                Set<String> noDuplicateCertificates = new HashSet<>(certificates);
-                for (String certificate : noDuplicateCertificates) {
-                    UserCertificate userCertificate = new UserCertificate(netId, certificate);
-                    userCertificatesRepository.save(userCertificate);
-                }
-            } else {
-                throw new AvailabilityOverlapException();
-            }
-            return user;
+        boolean uniqueId = checkNetIdIsUnique(netId);
+        if (!uniqueId) {
+            throw new NetIdAlreadyInUseException(netId);
         }
-        throw new NetIdAlreadyInUseException(netId);
+        boolean availabilitiesOverlap = Availability.overlap(availabilities);
+        if (availabilitiesOverlap) {
+            throw new AvailabilityOverlapException();
+        }
+        // Hash password
+        HashedPassword hashedPassword = passwordHashingService.hash(password);
+        // Create new account
+        AppUser user = new AppUser(netId, hashedPassword, gender);
+        userRepository.save(user);
+        for (Map.Entry<LocalDateTime, LocalDateTime> entry : availabilities.entrySet()) {
+            LocalDateTime start = entry.getKey();
+            LocalDateTime end = entry.getValue();
+            Availability availability = new Availability(netId, start, end);
+
+            availabilityRepository.save(availability);
+        }
+        Set<String> noDuplicateCertificates = new HashSet<>(certificates);
+        for (String certificate : noDuplicateCertificates) {
+            UserCertificate userCertificate = new UserCertificate(netId, certificate);
+            userCertificatesRepository.save(userCertificate);
+        }
+        return user;
     }
 
     public boolean checkNetIdIsUnique(NetId netId) {

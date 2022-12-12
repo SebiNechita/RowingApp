@@ -59,12 +59,14 @@ public class Availability {
             List<Tuple<String, String>> availabilitiesAsStrings)
             throws Exception {
         TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
-        String pattern = "yyyy-MM-dd'T'HH:mm";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         try {
             for (Tuple<String, String> currentStringTuple : availabilitiesAsStrings) {
-                LocalDateTime start = LocalDateTime.parse(currentStringTuple.getFirst(), formatter);
-                LocalDateTime end = LocalDateTime.parse(currentStringTuple.getSecond(), formatter);
+                LocalDateTime start = LocalDateTime.parse(
+                        currentStringTuple.getFirst(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                LocalDateTime end = LocalDateTime.parse(
+                        currentStringTuple.getSecond(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
                 availabilities.put(start, end);
             }
         } catch (Exception e) {

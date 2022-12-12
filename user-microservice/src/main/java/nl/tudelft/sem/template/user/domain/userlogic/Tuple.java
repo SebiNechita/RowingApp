@@ -1,13 +1,12 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Tuple class created for being able to represent a tuple. For example, it is used for retrieving availabilities from
  * the request in class UserController
  */
-public class Tuple<S, T> implements Serializable {
+public class Tuple<S, T> {
     private S first;
     private T second;
 
