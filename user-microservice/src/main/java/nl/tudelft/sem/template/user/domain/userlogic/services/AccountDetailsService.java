@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.user.domain.userlogic.services;
 
 import nl.tudelft.sem.template.user.controllers.UserController;
 import nl.tudelft.sem.template.user.domain.userlogic.*;
+import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUseException;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
@@ -10,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.HTMLDocument;
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * A DDD service for registering a new user.
@@ -51,23 +49,26 @@ public class AccountDetailsService {
             HashedPassword hashedPassword = passwordHashingService.hash(password);
             // Create new account
             AppUser user = new AppUser(netId, hashedPassword, gender);
-            userRepository.save(user);
             if (!Availability.overlap(availabilities)) {
+                userRepository.save(user);
                 for (Map.Entry<LocalDateTime, LocalDateTime> entry : availabilities.entrySet()) {
                     LocalDateTime start = entry.getKey();
                     LocalDateTime end = entry.getValue();
                     Availability availability = new Availability(netId, start, end);
+
                     availabilityRepository.save(availability);
                 }
+                Set<String> noDuplicateCertificates = new HashSet<>(certificates);
+                for (String certificate : noDuplicateCertificates) {
+                    UserCertificate userCertificate = new UserCertificate(netId, certificate);
+                    userCertificatesRepository.save(userCertificate);
+                }
             }
-
-
-
-
-
+            else {
+                throw new AvailabilityOverlapException();
+            }
             return user;
         }
-
         throw new NetIdAlreadyInUseException(netId);
     }
 

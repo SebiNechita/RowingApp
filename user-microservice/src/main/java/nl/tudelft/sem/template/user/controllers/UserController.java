@@ -47,12 +47,11 @@ public class UserController {
             TreeMap<LocalDateTime, LocalDateTime> availabilities =
                     Availability.generateAvailabilities(request.getAvailabilities());
             List<String> certificates = request.getCertificates();
-            userS
             setAccountDetailsService.setAccountDetails(netId, password, gender, availabilities, certificates);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Hello " + authManager.getNetId());
     }
 }

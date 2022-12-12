@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user-certificate")
+@Table(name = "usercertificate")
 @NoArgsConstructor
 public class UserCertificate {
     @Id
@@ -13,14 +13,14 @@ public class UserCertificate {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "net_id", nullable = false, unique = true)
+    @Column(name = "net_id", nullable = false)
     @Convert(converter = NetIdAttributeConverter.class)
     private NetId netId;
 
     @Column(name = "certificate")
     private String certificate;
 
-    UserCertificate(NetId netId, String certificate, int importance) {
+    public UserCertificate(NetId netId, String certificate) {
         this.netId = netId;
         this.certificate = certificate;
     }

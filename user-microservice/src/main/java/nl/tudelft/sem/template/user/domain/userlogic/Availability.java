@@ -21,7 +21,7 @@ public class Availability {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "net_id", nullable = false, unique = true)
+    @Column(name = "net_id", nullable = false)
     @Convert(converter = NetIdAttributeConverter.class)
     NetId netId;
 
