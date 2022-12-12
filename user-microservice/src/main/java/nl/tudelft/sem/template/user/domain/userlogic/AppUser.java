@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.user.domain.HasEvents;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "users")
@@ -44,5 +46,33 @@ public class AppUser extends HasEvents {
         this.password = password;
         this.gender = gender;
         this.recordThat(new UserWasCreatedEvent(netId));
+    }
+
+    public NetId getNetId() {
+        return netId;
+    }
+
+    public HashedPassword getPassword() {
+        return password;
+    }
+
+    /**
+     * Equality is only based on the identifier.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AppUser appUser = (AppUser) o;
+        return id == (appUser.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(netId);
     }
 }
