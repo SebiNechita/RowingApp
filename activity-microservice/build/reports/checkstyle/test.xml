@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="8.37">
-<file name="C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\activity-microservice\src\test\java\nl\tudelft\sem\template\example\profiles\MockAuthenticationManagerProfile.java">
-</file>
-<file name="C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\activity-microservice\src\test\java\nl\tudelft\sem\template\example\profiles\MockTokenVerifierProfile.java">
-</file>
-</checkstyle>

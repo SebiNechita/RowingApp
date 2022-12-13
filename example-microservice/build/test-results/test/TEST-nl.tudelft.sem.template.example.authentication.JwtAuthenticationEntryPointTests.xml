@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="nl.tudelft.sem.template.example.authentication.JwtAuthenticationEntryPointTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-12-13T10:32:35" hostname="DESKTOP-02MT1RU" time="0.606">
-  <properties/>
-  <testcase name="commenceTest()" classname="nl.tudelft.sem.template.example.authentication.JwtAuthenticationEntryPointTests" time="0.606"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
