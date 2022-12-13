@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">2.445s</div>
+<div class="counter">3.414s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,12 +79,12 @@
 </thead>
 <tr>
 <td class="success">createUser_withExistingUser_throwsException()</td>
-<td class="success">1.222s</td>
+<td class="success">1.894s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">createUser_withValidData_worksCorrectly()</td>
-<td class="success">1.223s</td>
+<td class="success">1.520s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -92,15 +92,22 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2022-12-12 16:09:41.961  INFO 4628 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests], using SpringBootContextLoader
-2022-12-12 16:09:41.963  INFO 4628 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: no resource found for suffixes {-context.xml, Context.groovy}.
-2022-12-12 16:09:41.963  INFO 4628 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: RegistrationServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2022-12-12 16:09:41.980  INFO 4628 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration nl.tudelft.sem.template.authentication.Application for test class nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests
-2022-12-12 16:09:41.983  INFO 4628 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
-2022-12-12 16:09:41.983  INFO 4628 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@50c442a5, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@4eb313ed, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@3fc92211, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@63d8590c, org.springframework.test.context.support.DirtiesContextTestExecutionListener@117bfeb8, org.springframework.test.context.transaction.TransactionalTestExecutionListener@4781bb01, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@31aec04a, org.springframework.test.context.event.EventPublishingTestExecutionListener@109fff4a, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@5e5f5ddf, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@144caca6, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@532782f5, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@3c2d4274, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@18b8518b, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@6960e7a6]
-2022-12-12 16:09:41.989  INFO 4628 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
-2022-12-12 16:09:41.989  INFO 4628 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2022-12-12 16:09:41.989  INFO 4628 --- [    Test worker] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+<pre>09:47:15.140 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+09:47:15.183 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+09:47:15.241 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+09:47:15.270 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests], using SpringBootContextLoader
+09:47:15.278 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: class path resource [nl/tudelft/sem/template/authentication/domain/user/RegistrationServiceTests-context.xml] does not exist
+09:47:15.279 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: class path resource [nl/tudelft/sem/template/authentication/domain/user/RegistrationServiceTestsContext.groovy] does not exist
+09:47:15.280 [Test worker] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+09:47:15.282 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: RegistrationServiceTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:47:15.459 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\authentication-microservice\build\classes\java\main\nl\tudelft\sem\template\authentication\Application.class]
+09:47:15.461 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration nl.tudelft.sem.template.authentication.Application for test class nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests
+09:47:15.632 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [nl.tudelft.sem.template.authentication.domain.user.RegistrationServiceTests]: using defaults.
+09:47:15.633 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+09:47:15.655 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@29cfd92b, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@21c64522, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@7997b197, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@11dee337, org.springframework.test.context.support.DirtiesContextTestExecutionListener@460f76a6, org.springframework.test.context.transaction.TransactionalTestExecutionListener@55f3c410, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@11acdc30, org.springframework.test.context.event.EventPublishingTestExecutionListener@770d4269, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@4a8ab068, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@1922e6d, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@76a82f33, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@6bab2585, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@74bdc168, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@644c78d4]
+09:47:15.659 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@791cbf87 testClass = RegistrationServiceTests, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@a7e2d9d testClass = RegistrationServiceTests, locations = '{}', classes = '{class nl.tudelft.sem.template.authentication.Application}', contextInitializerClasses = '[]', activeProfiles = '{mockPasswordEncoder, test}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@62e20a76, org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@33b1c5c5, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@9ef8eb7, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@340b9973, org.springframework.boot.test.context.SpringBootTestArgs@1, org.springframework.boot.test.context.SpringBootTestWebEnvironment@3ba987b8], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -&gt; true]], class annotated with @DirtiesContext [true] with mode [BEFORE_EACH_TEST_METHOD].
+09:47:15.694 [Test worker] DEBUG org.springframework.core.env.StandardEnvironment - Activating profiles [mockPasswordEncoder, test]
+09:47:15.699 [Test worker] DEBUG org.springframework.test.context.support.TestPropertySourceUtils - Adding inlined properties to environment: {spring.jmx.enabled=false, org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -110,23 +117,50 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::        (v2.3.5.RELEASE)
 
-2022-12-12 16:09:42.070  INFO 4628 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Starting RegistrationServiceTests on DESKTOP-02MT1RU with PID 4628 (started by Mihai Apolzan in C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\authentication-microservice)
-2022-12-12 16:09:42.070  INFO 4628 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : The following profiles are active: mockPasswordEncoder,test
-2022-12-12 16:09:42.269  INFO 4628 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-12-12 16:09:42.289  INFO 4628 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19ms. Found 1 JPA repository interfaces.
-2022-12-12 16:09:42.464  INFO 4628 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-12-12 16:09:42.477  INFO 4628 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
-2022-12-12 16:09:42.507  INFO 4628 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-12-12 16:09:42.508  INFO 4628 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-12-12 16:09:42.614  WARN 4628 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-12-12 16:09:42.829  INFO 4628 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-12-12 16:09:42.847  INFO 4628 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:myDb'
-2022-12-12 16:09:43.144  INFO 4628 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@cb29b75, org.springframework.security.web.context.SecurityContextPersistenceFilter@36361951, org.springframework.security.web.header.HeaderWriterFilter@33903444, org.springframework.security.web.authentication.logout.LogoutFilter@3c380db5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@24c8bc1e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@16488ed7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@68226b59, org.springframework.security.web.session.SessionManagementFilter@6149adee, org.springframework.security.web.access.ExceptionTranslationFilter@592efd6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5a66fc27]
-2022-12-12 16:09:43.189  INFO 4628 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Started RegistrationServiceTests in 1.196 seconds (JVM running for 12.125)
+2022-12-13 09:47:16.076  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Starting RegistrationServiceTests on DESKTOP-02MT1RU with PID 26268 (started by Mihai Apolzan in C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\authentication-microservice)
+2022-12-13 09:47:16.077  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : The following profiles are active: mockPasswordEncoder,test
+2022-12-13 09:47:16.743  INFO 26268 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-12-13 09:47:16.821  INFO 26268 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 68ms. Found 1 JPA repository interfaces.
+2022-12-13 09:47:17.786  INFO 26268 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-12-13 09:47:17.867  INFO 26268 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.22.Final
+2022-12-13 09:47:18.068  INFO 26268 --- [    Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2022-12-13 09:47:18.519  INFO 26268 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-12-13 09:47:19.332  INFO 26268 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-12-13 09:47:19.351  INFO 26268 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-12-13 09:47:19.850  WARN 26268 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-12-13 09:47:20.731  INFO 26268 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-12-13 09:47:20.833  INFO 26268 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:myDb'
+2022-12-13 09:47:21.613  INFO 26268 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@8cce9ad, org.springframework.security.web.context.SecurityContextPersistenceFilter@a7fd77f, org.springframework.security.web.header.HeaderWriterFilter@3a574a3b, org.springframework.security.web.authentication.logout.LogoutFilter@3ef7fb04, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@16257f8c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62ba3045, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6dc5e857, org.springframework.security.web.session.SessionManagementFilter@a70daf4, org.springframework.security.web.access.ExceptionTranslationFilter@22a2e581, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@136690b1]
+2022-12-13 09:47:21.712  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Started RegistrationServiceTests in 6.003 seconds (JVM running for 7.803)
+2022-12-13 09:47:21.745  INFO 26268 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-12-13 09:47:21.746  INFO 26268 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-12-13 09:47:21.746  INFO 26268 --- [    Test worker] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.3.5.RELEASE)
+
+2022-12-13 09:47:21.853  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Starting RegistrationServiceTests on DESKTOP-02MT1RU with PID 26268 (started by Mihai Apolzan in C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\authentication-microservice)
+2022-12-13 09:47:21.854  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : The following profiles are active: mockPasswordEncoder,test
+2022-12-13 09:47:22.110  INFO 26268 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-12-13 09:47:22.132  INFO 26268 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21ms. Found 1 JPA repository interfaces.
+2022-12-13 09:47:22.352  INFO 26268 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-12-13 09:47:22.369  INFO 26268 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-12-13 09:47:22.402  INFO 26268 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-12-13 09:47:22.403  INFO 26268 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-12-13 09:47:22.542  WARN 26268 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-12-13 09:47:22.836  INFO 26268 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-12-13 09:47:22.865  INFO 26268 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:myDb'
+2022-12-13 09:47:23.237  INFO 26268 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@16160a37, org.springframework.security.web.context.SecurityContextPersistenceFilter@6f09cb98, org.springframework.security.web.header.HeaderWriterFilter@58922a00, org.springframework.security.web.authentication.logout.LogoutFilter@6ad4ef13, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7236213e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3b3dc752, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@380e470a, org.springframework.security.web.session.SessionManagementFilter@69c335c4, org.springframework.security.web.access.ExceptionTranslationFilter@4b8ac512, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7fb2645b]
+2022-12-13 09:47:23.287  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Started RegistrationServiceTests in 1.528 seconds (JVM running for 9.378)
 Account (SomeUser) was created.
-2022-12-12 16:09:43.210  INFO 4628 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
-2022-12-12 16:09:43.211  INFO 4628 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2022-12-12 16:09:43.211  INFO 4628 --- [    Test worker] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2022-12-13 09:47:23.638  INFO 26268 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-12-13 09:47:23.639  INFO 26268 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-12-13 09:47:23.639  INFO 26268 --- [    Test worker] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -136,19 +170,19 @@ Account (SomeUser) was created.
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::        (v2.3.5.RELEASE)
 
-2022-12-12 16:09:43.290  INFO 4628 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Starting RegistrationServiceTests on DESKTOP-02MT1RU with PID 4628 (started by Mihai Apolzan in C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\authentication-microservice)
-2022-12-12 16:09:43.290  INFO 4628 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : The following profiles are active: mockPasswordEncoder,test
-2022-12-12 16:09:43.474  INFO 4628 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2022-12-12 16:09:43.497  INFO 4628 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22ms. Found 1 JPA repository interfaces.
-2022-12-12 16:09:43.661  INFO 4628 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-12-12 16:09:43.675  INFO 4628 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
-2022-12-12 16:09:43.707  INFO 4628 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-12-12 16:09:43.708  INFO 4628 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2022-12-12 16:09:43.807  WARN 4628 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2022-12-12 16:09:44.003  INFO 4628 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2022-12-12 16:09:44.023  INFO 4628 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:myDb'
-2022-12-12 16:09:44.359  INFO 4628 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1847da64, org.springframework.security.web.context.SecurityContextPersistenceFilter@27828021, org.springframework.security.web.header.HeaderWriterFilter@4e9b66ab, org.springframework.security.web.authentication.logout.LogoutFilter@6e18bc2f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@42a08547, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@579b1d86, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5967492a, org.springframework.security.web.session.SessionManagementFilter@532b3244, org.springframework.security.web.access.ExceptionTranslationFilter@4b75d640, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@142f0ac1]
-2022-12-12 16:09:44.410  INFO 4628 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Started RegistrationServiceTests in 1.196 seconds (JVM running for 13.346)
+2022-12-13 09:47:23.710  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Starting RegistrationServiceTests on DESKTOP-02MT1RU with PID 26268 (started by Mihai Apolzan in C:\tudelft\SEM\Rowing-Project\FinalVersion\SEM34c\authentication-microservice)
+2022-12-13 09:47:23.711  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : The following profiles are active: mockPasswordEncoder,test
+2022-12-13 09:47:23.942  INFO 26268 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-12-13 09:47:23.967  INFO 26268 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24ms. Found 1 JPA repository interfaces.
+2022-12-13 09:47:24.211  INFO 26268 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-12-13 09:47:24.224  INFO 26268 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-12-13 09:47:24.258  INFO 26268 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-12-13 09:47:24.258  INFO 26268 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-12-13 09:47:24.378  WARN 26268 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-12-13 09:47:24.671  INFO 26268 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-12-13 09:47:24.689  INFO 26268 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:myDb'
+2022-12-13 09:47:25.049  INFO 26268 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42af2977, org.springframework.security.web.context.SecurityContextPersistenceFilter@40b7e68c, org.springframework.security.web.header.HeaderWriterFilter@2122b4bd, org.springframework.security.web.authentication.logout.LogoutFilter@3f7b15bb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@15d0f2a3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21632bf8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@14acc33e, org.springframework.security.web.session.SessionManagementFilter@5dd79a57, org.springframework.security.web.access.ExceptionTranslationFilter@61868687, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@a23b96b]
+2022-12-13 09:47:25.104  INFO 26268 --- [    Test worker] n.t.s.t.a.d.u.RegistrationServiceTests   : Started RegistrationServiceTests in 1.461 seconds (JVM running for 11.195)
 Account (SomeUser) was created.
 </pre>
 </span>
@@ -161,7 +195,7 @@ Account (SomeUser) was created.
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.4</a> at 12 Dec 2022, 16:09:51</p>
+<a href="http://www.gradle.org">Gradle 7.4</a> at 13 Dec 2022, 09:47:25</p>
 </div>
 </div>
 </body>

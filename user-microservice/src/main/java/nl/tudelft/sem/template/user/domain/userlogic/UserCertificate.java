@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "usercertificate")
 @NoArgsConstructor
@@ -28,5 +30,35 @@ public class UserCertificate {
     public UserCertificate(NetId netId, String certificate) {
         this.netId = netId;
         this.certificate = certificate;
+    }
+
+    public NetId getNetId() {
+        return netId;
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserCertificate that = (UserCertificate) o;
+        return id == that.id;
+    }
+
+    public boolean equalAttributes(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserCertificate that = (UserCertificate) o;
+        return this.netId.equals(that.netId) && this.certificate.equals(that.certificate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

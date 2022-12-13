@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -46,6 +47,42 @@ public class Availability {
         this.netId = netId;
         this.start = start;
         this.end = end;
+    }
+
+    public NetId getNetId() {
+        return netId;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Availability that = (Availability) o;
+        return id == that.id;
+    }
+
+    public boolean equalAttributes(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Availability that = (Availability) o;
+        return this.netId.equals(that.netId) && this.start.equals(that.start) && this.end.equals(that.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     /**
@@ -95,3 +132,4 @@ public class Availability {
         return false;
     }
 }
+

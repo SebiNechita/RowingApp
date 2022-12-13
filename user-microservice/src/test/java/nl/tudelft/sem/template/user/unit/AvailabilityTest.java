@@ -33,5 +33,25 @@ class AvailabilityTest {
 
     @Test
     void overlap() {
+        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
+        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
+        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-12T13:40");
+        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-12T22:00");
+        TreeMap<LocalDateTime, LocalDateTime> treeMap = new TreeMap<>();
+        treeMap.put(dateOneIntervalOne, dateTwoIntervalOne);
+        treeMap.put(dateOneIntervalTwo, dateTwoIntervalTwo);
+        assertTrue(Availability.overlap(treeMap));
+    }
+
+    @Test
+    void notOverlap() {
+        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
+        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
+        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-31T13:40");
+        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-31T22:00");
+        TreeMap<LocalDateTime, LocalDateTime> treeMap = new TreeMap<>();
+        treeMap.put(dateOneIntervalOne, dateTwoIntervalOne);
+        treeMap.put(dateOneIntervalTwo, dateTwoIntervalTwo);
+        assertFalse(Availability.overlap(treeMap));
     }
 }

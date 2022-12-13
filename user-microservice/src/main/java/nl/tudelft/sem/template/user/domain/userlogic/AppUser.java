@@ -56,6 +56,10 @@ public class AppUser extends HasEvents {
         return password;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
     /**
      * Equality is only based on the identifier.
      */
