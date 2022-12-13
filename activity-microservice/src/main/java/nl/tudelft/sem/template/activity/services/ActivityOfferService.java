@@ -62,8 +62,7 @@ public class ActivityOfferService {
                                                                     request.getOwnerId(), request.getBoatCertificate(),
                                                                     request.getType());
                     activityOfferRepository.save(training);
-                    System.out.println("Training " + training.toString() + " has been added to the database");
-
+                    System.out.println("Training " + training + " has been added to the database");
                 }
             }
         } catch (Exception e) {

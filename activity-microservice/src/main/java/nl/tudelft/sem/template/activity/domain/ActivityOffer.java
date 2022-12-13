@@ -33,8 +33,10 @@ public abstract class ActivityOffer {
 
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     @NonNull
     @Column(name = "position", nullable = false)
+    @Convert(converter = TypeOfPositionConverter.class)
     private TypesOfPositions position;
 
     @Getter
