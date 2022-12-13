@@ -61,15 +61,11 @@ public class Availability {
         return end;
     }
 
+    /**
+     * Equality is only based on the identifier.
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Availability that = (Availability) o;
-        return id == that.id;
-    }
-
-    public boolean equalAttributes(Object o) {
         if (this == o) {
             return true;
         }
@@ -77,9 +73,21 @@ public class Availability {
             return false;
         }
         Availability that = (Availability) o;
-        return this.netId.equals(that.netId) && this.start.equals(that.start) && this.end.equals(that.end);
+        return id == that.id;
     }
 
+    /**
+     * Method that compare the attributes of two availabilities but not the id.
+     */
+    /*
+    public boolean equalAttributes(Object o) {
+        if (o.equals(this)) {
+            return true;
+        }
+        Availability that = (Availability) o;
+        return this.netId.equals(that.netId) && this.start.equals(that.start) && this.end.equals(that.end);
+    }
+    */
     @Override
     public int hashCode() {
         return Objects.hash(id);

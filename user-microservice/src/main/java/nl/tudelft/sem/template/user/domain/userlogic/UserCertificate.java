@@ -1,5 +1,6 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -8,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.NoArgsConstructor;
-
-import java.util.Objects;
 
 @Entity
 @Table(name = "usercertificate")
@@ -40,22 +39,36 @@ public class UserCertificate {
         return certificate;
     }
 
+    /**
+     * Equality is only based on the identifier.
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         UserCertificate that = (UserCertificate) o;
         return id == that.id;
     }
 
+    /**
+     * Method that compare the attributes of two UserCertificates but not the id.
+     */
+    /*
     public boolean equalAttributes(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
         UserCertificate that = (UserCertificate) o;
         return this.netId.equals(that.netId) && this.certificate.equals(that.certificate);
     }
+    */
 
     @Override
     public int hashCode() {

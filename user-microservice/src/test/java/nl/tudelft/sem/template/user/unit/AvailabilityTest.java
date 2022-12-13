@@ -1,14 +1,15 @@
 package nl.tudelft.sem.template.user.unit;
 
-import nl.tudelft.sem.template.user.domain.userlogic.Availability;
-import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
-
-import static org.junit.jupiter.api.Assertions.*;
+import nl.tudelft.sem.template.user.domain.userlogic.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
+import org.junit.jupiter.api.Test;
 
 class AvailabilityTest {
 

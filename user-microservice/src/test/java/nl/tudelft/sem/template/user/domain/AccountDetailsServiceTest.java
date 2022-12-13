@@ -1,6 +1,18 @@
 package nl.tudelft.sem.template.user.domain;
 
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.TreeMap;
+import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
+import nl.tudelft.sem.template.user.domain.userlogic.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
+import nl.tudelft.sem.template.user.domain.userlogic.UserCertificate;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
@@ -14,14 +26,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.TreeMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -72,7 +76,7 @@ class AccountDetailsServiceTest {
         // Assert
         AppUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
         List<Availability> foundAvailabilities = availabilityRepository.findAllByNetId(testUser);
-        List<UserCertificate> foundCertificates = userCertificatesRepository.findALlByNetId(testUser);
+        List<UserCertificate> foundCertificates = userCertificatesRepository.findAllByNetId(testUser);
 
         assertThat(savedUser.getNetId()).isEqualTo(testUser);
         assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
