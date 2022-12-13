@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 
 @AllArgsConstructor
@@ -25,39 +26,47 @@ public abstract class ActivityOffer {
 
     @Id
     @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private int id;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "position", nullable = false)
     private TypesOfPositions position;
 
     @Getter
+    @Setter
     @Column(name = "isActive", nullable = false)
     private boolean isActive;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "startTime", nullable = false)
     private LocalDateTime startTime;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "endTime", nullable = false)
     private LocalDateTime endTime;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "ownerName", nullable = false)
     private String ownerId;
 
     @Getter
+    @Setter
     @Column(name = "certificates", nullable = false)
     private String boatCertificate;
 
     @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     @Convert(converter = TypeOfActivityConverter.class)

@@ -1,5 +1,6 @@
 package nl.tudelft.sem.template.activity.controllers;
 
+import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,24 @@ public class ActivityOfferController {
     public ResponseEntity createOffer(@RequestBody TrainingCreationRequestModel request) throws Exception {
         try {
             activityOfferService.createTrainingOffer(request);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Endpoint for creating multiple new offers.
+     *
+     * @param request request
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    @PostMapping("/create/training/many")
+    public ResponseEntity createManyOffers(@RequestBody ManyTrainingsCreationRequestModel request) throws Exception {
+        try {
+            activityOfferService.createManyTrainingOffers(request);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
