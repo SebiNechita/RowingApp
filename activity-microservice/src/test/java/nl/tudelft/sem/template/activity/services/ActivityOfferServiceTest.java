@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
-import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,6 @@ public class ActivityOfferServiceTest {
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
 
-    private TrainingCreationRequestModel requestModel;
     private String position;
     private boolean isActive;
     private LocalDateTime startTime;
@@ -54,14 +52,13 @@ public class ActivityOfferServiceTest {
         this.type = TypesOfActivities.TRAINING;
         this.name = "Team Blue Training";
         this.description = "Pumping the iron all day long";
-        this.requestModel = new TrainingCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
     }
 
     @Test
     public void createActivity_withValidData_worksCorrectly() throws Exception {
         // Act
-        activityService.createTrainingOffer(requestModel);
+        activityService.createTrainingOffer(position, isActive,
+                startTime, endTime, ownerId, boatCertificate, type, name, description);
 
         // Assert
         ActivityOffer activityOffer = activityOfferRepository.findById(1).orElseThrow();
