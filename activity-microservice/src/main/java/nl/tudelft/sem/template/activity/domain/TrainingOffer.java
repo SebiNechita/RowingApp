@@ -10,7 +10,7 @@ import lombok.NonNull;
 public class TrainingOffer extends ActivityOffer {
 
     /**
-     * Initialises a new TrainingOffer without an Id.
+     * Initialises a new TrainingOffer without an Id, name and description.
      *
      * @param position        position
      * @param isActive        isActive
@@ -28,6 +28,31 @@ public class TrainingOffer extends ActivityOffer {
                          String boatCertificate,
                          TypesOfActivities type) {
         super(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
+    }
+
+    /**
+     * Initialises a new TrainingOffer without an Id.
+     *
+     * @param position
+     * @param isActive
+     * @param startTime
+     * @param endTime
+     * @param ownerId
+     * @param boatCertificate
+     * @param type
+     * @param name
+     * @param description
+     */
+    public TrainingOffer(@NonNull String position,
+                         boolean isActive,
+                         @NonNull LocalDateTime startTime,
+                         @NonNull LocalDateTime endTime,
+                         @NonNull String ownerId,
+                         String boatCertificate,
+                         TypesOfActivities type,
+                         String name,
+                         String description) {
+        super(position, isActive, startTime, endTime, ownerId, boatCertificate, type, name, description);
     }
 
     public String toString() {
