@@ -1,13 +1,17 @@
 package nl.tudelft.sem.template.activity.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
+import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,4 +78,51 @@ public class ActivityOfferServiceTest {
         assertThat(activityOffer.getDescription()).isEqualTo(description);
     }
 
+    @Test
+    public void createActivity_withEmptyName_throwsException() {
+        // Arrange
+        this.name = "";
+
+        // Act
+        ThrowableAssert.ThrowingCallable action = () -> activityService
+                .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
+                        boatCertificate, type, name, description);
+
+        // Assert
+        assertThatExceptionOfType(EmptyStringException.class)
+                .isThrownBy(action);
+    }
+
+    @Test
+    public void createActivity_withEmptyDescription_throwsException() {
+        // Arrange
+        this.description = "";
+
+        // Act
+        ThrowableAssert.ThrowingCallable action = () -> activityService
+                .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
+                        boatCertificate, type, name, description);
+
+        // Assert
+        assertThatExceptionOfType(EmptyStringException.class)
+                .isThrownBy(action);
+    }
+
+    @Test
+    public void createActivity_withInvalidStartEndTime_throwsException() {
+        // Arrange
+        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(12, 0, 0));
+        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(10, 0, 0));
+
+        // Act
+        ThrowableAssert.ThrowingCallable action = () -> activityService
+                .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
+                        boatCertificate, type, name, description);
+
+        // Assert
+        assertThatExceptionOfType(NotCorrectIntervalException.class)
+                .isThrownBy(action);
+    }
 }

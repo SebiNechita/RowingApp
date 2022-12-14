@@ -49,7 +49,7 @@ public class ActivityOfferController {
             activityOfferService.createTrainingOffer(position, isActive, startTime, endTime,
                     ownerId, boatCertificate, type, name, description);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
