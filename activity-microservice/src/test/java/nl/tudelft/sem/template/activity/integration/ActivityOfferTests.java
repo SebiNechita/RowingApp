@@ -52,6 +52,8 @@ public class ActivityOfferTests {
     private String ownerId;
     private String boatCertificate;
     private TypesOfActivities type;
+    private String name;
+    private String description;
 
     @BeforeEach
     void setup() {
@@ -65,8 +67,10 @@ public class ActivityOfferTests {
         this.ownerId = "JohnP2";
         this.boatCertificate = "4+";
         this.type = TypesOfActivities.TRAINING;
+        this.name = "Team Blue Training";
+        this.description = "Pumping the iron all day long";
         this.requestModel = new TrainingCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type);
+                startTime, endTime, ownerId, boatCertificate, type, name, description);
 
     }
 
@@ -94,5 +98,7 @@ public class ActivityOfferTests {
         assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
         assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
         assertThat(activityOffer.getType()).isEqualTo(type);
+        assertThat(activityOffer.getName()).isEqualTo(name);
+        assertThat(activityOffer.getDescription()).isEqualTo(description);
     }
 }

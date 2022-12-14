@@ -103,15 +103,15 @@ public abstract class ActivityOffer {
     /**
      * Initialises an ActivityOffer without an Id.
      *
-     * @param position
-     * @param isActive
-     * @param startTime
-     * @param endTime
-     * @param ownerId
-     * @param boatCertificate
-     * @param type
-     * @param name
-     * @param description
+     * @param position        position
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
+     * @param boatCertificate boatCertificate
+     * @param type            type
+     * @param name            name
+     * @param description     description
      */
     public ActivityOffer(@NonNull String position,
                          boolean isActive,

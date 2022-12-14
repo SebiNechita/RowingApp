@@ -36,11 +36,22 @@ public class ActivityOfferService {
             String ownerId = request.getOwnerId();
             String boatCertificate = request.getBoatCertificate();
             TypesOfActivities type = request.getType();
+
             String name = request.getName();
             String description = request.getDescription();
-            // Do some checks if name and description are fine
+
+            //            if (name.isEmpty()) {
+            //                throw new EmptyStringException("Name");
+            //            }
+            //
+            //
+            //            if (description.isEmpty()) {
+            //                throw new EmptyStringException("Description");
+            //            }
+
             TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
                     ownerId, boatCertificate, type, name, description);
+
             activityOfferRepository.save(training);
             System.out.println("Training " + training.toString() + " has been added to the database");
         } catch (Exception e) {
