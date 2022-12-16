@@ -1,0 +1,56 @@
+package nl.tudelft.sem.template.example.controllers;
+//package nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
+
+import nl.tudelft.sem.template.example.services.ActivityMatchService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+
+//import nl.tudelft.sem.template.activity.domain.ActivityMatch;
+//import nl.tudelft.sem.template.activity.domain.TrainingOffer;
+import nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
+import nl.tudelft.sem.template.example.services.ActivityMatchService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
+@RestController
+public class ActivityMatchController {
+    private final transient ActivityMatchService activityMatchService;
+
+    /**
+     * Instantiates a new ActivityMatchController.
+     *
+     * @param activityMatchService activityMatchService
+     */
+    @Autowired
+    public ActivityMatchController(ActivityMatchService activityMatchService) {
+        this.activityMatchService = activityMatchService;
+    }
+
+    /**
+     * Endpoint for creating a new offer.
+     *
+     * @param request request
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    @PostMapping("/create/match")
+    public ResponseEntity createActivityMatch(@RequestBody MatchCreationRequestModel request) throws Exception {
+        try {
+            activityMatchService.createActivityMatch(request);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+}
