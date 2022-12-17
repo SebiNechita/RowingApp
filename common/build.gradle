@@ -37,7 +37,6 @@ repositories {
 
 dependencies {
 
-	implementation project(':common')
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -94,7 +93,7 @@ jacocoTestCoverageVerification() {
 
 checkstyle {
 	toolVersion "8.37"
-	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+	configFile = file("../config/checkstyle/checkstyle.xml")
 	ignoreFailures = false
 	maxErrors = 0
 	maxWarnings = 0
@@ -115,4 +114,12 @@ pitest {
 	threads = 4
 	outputFormats = ['XML', 'HTML']
 	timestampedReports = false
+}
+
+bootJar {
+	enabled = false
+}
+
+jar {
+	enabled = true
 }

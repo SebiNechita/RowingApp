@@ -5,9 +5,10 @@ import nl.tudelft.sem.template.authentication.authentication.JwtUserDetailsServi
 import nl.tudelft.sem.template.authentication.domain.user.NetId;
 import nl.tudelft.sem.template.authentication.domain.user.Password;
 import nl.tudelft.sem.template.authentication.domain.user.RegistrationService;
-import nl.tudelft.sem.template.authentication.models.AuthenticationRequestModel;
-import nl.tudelft.sem.template.authentication.models.AuthenticationResponseModel;
-import nl.tudelft.sem.template.authentication.models.RegistrationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
+import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthenticationController {
 
     private final transient AuthenticationManager authenticationManager;
-
     private final transient JwtTokenGenerator jwtTokenGenerator;
-
     private final transient JwtUserDetailsService jwtUserDetailsService;
-
     private final transient RegistrationService registrationService;
+    private final transient Logger logger;
 
     /**
      * Instantiates a new UsersController.
@@ -39,16 +38,20 @@ public class AuthenticationController {
      * @param jwtTokenGenerator     the token generator
      * @param jwtUserDetailsService the user service
      * @param registrationService   the registration service
+     * @param logger                the logger
      */
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager,
                                     JwtTokenGenerator jwtTokenGenerator,
                                     JwtUserDetailsService jwtUserDetailsService,
-                                    RegistrationService registrationService) {
+                                    RegistrationService registrationService,
+                                    Logger logger) {
+
         this.authenticationManager = authenticationManager;
         this.jwtTokenGenerator = jwtTokenGenerator;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.registrationService = registrationService;
+        this.logger = logger;
     }
 
     /**
@@ -62,14 +65,18 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponseModel> authenticate(@RequestBody AuthenticationRequestModel request)
             throws Exception {
 
+        logger.info("Received authentication request from user: " + request.getNetId());
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getNetId(),
                             request.getPassword()));
         } catch (DisabledException e) {
+            logger.info("User " + request.getNetId() + " is disabled, responding with unauthorized error");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            logger.info("User " + request.getNetId() + " provided invalid credentials, responding with unauthorized error");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", e);
         }
 
@@ -88,13 +95,19 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegistrationRequestModel request) throws Exception {
 
+        logger.info("Received registration request from user: " + request.getNetId());
+
         try {
             NetId netId = new NetId(request.getNetId());
             Password password = new Password(request.getPassword());
             registrationService.registerUser(netId, password);
         } catch (Exception e) {
+            logger.info("User " + request.getNetId() + " could not be registered, responding with bad request error");
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+
+        logger.info("User " + request.getNetId() + " registered successfully");
 
         return ResponseEntity.ok().build();
     }
