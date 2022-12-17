@@ -8,6 +8,8 @@ import nl.tudelft.sem.template.authentication.domain.user.RegistrationService;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
+
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthenticationController {
 
     private final transient AuthenticationManager authenticationManager;
-
     private final transient JwtTokenGenerator jwtTokenGenerator;
-
     private final transient JwtUserDetailsService jwtUserDetailsService;
-
     private final transient RegistrationService registrationService;
+    private final transient Logger logger;
 
     /**
      * Instantiates a new UsersController.
@@ -44,11 +44,14 @@ public class AuthenticationController {
     public AuthenticationController(AuthenticationManager authenticationManager,
                                     JwtTokenGenerator jwtTokenGenerator,
                                     JwtUserDetailsService jwtUserDetailsService,
-                                    RegistrationService registrationService) {
+                                    RegistrationService registrationService,
+                                    Logger logger) {
+
         this.authenticationManager = authenticationManager;
         this.jwtTokenGenerator = jwtTokenGenerator;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.registrationService = registrationService;
+        this.logger = logger;
     }
 
     /**
@@ -61,6 +64,8 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponseModel> authenticate(@RequestBody AuthenticationRequestModel request)
             throws Exception {
+
+        logger.info("Received authentication request from user: " + request.getNetId());
 
         try {
             authenticationManager.authenticate(

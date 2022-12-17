@@ -1,6 +1,9 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
 import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +19,18 @@ import nl.tudelft.sem.template.common.models.authentication.AuthenticationRespon
 public class GatewayController {
 
     AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter;
+    Logger logger;
 
     /**
      * Instantiates a new GatewayController.
      */
     @Autowired
-    public GatewayController() {}
+    public GatewayController(AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter,
+                             Logger logger) {
+
+        this.authenticationMicroserviceAdapter = authenticationMicroserviceAdapter;
+        this.logger = logger;
+    }
 
     /**
      * Gateway endpoint for authentication.
@@ -31,6 +40,7 @@ public class GatewayController {
      */
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponseModel> authenticate(@RequestBody AuthenticationRequestModel request) {
+        logger.info("Received authentication request from user: " + request.getNetId());
         return authenticationMicroserviceAdapter.authenticate(request);
     }
 }
