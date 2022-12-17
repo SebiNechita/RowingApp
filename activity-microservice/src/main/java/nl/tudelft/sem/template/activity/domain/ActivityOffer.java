@@ -63,8 +63,18 @@ public abstract class ActivityOffer {
     @Convert(converter = TypeOfActivityConverter.class)
     private TypesOfActivities type;
 
+    @Getter
+    @NonNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Getter
+    @NonNull
+    @Column(name = "description", nullable = false)
+    private String description;
+
     /**
-     * Initialises an ActivityOffer without an Id.
+     * Initialises an ActivityOffer without an Id, name and description.
      *
      * @param position        position
      * @param isActive        isActive
@@ -88,5 +98,38 @@ public abstract class ActivityOffer {
         this.ownerId = ownerId;
         this.boatCertificate = boatCertificate;
         this.type = type;
+    }
+
+    /**
+     * Initialises an ActivityOffer without an Id.
+     *
+     * @param position        position
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
+     * @param boatCertificate boatCertificate
+     * @param type            type
+     * @param name            name
+     * @param description     description
+     */
+    public ActivityOffer(@NonNull String position,
+                         boolean isActive,
+                         @NonNull LocalDateTime startTime,
+                         @NonNull LocalDateTime endTime,
+                         @NonNull String ownerId,
+                         String boatCertificate,
+                         TypesOfActivities type,
+                         @NonNull String name,
+                         @NonNull String description) {
+        this.position = position;
+        this.isActive = isActive;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.ownerId = ownerId;
+        this.boatCertificate = boatCertificate;
+        this.type = type;
+        this.name = name;
+        this.description = description;
     }
 }
