@@ -43,7 +43,7 @@ public class TrainingOffer extends ActivityOffer {
      * @param name            name
      * @param description     description
      */
-    public TrainingOffer(@NonNull String position,
+    public TrainingOffer(@NonNull TypesOfPositions position,
                          boolean isActive,
                          @NonNull LocalDateTime startTime,
                          @NonNull LocalDateTime endTime,

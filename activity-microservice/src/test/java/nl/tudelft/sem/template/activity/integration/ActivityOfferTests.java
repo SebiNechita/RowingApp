@@ -78,14 +78,14 @@ public class ActivityOfferTests {
         this.requestModel = new TrainingCreationRequestModel(position, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description);
         this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime,
-                ownerId, boatCertificate, type);
+                ownerId, boatCertificate, type, name, description);
         this.positions = new HashMap<>() {{
                     put(TypesOfPositions.COX, 2);
                     put(TypesOfPositions.COACH, 1);
                 }};
 
         this.manyTrainingsRequestModel = new ManyTrainingsCreationRequestModel(positions, isActive,
-                startTime, endTime, ownerId, boatCertificate, type);
+                startTime, endTime, ownerId, boatCertificate, type, name, description);
 
     }
 
@@ -143,6 +143,9 @@ public class ActivityOfferTests {
                 assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
                 assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
                 assertThat(activityOffer.getType()).isEqualTo(type);
+                assertThat(activityOffer.getName()).isEqualTo(name);
+                assertThat(activityOffer.getDescription()).isEqualTo(description);
+
             }
         }
     }

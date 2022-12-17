@@ -10,11 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
-import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
-import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
-import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,9 +35,6 @@ public class ActivityOfferServiceTest {
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
 
-    private TrainingCreationRequestModel requestModel;
-
-    private ManyTrainingsCreationRequestModel manyRequestsModel;
     private TypesOfPositions position;
 
     private Map<TypesOfPositions, Integer> positions;
@@ -69,11 +64,6 @@ public class ActivityOfferServiceTest {
         this.positions = new HashMap<>();
         this.positions.put(TypesOfPositions.COX, 2);
         this.positions.put(TypesOfPositions.COACH, 1);
-
-        this.requestModel = new TrainingCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type);
-        this.manyRequestsModel = new ManyTrainingsCreationRequestModel(positions, isActive,
-                startTime, endTime, ownerId, boatCertificate, type);
     }
 
     @Test
@@ -143,10 +133,12 @@ public class ActivityOfferServiceTest {
         assertThatExceptionOfType(NotCorrectIntervalException.class)
                 .isThrownBy(action);
     }
+
     @Test
     public void createManyActivities_withValidData_worksCorrectly() throws Exception {
         // Act
-        activityService.createManyTrainingOffers(manyRequestsModel);
+        activityService.createManyTrainingOffers(positions, isActive,
+                startTime, endTime, ownerId, boatCertificate, type, name, description);
 
         // Assert
         int id = 1;
@@ -162,6 +154,8 @@ public class ActivityOfferServiceTest {
                 assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
                 assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
                 assertThat(activityOffer.getType()).isEqualTo(type);
+                assertThat(activityOffer.getName()).isEqualTo(name);
+                assertThat(activityOffer.getDescription()).isEqualTo(description);
             }
         }
     }

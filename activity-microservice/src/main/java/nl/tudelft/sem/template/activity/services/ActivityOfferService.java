@@ -5,6 +5,7 @@ import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
@@ -38,7 +39,7 @@ public class ActivityOfferService {
      * @param description     description
      * @throws Exception EmptyStringException
      */
-    public void createTrainingOffer(String position,
+    public void createTrainingOffer(TypesOfPositions position,
                                     boolean isActive,
                                     LocalDateTime startTime,
                                     LocalDateTime endTime,
@@ -62,23 +63,41 @@ public class ActivityOfferService {
 
         activityOfferRepository.save(training);
         System.out.println("Training " + training.toString() + " has been added to the database");
+
+    }
+
     /**
      * Creates a multiple TrainingOffers and adds them to database.
      *
-     * @param request TrainingOffer model sent by user
+     * @param positions       positions
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
+     * @param boatCertificate boatCertificate
+     * @param type            type
+     * @param name            name
+     * @param description     description
      * @throws Exception exception
      */
-    public void createManyTrainingOffers(ManyTrainingsCreationRequestModel request) throws Exception {
+    public void createManyTrainingOffers(Map<TypesOfPositions, Integer> positions,
+                                         boolean isActive,
+                                         LocalDateTime startTime,
+                                         LocalDateTime endTime,
+                                         String ownerId,
+                                         String boatCertificate,
+                                         TypesOfActivities type,
+                                         String name,
+                                         String description) throws Exception {
         try {
-            Map<TypesOfPositions, Integer> map = request.getPositions();
 
-            for (TypesOfPositions position : map.keySet()) {
-                int amountToCreate = map.get(position);
+            for (TypesOfPositions position : positions.keySet()) {
+                int amountToCreate = positions.get(position);
                 for (int i = 0; i < amountToCreate; i++) {
-                    TrainingOffer training = setTrainingParameters(position, request.isActive(),
-                                                                    request.getStartTime(), request.getEndTime(),
-                                                                    request.getOwnerId(), request.getBoatCertificate(),
-                                                                    request.getType());
+                    TrainingOffer training = setTrainingParameters(position, isActive,
+                            startTime, endTime,
+                            ownerId, boatCertificate,
+                            type, name, description);
                     activityOfferRepository.save(training);
                     System.out.println("Training " + training + " has been added to the database");
                 }
@@ -92,19 +111,20 @@ public class ActivityOfferService {
     /**
      * Creates a training from given parameters.
      *
-     * @param position postition
-     * @param isActive isActive
-     * @param startTime startTime
-     * @param endTime endTime
-     * @param ownerId ownerId
+     * @param position        postition
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
      * @param boatCertificate boatCertificate
-     * @param type type
-     * @return created training
+     * @param type            type
+     * @param name            name
+     * @param description     description
      */
     public TrainingOffer setTrainingParameters(TypesOfPositions position, boolean isActive,
                                                LocalDateTime startTime, LocalDateTime endTime,
                                                String ownerId, String boatCertificate,
-                                               TypesOfActivities type) {
+                                               TypesOfActivities type, String name, String description) {
         TrainingOfferBuilder builder = new TrainingOfferBuilder();
         builder.setPosition(position)
                 .setActive(isActive)
@@ -112,7 +132,9 @@ public class ActivityOfferService {
                 .setEndTime(endTime)
                 .setOwnerId(ownerId)
                 .setBoatCertificate(boatCertificate)
-                .setType(type);
+                .setType(type)
+                .setName(name)
+                .setDescription(description);
         return builder.build();
     }
 }

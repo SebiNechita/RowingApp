@@ -11,6 +11,8 @@ public class TrainingOfferBuilder implements ActivityOfferBuilder<TrainingOffer>
     private transient String ownerId;
     private transient String boatCertificate;
     private transient TypesOfActivities type;
+    private transient String name;
+    private transient String description;
 
     @Override
     public ActivityOfferBuilder<TrainingOffer> setPosition(TypesOfPositions position) {
@@ -55,7 +57,22 @@ public class TrainingOfferBuilder implements ActivityOfferBuilder<TrainingOffer>
     }
 
     @Override
+    public ActivityOfferBuilder<TrainingOffer> setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public ActivityOfferBuilder<TrainingOffer> setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    @Override
     public TrainingOffer build() {
-        return new TrainingOffer(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
+        return new TrainingOffer(position, isActive,
+                                startTime, endTime,
+                                ownerId, boatCertificate,
+                                type, name, description);
     }
 }

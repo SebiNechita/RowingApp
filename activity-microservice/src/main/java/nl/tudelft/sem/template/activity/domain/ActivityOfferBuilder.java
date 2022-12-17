@@ -18,5 +18,9 @@ public interface ActivityOfferBuilder<T extends ActivityOffer> {
 
     ActivityOfferBuilder<T> setType(TypesOfActivities type);
 
+    ActivityOfferBuilder<T> setName(String name);
+
+    ActivityOfferBuilder<T> setDescription(String description);
+
     T build();
 }
