@@ -17,7 +17,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.services.PasswordHashingService;
 import nl.tudelft.sem.template.user.integration.util.JsonUtil;
-import nl.tudelft.sem.template.user.modules.SetAccountDetailsModel;
+import nl.tudelft.sem.template.user.models.SetAccountDetailsModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

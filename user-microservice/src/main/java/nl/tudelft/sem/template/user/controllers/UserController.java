@@ -8,7 +8,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import nl.tudelft.sem.template.user.domain.userlogic.Password;
 import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
-import nl.tudelft.sem.template.user.modules.SetAccountDetailsModel;
+import nl.tudelft.sem.template.user.models.SetAccountDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +54,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
-        return ResponseEntity.ok("Hello " + authManager.getNetId());
+        return ResponseEntity.ok("Account (" + authManager.getNetId() + ") set successfully");
     }
 }

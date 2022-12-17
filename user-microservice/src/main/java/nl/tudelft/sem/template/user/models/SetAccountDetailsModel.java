@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.user.modules;
+package nl.tudelft.sem.template.user.models;
 
 import java.util.List;
 import lombok.Data;

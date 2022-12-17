@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "usercertificate")
+@Table(name = "userCertificate")
 @NoArgsConstructor
 public class UserCertificate {
     @Id
