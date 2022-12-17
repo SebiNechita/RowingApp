@@ -12,6 +12,14 @@ import java.util.List;
 
 public class HttpUtils {
 
+    /**
+     * Send a HTTP request to a given URL.
+     * @param url The URL to send the request to.
+     * @param method The HTTP method to use.
+     * @param body The body of the request.
+     * @param headers The headers of the request.
+     * @param responseBodyType The type of the response body.
+     */
     public static <RequestBodyType, ResponseBodyType> ResponseEntity<ResponseBodyType>
     sendHttpRequest(String url, HttpMethod method, RequestBodyType body, Map<String, String> headers,
                     Class<ResponseBodyType> responseBodyType) throws ResponseStatusException {
@@ -30,6 +38,13 @@ public class HttpUtils {
         }
     }
 
+    /**
+     * Send a HTTP request to a given URL.
+     * @param url The URL to send the request to.
+     * @param method The HTTP method to use.
+     * @param body The body of the request.
+     * @param responseBodyType The type of the response body.
+     */
     public static <RequestBodyType, ResponseBodyType> ResponseEntity<ResponseBodyType>
     sendHttpRequest(String url, HttpMethod method, RequestBodyType body,
             Class<ResponseBodyType> responseBodyType) throws ResponseStatusException {

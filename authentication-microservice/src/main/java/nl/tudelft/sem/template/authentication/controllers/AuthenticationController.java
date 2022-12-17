@@ -39,6 +39,7 @@ public class AuthenticationController {
      * @param jwtTokenGenerator     the token generator
      * @param jwtUserDetailsService the user service
      * @param registrationService   the registration service
+     * @param logger                the logger
      */
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager,
@@ -73,8 +74,10 @@ public class AuthenticationController {
                             request.getNetId(),
                             request.getPassword()));
         } catch (DisabledException e) {
+            logger.info("User " + request.getNetId() + " is disabled, responding with unauthorized error");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            logger.info("User " + request.getNetId() + " provided invalid credentials, responding with unauthorized error");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", e);
         }
 
@@ -93,13 +96,19 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegistrationRequestModel request) throws Exception {
 
+        logger.info("Received registration request from user: " + request.getNetId());
+
         try {
             NetId netId = new NetId(request.getNetId());
             Password password = new Password(request.getPassword());
             registrationService.registerUser(netId, password);
         } catch (Exception e) {
+            logger.info("User " + request.getNetId() + " could not be registered, responding with bad request error");
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+
+        logger.info("User " + request.getNetId() + " registered successfully");
 
         return ResponseEntity.ok().build();
     }
