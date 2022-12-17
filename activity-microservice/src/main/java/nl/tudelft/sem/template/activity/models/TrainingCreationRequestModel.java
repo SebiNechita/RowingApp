@@ -3,9 +3,11 @@ package nl.tudelft.sem.template.activity.models;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class TrainingCreationRequestModel {
     private String position;
