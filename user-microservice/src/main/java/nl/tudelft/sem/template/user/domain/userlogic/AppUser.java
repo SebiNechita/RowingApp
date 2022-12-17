@@ -8,12 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import nl.tudelft.sem.template.user.domain.Gender;
 import nl.tudelft.sem.template.user.domain.HasEvents;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
 @Entity
 @Table(name = "users")
+@Getter
 @NoArgsConstructor
 public class AppUser extends HasEvents {
     @Id
@@ -30,7 +34,7 @@ public class AppUser extends HasEvents {
     private HashedPassword password;
 
     @Column(name = "gender", nullable = false)
-    private String gender;
+    private Gender gender;
 
     /**
      * Create new application user.
@@ -44,18 +48,6 @@ public class AppUser extends HasEvents {
         this.password = password;
         this.gender = gender;
         this.recordThat(new UserWasCreatedEvent(netId));
-    }
-
-    public NetId getNetId() {
-        return netId;
-    }
-
-    public HashedPassword getPassword() {
-        return password;
-    }
-
-    public String getGender() {
-        return gender;
     }
 
     /**

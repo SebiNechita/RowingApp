@@ -13,10 +13,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Table(name = "availabilities")
+@Getter
 @NoArgsConstructor
 //class to support users availabilities
 public class Availability {
@@ -43,22 +47,12 @@ public class Availability {
      * @param start The start of the interval when a user is available for training/competing
      * @param end The start of the interval when a user is available for training/competing
      */
-    public Availability(NetId netId, LocalDateTime start, LocalDateTime end) {
+    public Availability(@NonNull NetId netId,
+                        @NonNull LocalDateTime start,
+                        @NonNull LocalDateTime end) {
         this.netId = netId;
         this.start = start;
         this.end = end;
-    }
-
-    public NetId getNetId() {
-        return netId;
-    }
-
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public LocalDateTime getEnd() {
-        return end;
     }
 
     /**

@@ -8,10 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Table(name = "userCertificate")
+@Getter
 @NoArgsConstructor
 public class UserCertificate {
     @Id
@@ -26,17 +29,9 @@ public class UserCertificate {
     @Column(name = "certificate")
     private String certificate;
 
-    public UserCertificate(NetId netId, String certificate) {
+    public UserCertificate(@NonNull NetId netId, String certificate) {
         this.netId = netId;
         this.certificate = certificate;
-    }
-
-    public NetId getNetId() {
-        return netId;
-    }
-
-    public String getCertificate() {
-        return certificate;
     }
 
     /**
@@ -69,9 +64,4 @@ public class UserCertificate {
         return this.netId.equals(that.netId) && this.certificate.equals(that.certificate);
     }
     */
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
