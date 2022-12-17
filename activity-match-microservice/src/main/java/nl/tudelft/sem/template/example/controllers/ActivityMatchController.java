@@ -1,13 +1,8 @@
 package nl.tudelft.sem.template.example.controllers;
-//package nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
 
 import nl.tudelft.sem.template.example.services.ActivityMatchService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
-
-//import nl.tudelft.sem.template.activity.domain.ActivityMatch;
-//import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
 import nl.tudelft.sem.template.example.services.ActivityMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +20,7 @@ import java.util.List;
 @RestController
 public class ActivityMatchController {
     private final transient ActivityMatchService activityMatchService;
+    private final transient Logger logger;
 
     /**
      * Instantiates a new ActivityMatchController.
@@ -32,8 +28,9 @@ public class ActivityMatchController {
      * @param activityMatchService activityMatchService
      */
     @Autowired
-    public ActivityMatchController(ActivityMatchService activityMatchService) {
+    public ActivityMatchController(ActivityMatchService activityMatchService, Logger logger) {
         this.activityMatchService = activityMatchService;
+        this.logger = logger;
     }
 
     /**
@@ -52,5 +49,15 @@ public class ActivityMatchController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/get/offers/pending")
+    public ResponseEntity<List<ActivityOffer>> getPendingOffers(@RequestBody PendingOffersRequestModel request) throws Exception {
+        try {
+            return ResponseEntity.ok(activityMatchService.getPendingOffers(request));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

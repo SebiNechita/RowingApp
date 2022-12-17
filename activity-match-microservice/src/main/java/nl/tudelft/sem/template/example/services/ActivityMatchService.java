@@ -20,6 +20,7 @@ public class ActivityMatchService {
     public ActivityMatchService(ActivityMatchRepository activityMatchRepository) {
         this.activityMatchRepository = activityMatchRepository;
     }
+
     /**
      * Creates a new TrainingOffer and adds it to database.
      *
@@ -42,4 +43,22 @@ public class ActivityMatchService {
         }
     }
 
+    /**
+     * 
+     */
+    public void getPendingOffers(PendingOffersRequestModel request) throws Exception {
+        try {
+            int activityId = request.getActivityId();
+            Optional<ActivityMatch> activityMatch = activityMatchRepository.findById(activityId);
+
+            if (pendingOffers.isEmpty()) {
+                throw new Exception("No pending offers for user " + userId + " have been found");
+            }
+
+            // TODO: return pending offers
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while retrieving pending offers. " + e.getMessage());
+        }
+    }
 }
