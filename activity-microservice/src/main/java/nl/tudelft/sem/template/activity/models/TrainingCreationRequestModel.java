@@ -15,6 +15,7 @@ public class TrainingCreationRequestModel {
     private String ownerId;
     private String boatCertificate;
     private TypesOfActivities type;
-
+    private String name;
+    private String description;
 
 }
