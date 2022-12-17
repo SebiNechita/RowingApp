@@ -5,9 +5,8 @@ import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
-import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
-import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
-import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
+import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
+import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,23 +27,41 @@ public class ActivityOfferService {
     /**
      * Creates a new TrainingOffer and adds it to database.
      *
-     * @param request TrainingOffer model sent by user
-     * @throws Exception exception
+     * @param position        position
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
+     * @param boatCertificate boatCertificate
+     * @param type            type
+     * @param name            name
+     * @param description     description
+     * @throws Exception EmptyStringException
      */
-    public void createTrainingOffer(TrainingCreationRequestModel request) throws Exception {
-        try {
-            TrainingOffer training = setTrainingParameters(request.getPosition(), request.isActive(),
-                                                            request.getStartTime(), request.getEndTime(),
-                                                            request.getOwnerId(), request.getBoatCertificate(),
-                                                            request.getType());
-            activityOfferRepository.save(training);
-            System.out.println("Training " + training.toString() + " has been added to the database");
-        } catch (Exception e) {
-            System.out.println("Exception in the service");
-            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+    public void createTrainingOffer(String position,
+                                    boolean isActive,
+                                    LocalDateTime startTime,
+                                    LocalDateTime endTime,
+                                    String ownerId,
+                                    String boatCertificate,
+                                    TypesOfActivities type,
+                                    String name,
+                                    String description) throws Exception {
+        if (!startTime.isBefore(endTime)) {
+            throw new NotCorrectIntervalException("Start time of the interval has to be before the end time.");
         }
-    }
+        if (name.isEmpty()) {
+            throw new EmptyStringException("Name");
+        }
+        if (description.isEmpty()) {
+            throw new EmptyStringException("Description");
+        }
 
+        TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
+                ownerId, boatCertificate, type, name, description);
+
+        activityOfferRepository.save(training);
+        System.out.println("Training " + training.toString() + " has been added to the database");
     /**
      * Creates a multiple TrainingOffers and adds them to database.
      *

@@ -1,6 +1,8 @@
 package nl.tudelft.sem.template.activity.controllers;
 
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
+import java.time.LocalDateTime;
+import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +37,20 @@ public class ActivityOfferController {
     @PostMapping("/create/training")
     public ResponseEntity createOffer(@RequestBody TrainingCreationRequestModel request) throws Exception {
         try {
-            activityOfferService.createTrainingOffer(request);
+            String position = request.getPosition();
+            boolean isActive = request.isActive();
+            LocalDateTime startTime = request.getStartTime();
+            LocalDateTime endTime = request.getEndTime();
+            String ownerId = request.getOwnerId();
+            String boatCertificate = request.getBoatCertificate();
+            TypesOfActivities type = request.getType();
+            String name = request.getName();
+            String description = request.getDescription();
+
+            activityOfferService.createTrainingOffer(position, isActive, startTime, endTime,
+                    ownerId, boatCertificate, type, name, description);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
