@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nl.tudelft.sem.template.user.domain.Gender;
 import nl.tudelft.sem.template.user.domain.HasEvents;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
