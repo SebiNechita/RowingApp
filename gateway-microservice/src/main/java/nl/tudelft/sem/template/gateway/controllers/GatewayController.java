@@ -1,13 +1,13 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
-import nl.tudelft.sem.template.authentication.models.AuthenticationRequestModel;
 import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import nl.tudelft.sem.template.authentication.models.AuthenticationResponseModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 
 /**
  * Gateway controller.

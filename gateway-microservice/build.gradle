@@ -37,7 +37,6 @@ repositories {
 
 dependencies {
 
-	implementation project(':authentication-microservice')
 	implementation project(':common')
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'

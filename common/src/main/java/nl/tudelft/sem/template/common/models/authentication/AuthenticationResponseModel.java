@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.authentication.models;
+package nl.tudelft.sem.template.common.models.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

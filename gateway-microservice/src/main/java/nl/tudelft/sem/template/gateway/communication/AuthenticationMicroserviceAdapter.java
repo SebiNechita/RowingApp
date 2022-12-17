@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import nl.tudelft.sem.template.authentication.models.AuthenticationRequestModel;
-import nl.tudelft.sem.template.authentication.models.AuthenticationResponseModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 
 @Component
 public class AuthenticationMicroserviceAdapter {
