@@ -7,12 +7,8 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
-import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
-import nl.tudelft.sem.template.user.domain.userlogic.Availability;
-import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
-import nl.tudelft.sem.template.user.domain.userlogic.NetId;
-import nl.tudelft.sem.template.user.domain.userlogic.Password;
-import nl.tudelft.sem.template.user.domain.userlogic.UserCertificate;
+
+import nl.tudelft.sem.template.user.domain.userlogic.*;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
@@ -55,7 +51,7 @@ class AccountDetailsServiceTest {
         final NetId testUser = new NetId("SomeUser");
         final Password testPassword = new Password("password123");
         final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
-        final String gender = "male";
+        final Gender gender = Gender.MALE;
         LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
         LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
         LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-31T20:59");
@@ -91,7 +87,7 @@ class AccountDetailsServiceTest {
         final NetId testUser = new NetId("NewUser");
         final HashedPassword existingTestPassword = new HashedPassword("password123");
         final Password newTestPassword = new Password("password456");
-        final String gender = "male";
+        final Gender gender = Gender.MALE;
         AppUser existingAppUser = new AppUser(testUser, existingTestPassword, gender);
         LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
         LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T13:00");

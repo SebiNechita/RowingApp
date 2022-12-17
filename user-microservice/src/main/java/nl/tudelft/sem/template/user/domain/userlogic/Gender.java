@@ -1,5 +1,8 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
+import lombok.Getter;
+
+@Getter
 public enum Gender {
     MALE("male"),
     FEMALE("female");

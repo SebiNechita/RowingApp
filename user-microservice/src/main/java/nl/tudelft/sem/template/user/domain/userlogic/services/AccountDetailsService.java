@@ -6,12 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
-import nl.tudelft.sem.template.user.domain.userlogic.Availability;
-import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
-import nl.tudelft.sem.template.user.domain.userlogic.NetId;
-import nl.tudelft.sem.template.user.domain.userlogic.Password;
-import nl.tudelft.sem.template.user.domain.userlogic.UserCertificate;
+
+import nl.tudelft.sem.template.user.domain.userlogic.*;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUseException;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
@@ -56,7 +52,7 @@ public class AccountDetailsService {
      */
     public AppUser setAccountDetails(NetId netId,
                                      Password password,
-                                     String gender,
+                                     Gender gender,
                                      TreeMap<LocalDateTime, LocalDateTime> availabilities,
                                      List<String> certificates) throws Exception {
 

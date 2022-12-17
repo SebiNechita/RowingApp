@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.TreeMap;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
 import nl.tudelft.sem.template.user.domain.userlogic.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
 import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import nl.tudelft.sem.template.user.domain.userlogic.Password;
 import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
@@ -44,7 +45,7 @@ public class UserController {
         try {
             NetId netId = new NetId(request.getNetId());
             Password password = new Password(request.getPassword());
-            String gender = request.getGender();
+            Gender gender = Gender.valueOf(request.getGender());
             TreeMap<LocalDateTime, LocalDateTime> availabilities =
                     Availability.generateAvailabilities(request.getAvailabilities());
             List<String> certificates = request.getCertificates();

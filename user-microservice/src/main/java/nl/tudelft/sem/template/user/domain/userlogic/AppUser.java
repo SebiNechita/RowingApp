@@ -11,7 +11,9 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import nl.tudelft.sem.template.user.domain.HasEvents;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.GenderConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
 @Entity
@@ -33,6 +35,7 @@ public class AppUser extends HasEvents {
     private HashedPassword password;
 
     @Column(name = "gender", nullable = false)
+    @Convert(converter = GenderConverter.class)
     private Gender gender;
 
     /**
@@ -42,7 +45,9 @@ public class AppUser extends HasEvents {
      * @param password The password for the new user
      * @param gender The gender of the user
      */
-    public AppUser(NetId netId, HashedPassword password, String gender) {
+    public AppUser(@NonNull NetId netId,
+                   @NonNull HashedPassword password,
+                   @NonNull Gender gender) {
         this.netId = netId;
         this.password = password;
         this.gender = gender;
