@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -118,17 +119,14 @@ public class Availability {
      * This method iterates over the three and checks weather there are any overlaps
      * in the intervals given in the TreeMap or not.
      *
-     * @param availabilities the List of  user's availabilities as a TreeMap
+     * @param intervals the List of  user's availabilities as a TreeMap
      */
-    public static boolean overlap(TreeMap<LocalDateTime, LocalDateTime> availabilities) {
-        LocalDateTime prevEnd = availabilities.firstEntry().getValue();
-        for (Map.Entry<LocalDateTime, LocalDateTime> interval : availabilities.entrySet()) {
-            LocalDateTime start = interval.getKey();
-            LocalDateTime end = interval.getValue();
-            if (start.isBefore(prevEnd)) {
+    public static boolean overlap(TreeMap<LocalDateTime, LocalDateTime> intervals) {
+        List<Map.Entry<LocalDateTime, LocalDateTime>> availabilities = new ArrayList<>(intervals.entrySet());
+        for (int i = 1; i < availabilities.size(); i++) {
+            if (availabilities.get(i).getKey().isBefore(availabilities.get(i - 1).getValue())) {
                 return true;
             }
-            prevEnd = end;
         }
         return false;
     }
