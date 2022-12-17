@@ -26,7 +26,6 @@ public abstract class ActivityOffer {
 
     @Id
     @Getter
-    @Setter
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private int id;

@@ -1,8 +1,9 @@
 package nl.tudelft.sem.template.activity.services;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
+import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
@@ -52,10 +53,10 @@ public class ActivityOfferService {
      */
     public void createManyTrainingOffers(ManyTrainingsCreationRequestModel request) throws Exception {
         try {
-            Set<TypesOfPositions> positionsToCreate = request.getPositions().keySet();
+            Map<TypesOfPositions, Integer> map = request.getPositions();
 
-            for (TypesOfPositions position : positionsToCreate) {
-                int amountToCreate = request.getPositions().get(position);
+            for (TypesOfPositions position : map.keySet()) {
+                int amountToCreate = map.get(position);
                 for (int i = 0; i < amountToCreate; i++) {
                     TrainingOffer training = setTrainingParameters(position, request.isActive(),
                                                                     request.getStartTime(), request.getEndTime(),
@@ -87,14 +88,14 @@ public class ActivityOfferService {
                                                LocalDateTime startTime, LocalDateTime endTime,
                                                String ownerId, String boatCertificate,
                                                TypesOfActivities type) {
-        TrainingOffer training = new TrainingOffer();
-        training.setPosition(position);
-        training.setActive(isActive);
-        training.setStartTime(startTime);
-        training.setEndTime(endTime);
-        training.setOwnerId(ownerId);
-        training.setBoatCertificate(boatCertificate);
-        training.setType(type);
-        return training;
+        TrainingOfferBuilder builder = new TrainingOfferBuilder();
+        builder.setPosition(position)
+                .setActive(isActive)
+                .setStartTime(startTime)
+                .setEndTime(endTime)
+                .setOwnerId(ownerId)
+                .setBoatCertificate(boatCertificate)
+                .setType(type);
+        return builder.build();
     }
 }
