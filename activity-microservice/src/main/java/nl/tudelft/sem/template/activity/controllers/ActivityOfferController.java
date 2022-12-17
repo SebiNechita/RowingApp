@@ -1,5 +1,6 @@
 package nl.tudelft.sem.template.activity.controllers;
 
+import java.util.List;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+
 
 @RestController
 public class ActivityOfferController {
@@ -48,6 +49,12 @@ public class ActivityOfferController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Endpoint for getting all trainings offer.
+     *
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
     @GetMapping("/get/trainings")
     public ResponseEntity<List<ActivityOffer>> getTraining() throws Exception {
         try {

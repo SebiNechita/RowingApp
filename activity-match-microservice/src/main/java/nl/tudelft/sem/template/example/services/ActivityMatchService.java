@@ -7,7 +7,7 @@ import nl.tudelft.sem.template.example.repositories.ActivityMatchRepository;
 import org.springframework.stereotype.Service;
 
 
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 @Service
 public class ActivityMatchService {
     private final transient ActivityMatchRepository activityMatchRepository;
@@ -20,6 +20,7 @@ public class ActivityMatchService {
     public ActivityMatchService(ActivityMatchRepository activityMatchRepository) {
         this.activityMatchRepository = activityMatchRepository;
     }
+
     /**
      * Creates a new TrainingOffer and adds it to database.
      *

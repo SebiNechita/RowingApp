@@ -1,26 +1,14 @@
 package nl.tudelft.sem.template.example.controllers;
-//package nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
 
-import nl.tudelft.sem.template.example.services.ActivityMatchService;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
-
-//import nl.tudelft.sem.template.activity.domain.ActivityMatch;
-//import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
 import nl.tudelft.sem.template.example.services.ActivityMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @RestController
 public class ActivityMatchController {
