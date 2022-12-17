@@ -18,7 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "activities")
+@Table(name = "pendingactivities")
 @ToString
 public class ActivityMatch {
 

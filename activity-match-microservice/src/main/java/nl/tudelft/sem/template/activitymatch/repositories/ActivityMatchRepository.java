@@ -12,7 +12,7 @@ public interface ActivityMatchRepository extends JpaRepository<ActivityMatch, In
      * Method to find Actividy in repository by its ID.
      *
      * @param id id
-     * @return ActivityOffer
+     * @return ActivityMatch
      */
     Optional<ActivityMatch> findById(int id);
 }
