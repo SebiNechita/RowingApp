@@ -8,7 +8,6 @@ import nl.tudelft.sem.template.authentication.domain.user.RegistrationService;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
