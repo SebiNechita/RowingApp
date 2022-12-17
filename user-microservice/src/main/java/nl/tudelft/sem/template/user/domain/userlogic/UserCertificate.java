@@ -49,10 +49,13 @@ public class UserCertificate {
         return id == that.id;
     }
 
-    /**
-     * Method that compare the attributes of two UserCertificates but not the id.
-     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, netId, certificate);
+    }
     /*
+    Method that compare the attributes of two UserCertificates but not the id.
+
     public boolean equalAttributes(Object o) {
         if (this == o) {
             return true;

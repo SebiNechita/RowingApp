@@ -58,7 +58,7 @@ class UserControllerTest {
         final NetId testUser = new NetId("SomeUser");
         final Password testPassword = new Password("password123");
         final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
-        final String testGender = "male";
+        final String testGender = "MALE";
         when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
         SetAccountDetailsModel model = new SetAccountDetailsModel();
         model.setNetId(testUser.toString());
@@ -78,7 +78,7 @@ class UserControllerTest {
 
         // Act
         // Still include Bearer token as AuthFilter itself is not mocked
-        ResultActions result = mockMvc.perform(post("/setAccountDetails")
+        ResultActions result = mockMvc.perform(post("/set/account/details")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer MockedToken")
                 .content(JsonUtil.serialize(model)));
@@ -90,6 +90,6 @@ class UserControllerTest {
 
         assertThat(savedUser.getNetId()).isEqualTo(testUser);
         assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
-        assertThat(savedUser.getGender()).isEqualTo(testGender);
+        assertThat(savedUser.getGender().getGender()).isEqualTo(testGender);
     }
 }

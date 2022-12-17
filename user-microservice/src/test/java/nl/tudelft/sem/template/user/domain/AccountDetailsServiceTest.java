@@ -7,8 +7,13 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
-
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
+import nl.tudelft.sem.template.user.domain.userlogic.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
+import nl.tudelft.sem.template.user.domain.userlogic.UserCertificate;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
@@ -76,7 +81,7 @@ class AccountDetailsServiceTest {
 
         assertThat(savedUser.getNetId()).isEqualTo(testUser);
         assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
-        assertThat(savedUser.getGender()).isEqualTo(gender);
+        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
         //assertThat(foundAvailabilities).containsExactlyInAnyOrder(expectedAvailabilityOne, expectedAvailabilityTwo);
         //assertThat(foundCertificates).containsExactlyInAnyOrder(expectedUserCertificateOne, expectedUserCertificateTwo);
     }
@@ -114,5 +119,6 @@ class AccountDetailsServiceTest {
 
         assertThat(savedUser.getNetId()).isEqualTo(testUser);
         assertThat(savedUser.getPassword()).isEqualTo(existingTestPassword);
+        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
     }
 }

@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.user.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.TreeMap;
 import nl.tudelft.sem.template.user.domain.userlogic.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
+import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import org.junit.jupiter.api.Test;
 
 class AvailabilityTest {
@@ -33,6 +35,18 @@ class AvailabilityTest {
     }
 
     @Test
+    void generateAvailabilitiesWhenStartIsEqual() {
+        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-12T22:00");
+        Tuple<String, String> tupleOne = new Tuple<>("2022-12-12T13:30", "2022-12-12T15:00");
+        Tuple<String, String> tupleTwo = new Tuple<>("2022-12-12T13:30", "2022-12-12T22:00");
+
+        List<Tuple<String, String>> availabilities = List.of(tupleOne, tupleTwo);
+        assertThrows(AvailabilityOverlapException.class, () -> {
+            Availability.generateAvailabilities(availabilities);
+        });
+    }
+
+    @Test
     void overlap() {
         LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
         LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
@@ -43,6 +57,7 @@ class AvailabilityTest {
         treeMap.put(dateOneIntervalTwo, dateTwoIntervalTwo);
         assertTrue(Availability.overlap(treeMap));
     }
+
 
     @Test
     void notOverlap() {

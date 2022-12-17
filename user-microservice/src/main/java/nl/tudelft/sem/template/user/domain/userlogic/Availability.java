@@ -13,10 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 
 @Entity
 @Table(name = "availabilities")
@@ -98,19 +98,18 @@ public class Availability {
             List<Tuple<String, String>> availabilitiesAsStrings)
             throws Exception {
         TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
-        try {
-            for (Tuple<String, String> currentStringTuple : availabilitiesAsStrings) {
-                LocalDateTime start = LocalDateTime.parse(
-                        currentStringTuple.getFirst(),
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-                LocalDateTime end = LocalDateTime.parse(
-                        currentStringTuple.getSecond(),
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+        for (Tuple<String, String> currentStringTuple : availabilitiesAsStrings) {
+            LocalDateTime start = LocalDateTime.parse(
+                    currentStringTuple.getFirst(),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+            LocalDateTime end = LocalDateTime.parse(
+                    currentStringTuple.getSecond(),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+            if (!availabilities.containsKey(start)) {
                 availabilities.put(start, end);
+            } else {
+                throw new AvailabilityOverlapException();
             }
-        } catch (Exception e) {
-            String errorMessage = e.getMessage();
-            System.out.println("An error occurred: " + errorMessage);
         }
         return availabilities;
     }
@@ -122,16 +121,19 @@ public class Availability {
      * @param availabilities the List of  user's availabilities as a TreeMap
      */
     public static boolean overlap(TreeMap<LocalDateTime, LocalDateTime> availabilities) {
+        LocalDateTime prevStart = availabilities.firstKey();
+        LocalDateTime prevEnd = availabilities.firstEntry().getValue();
         for (Map.Entry<LocalDateTime, LocalDateTime> interval : availabilities.entrySet()) {
             LocalDateTime start = interval.getKey();
-            for (Map.Entry<LocalDateTime, LocalDateTime> previous : availabilities.headMap(start).entrySet()) {
-                LocalDateTime previousEnd = previous.getValue();
-                if (previousEnd.isAfter(start)) {
-                    return true;
-                }
+            LocalDateTime end = interval.getValue();
+            if (start.isBefore(prevEnd) || start.isEqual(prevEnd) || end.isAfter(prevStart) || end.isEqual(prevStart)) {
+                return true;
             }
+            prevStart = start;
+            prevEnd = end;
         }
         return false;
     }
+
 }
 

@@ -1,17 +1,16 @@
 package nl.tudelft.sem.template.user.domain.userlogic.converters;
 
-import nl.tudelft.sem.template.user.domain.userlogic.Gender;
-
+import java.util.Arrays;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.Arrays;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
 
 @Converter
 public class GenderConverter implements AttributeConverter<Gender, String> {
 
     @Override
     public String convertToDatabaseColumn(Gender type) {
-        return type.toString();
+        return type.getGender();
     }
 
     @Override

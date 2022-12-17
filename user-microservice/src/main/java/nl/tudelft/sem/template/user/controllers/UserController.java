@@ -39,7 +39,7 @@ public class UserController {
      *
      * @return the example found in the database with the given id
      */
-    @PostMapping ("/setAccountDetails")
+    @PostMapping ("/set/account/details")
     public ResponseEntity setAccountDetails(@RequestBody SetAccountDetailsModel request) throws Exception {
 
         try {
