@@ -102,10 +102,10 @@ public class Availability {
             LocalDateTime start = LocalDateTime.parse(
                     currentStringTuple.getFirst(),
                     DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-            LocalDateTime end = LocalDateTime.parse(
-                    currentStringTuple.getSecond(),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
             if (!availabilities.containsKey(start)) {
+                LocalDateTime end = LocalDateTime.parse(
+                        currentStringTuple.getSecond(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
                 availabilities.put(start, end);
             } else {
                 throw new AvailabilityOverlapException();
