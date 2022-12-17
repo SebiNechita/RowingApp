@@ -121,15 +121,13 @@ public class Availability {
      * @param availabilities the List of  user's availabilities as a TreeMap
      */
     public static boolean overlap(TreeMap<LocalDateTime, LocalDateTime> availabilities) {
-        LocalDateTime prevStart = availabilities.firstKey();
         LocalDateTime prevEnd = availabilities.firstEntry().getValue();
         for (Map.Entry<LocalDateTime, LocalDateTime> interval : availabilities.entrySet()) {
             LocalDateTime start = interval.getKey();
             LocalDateTime end = interval.getValue();
-            if (start.isBefore(prevEnd) || start.isEqual(prevEnd) || end.isAfter(prevStart) || end.isEqual(prevStart)) {
+            if (start.isBefore(prevEnd)) {
                 return true;
             }
-            prevStart = start;
             prevEnd = end;
         }
         return false;
