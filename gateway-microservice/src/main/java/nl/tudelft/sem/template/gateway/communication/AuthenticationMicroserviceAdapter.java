@@ -1,17 +1,16 @@
 package nl.tudelft.sem.template.gateway.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
-import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
-
 @Component
 public class AuthenticationMicroserviceAdapter {
-    public final String authenticationMicroserviceAddress;
+    public final transient String authenticationMicroserviceAddress;
 
     /**
      * Instantiates a new AuthenticationMicroserviceAdapter.
@@ -22,6 +21,7 @@ public class AuthenticationMicroserviceAdapter {
 
     /**
      * Instantiates a new AuthenticationMicroserviceAdapter with an injected microservice address.
+     *
      * @param authenticationMicroserviceAddress The address of the microservice.
      */
     public AuthenticationMicroserviceAdapter(String authenticationMicroserviceAddress) {

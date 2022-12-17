@@ -9,6 +9,7 @@ import nl.tudelft.sem.template.common.models.authentication.AuthenticationReques
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class AuthenticationController {
     private final transient JwtTokenGenerator jwtTokenGenerator;
     private final transient JwtUserDetailsService jwtUserDetailsService;
     private final transient RegistrationService registrationService;
-    private final transient Logger logger;
+    static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class.getName());
 
     /**
      * Instantiates a new UsersController.
@@ -38,20 +39,17 @@ public class AuthenticationController {
      * @param jwtTokenGenerator     the token generator
      * @param jwtUserDetailsService the user service
      * @param registrationService   the registration service
-     * @param logger                the logger
      */
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager,
                                     JwtTokenGenerator jwtTokenGenerator,
                                     JwtUserDetailsService jwtUserDetailsService,
-                                    RegistrationService registrationService,
-                                    Logger logger) {
+                                    RegistrationService registrationService) {
 
         this.authenticationManager = authenticationManager;
         this.jwtTokenGenerator = jwtTokenGenerator;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.registrationService = registrationService;
-        this.logger = logger;
     }
 
     /**
@@ -73,10 +71,11 @@ public class AuthenticationController {
                             request.getNetId(),
                             request.getPassword()));
         } catch (DisabledException e) {
-            logger.info("User " + request.getNetId() + " is disabled, responding with unauthorized error");
+            logger.info(String.format("User %s is disabled, responding with unauthorized error", request.getNetId()));
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            logger.info("User " + request.getNetId() + " provided invalid credentials, responding with unauthorized error");
+            logger.info(String.format("User %s provided invalid credentials, responding with unauthorized error",
+                    request.getNetId()));
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", e);
         }
 
@@ -102,12 +101,13 @@ public class AuthenticationController {
             Password password = new Password(request.getPassword());
             registrationService.registerUser(netId, password);
         } catch (Exception e) {
-            logger.info("User " + request.getNetId() + " could not be registered, responding with bad request error");
+            logger.info(String.format("User %s could not be registered, responding with bad request error",
+                    request.getNetId()));
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
-        logger.info("User " + request.getNetId() + " registered successfully");
+        logger.info(String.format("User %s registered successfully", request.getNetId()));
 
         return ResponseEntity.ok().build();
     }
