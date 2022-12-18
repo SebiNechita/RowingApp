@@ -1,6 +1,7 @@
 package nl.tudelft.sem.template.activity.models;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
@@ -8,8 +9,8 @@ import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 
 @Data
 @AllArgsConstructor
-public class TrainingCreationRequestModel {
-    private TypesOfPositions position;
+public class ManyTrainingsCreationRequestModel {
+    private Map<TypesOfPositions, Integer> positions;
     private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
