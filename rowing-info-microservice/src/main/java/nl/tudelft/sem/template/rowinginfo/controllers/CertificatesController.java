@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.rowinginfo.controllers;
 
 import java.util.List;
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
+import nl.tudelft.sem.template.rowinginfo.models.CertificatesExistanceRequestModel;
 import nl.tudelft.sem.template.rowinginfo.models.CertificatesRequestModel;
 import nl.tudelft.sem.template.rowinginfo.services.CertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class CertificatesController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/certificates")
-    public ResponseEntity createOffer(@RequestBody CertificatesRequestModel request) throws Exception {
+    public ResponseEntity createNewCertificate(@RequestBody CertificatesRequestModel request) throws Exception {
         try {
             String certificateName = request.getCertificateName();
             int certificateValue = request.getCertificateValue();
@@ -49,15 +50,34 @@ public class CertificatesController {
     }
 
     /**
-     * Endpoint for getting all trainings offer.
+     * Endpoint for getting all certificates offer.
      *
      * @return ok response if successful
      * @throws Exception if not successful
      */
     @GetMapping("/get/certificates")
-    public ResponseEntity<List<Certificates>> getTraining() throws Exception {
+    public ResponseEntity<List<Certificates>> getAllCertificates() throws Exception {
         try {
             return ResponseEntity.ok(certificatesService.getAllCertificates());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    /**
+     * Endpoint for checking if certificates exists.
+     *
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    @GetMapping("/check/certificates")
+    public ResponseEntity<Boolean> checkCertificates(@RequestBody CertificatesExistanceRequestModel request) throws Exception {
+        try {
+            //return ResponseEntity.ok(certificatesService.checkCertificates(request.getCertificateName()));
+           return ResponseEntity.ok(certificatesService.getAllCertificates().stream()
+                   .anyMatch(certificate -> certificate.getCertificateName().equals(request.getCertificateName())));
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

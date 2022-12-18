@@ -50,4 +50,19 @@ public class CertificatesService {
             throw new Exception("Error while creating Certificates. " + e.getMessage());
         }
     }
+
+    /**
+     * Checks if a Certificate exist.
+     *
+     * @throws Exception exception
+     */
+    public Boolean checkCertificates(String name) throws Exception {
+        try {
+            return certificatesRepository.existsByCertificateName(name).orElseThrow();
+            //return certificatesRepository.findAll().stream().anyMatch(c -> c.getCertificateName().equals(name));
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating Certificates. " + e.getMessage());
+        }
+    }
 }

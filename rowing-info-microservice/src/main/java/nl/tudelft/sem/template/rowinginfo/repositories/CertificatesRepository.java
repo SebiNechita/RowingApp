@@ -16,4 +16,11 @@ public interface CertificatesRepository extends JpaRepository<Certificates, Inte
      */
     Optional<Certificates> findById(int id);
 
+    /**
+     * Method to check if Certificates is in repository by its name.
+     *
+     * @param certificateName name
+     * @return Boolean
+     */
+    Optional<Boolean> existsByCertificateName(String certificateName);
 }
