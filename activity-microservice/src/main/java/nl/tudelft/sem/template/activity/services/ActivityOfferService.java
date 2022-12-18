@@ -3,7 +3,6 @@ package nl.tudelft.sem.template.activity.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;

@@ -3,7 +3,6 @@ package nl.tudelft.sem.template.activity.controllers;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
