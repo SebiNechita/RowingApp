@@ -1,5 +1,8 @@
 package nl.tudelft.sem.template.example.controllers;
 
+import nl.tudelft.sem.template.common.models.activity_match.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activity_match.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activity_match.SetParticipantRequestModel;
 import nl.tudelft.sem.template.example.services.ActivityMatchService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +55,23 @@ public class ActivityMatchController {
     }
 
     @GetMapping("/get/offers/pending")
-    public ResponseEntity<List<ActivityOffer>> getPendingOffers(@RequestBody PendingOffersRequestModel request) throws Exception {
+    public ResponseEntity<PendingOffersResponseModel> getPendingOffers(@RequestBody PendingOffersRequestModel request)
+            throws Exception {
         try {
             return ResponseEntity.ok(activityMatchService.getPendingOffers(request));
         } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("/set/participant")
+    public ResponseEntity<String> setParticipant(@RequestBody SetParticipantRequestModel request)
+            throws Exception {
+        try {
+            activityMatchService.setParticipant(request);
+            return ResponseEntity.ok("Successfully set participant");
+        } catch(Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
