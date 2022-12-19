@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.rowinginfo.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,7 +58,7 @@ public class CertificatesTests {
     }
 
     @Test
-    public void createTraining_withValidData_worksCorrectly() throws Exception {
+    public void createCertificate_withValidData_worksCorrectly() throws Exception {
         // Arrange
         when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
@@ -79,4 +80,45 @@ public class CertificatesTests {
         assertThat(certificate.getCertificateValue()).isEqualTo(certificateValue);
     }
 
+    @Test
+    public void checkIfCertificateExists_withValidData_worksCorrectly() throws Exception {
+        // Arrange
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        // Act
+        ResultActions resultActions = mockMvc.perform(post("/create/certificates")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+        ResultActions resultActions2 = mockMvc.perform(get("/check/certificates")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
+
+        // Assert
+        resultActions.andExpect(status().isOk());
+
+        // Assert
+        assertThat(resultActions2.andReturn().getResponse().getContentAsString().contains("true")).isEqualTo(true);
+    }
+
+    @Test
+    public void checkIfCertificateExists_withWrongData_worksCorrectly() throws Exception {
+        // Arrange
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        // Act
+        ResultActions resultActions = mockMvc.perform(get("/check/certificates")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
+
+        // Assert
+        resultActions.andExpect(status().isOk());
+
+        // Assert
+        assertThat(resultActions.andReturn().getResponse().getContentAsString().contains("true")).isEqualTo(false);
+    }
 }

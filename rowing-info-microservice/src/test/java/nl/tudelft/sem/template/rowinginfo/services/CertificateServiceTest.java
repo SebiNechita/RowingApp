@@ -54,7 +54,7 @@ public class CertificateServiceTest {
     }
 
     @Test
-    public void createActivity_withEmptyName_throwsException() {
+    public void createCertificate_withEmptyName_throwsException() {
         // Arrange
         this.certificateName = "";
 
@@ -68,7 +68,7 @@ public class CertificateServiceTest {
     }
 
     @Test
-    public void createActivity_withEmptyDescription_throwsException() {
+    public void createCertificate_withEmptyDescription_throwsException() {
         // Arrange
         this.description = "";
 
@@ -81,4 +81,15 @@ public class CertificateServiceTest {
                 .isThrownBy(action);
     }
 
+    @Test
+    public void checkCertificates_withValidData_worksCorrectly() throws Exception {
+        // Act
+        certificatesService.createCertificate(certificateName, certificateValue, description);
+
+        // Assert
+        Certificates certificate = certificatesRepository.findById(1).orElseThrow();
+
+
+        assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
+    }
 }
