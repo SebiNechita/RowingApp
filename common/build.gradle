@@ -36,7 +36,6 @@ repositories {
 }
 
 dependencies {
-	compileOnly 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
 
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -115,4 +114,12 @@ pitest {
 	threads = 4
 	outputFormats = ['XML', 'HTML']
 	timestampedReports = false
+}
+
+bootJar {
+	enabled = false
+}
+
+jar {
+	enabled = true
 }
