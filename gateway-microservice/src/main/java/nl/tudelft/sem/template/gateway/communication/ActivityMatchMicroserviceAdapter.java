@@ -1,10 +1,10 @@
 package nl.tudelft.sem.template.gateway.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
-import nl.tudelft.sem.template.common.models.activity_match.MatchCreationRequestModel;
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersRequestModel;
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersResponseModel;
-import nl.tudelft.sem.template.common.models.activity_match.SetParticipantRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import org.springframework.http.HttpMethod;
@@ -63,7 +63,7 @@ public class ActivityMatchMicroserviceAdapter {
      *
      * @param request the request wrapped in a PendingOffersRequestModel
      * @return a response wrapped in a PendingOffersResponseModel
-     * @throws Exception
+     * @throws Exception if not successful
      */
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(PendingOffersRequestModel request,
                                                                        String authToken) {
@@ -76,7 +76,7 @@ public class ActivityMatchMicroserviceAdapter {
      *
      * @param request the request wrapped in a SetParticipantRequestModel
      * @return a simple okay status message
-     * @throws Exception
+     * @throws Exception if not successful
      */
     public ResponseEntity<String> setParticipant(SetParticipantRequestModel request, String authToken) {
         return HttpUtils.sendAuthorizedHttpRequest(setParticipantEndpointUrl(), HttpMethod.POST, authToken, request,

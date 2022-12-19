@@ -1,12 +1,13 @@
 package nl.tudelft.sem.template.example.controllers;
 
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersRequestModel;
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersResponseModel;
-import nl.tudelft.sem.template.common.models.activity_match.SetParticipantRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import nl.tudelft.sem.template.example.services.ActivityMatchService;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import nl.tudelft.sem.template.common.models.activity_match.MatchCreationRequestModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class ActivityMatchController {
     private final transient ActivityMatchService activityMatchService;
-    private final transient Logger logger;
+    static final Logger logger = LoggerFactory.getLogger(ActivityMatchController.class.getName());
 
     /**
      * Instantiates a new ActivityMatchController.
@@ -26,9 +27,8 @@ public class ActivityMatchController {
      * @param activityMatchService activityMatchService
      */
     @Autowired
-    public ActivityMatchController(ActivityMatchService activityMatchService, Logger logger) {
+    public ActivityMatchController(ActivityMatchService activityMatchService) {
         this.activityMatchService = activityMatchService;
-        this.logger = logger;
     }
 
     /**
@@ -54,7 +54,7 @@ public class ActivityMatchController {
      *
      * @param request the request wrapped in a PendingOffersRequestModel
      * @return a response wrapped in a PendingOffersResponseModel
-     * @throws Exception
+     * @throws Exception if not successful
      */
     @PostMapping("/get/offers/pending")
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(@RequestBody PendingOffersRequestModel request)
@@ -72,7 +72,7 @@ public class ActivityMatchController {
      *
      * @param request the request wrapped in a SetParticipantRequestModel
      * @return a simple okay status message
-     * @throws Exception
+     * @throws Exception if not successful
      */
     @PostMapping("/set/participant")
     public ResponseEntity<String> setParticipant(@RequestBody SetParticipantRequestModel request)
@@ -80,7 +80,7 @@ public class ActivityMatchController {
         try {
             activityMatchService.setParticipant(request);
             return ResponseEntity.ok("Successfully set participant");
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

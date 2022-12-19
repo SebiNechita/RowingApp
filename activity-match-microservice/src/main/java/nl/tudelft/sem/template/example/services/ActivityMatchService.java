@@ -1,23 +1,21 @@
 package nl.tudelft.sem.template.example.services;
 
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersRequestModel;
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersResponseModel;
-import nl.tudelft.sem.template.common.models.activity_match.SetParticipantRequestModel;
-import nl.tudelft.sem.template.example.domain.ActivityJoinQueueEntry;
-import nl.tudelft.sem.template.example.domain.ActivityMatch;
-import nl.tudelft.sem.template.example.domain.ActivityParticipant;
-import nl.tudelft.sem.template.common.models.activity_match.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.activity_match.MatchCreationRequestModel;
-import nl.tudelft.sem.template.example.repositories.ActivityJoinQueueRepository;
-import nl.tudelft.sem.template.example.repositories.ActivityMatchRepository;
-import nl.tudelft.sem.template.example.repositories.ActivityParticipantRepository;
-import org.springframework.stereotype.Service;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.TypesOfActivities;
+import nl.tudelft.sem.template.example.domain.ActivityJoinQueueEntry;
+import nl.tudelft.sem.template.example.domain.ActivityMatch;
+import nl.tudelft.sem.template.example.domain.ActivityParticipant;
+import nl.tudelft.sem.template.example.repositories.ActivityJoinQueueRepository;
+import nl.tudelft.sem.template.example.repositories.ActivityMatchRepository;
+import nl.tudelft.sem.template.example.repositories.ActivityParticipantRepository;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ActivityMatchService {
@@ -65,8 +63,8 @@ public class ActivityMatchService {
      * Retrieves the pending offers for a given activity ID.
      *
      * @param request the request wrapped in a PendingOffersRequestModel.
-     * @throws Exception when the given activity ID does not exist.
      * @return the response wrapped in a PendingOffersResponseModel.
+     * @throws Exception when the given activity ID does not exist.
      */
     public PendingOffersResponseModel getPendingOffers(PendingOffersRequestModel request) throws Exception {
         try {

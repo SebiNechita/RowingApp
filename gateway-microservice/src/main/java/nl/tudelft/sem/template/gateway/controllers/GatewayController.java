@@ -1,10 +1,10 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
-import nl.tudelft.sem.template.common.models.activity_match.MatchCreationRequestModel;
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersRequestModel;
-import nl.tudelft.sem.template.common.models.activity_match.PendingOffersResponseModel;
-import nl.tudelft.sem.template.common.models.activity_match.SetParticipantRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Gateway controller.
@@ -84,7 +87,7 @@ public class GatewayController {
      *
      * @param request the request wrapped in a PendingOffersRequestModel
      * @return a response wrapped in a PendingOffersResponseModel
-     * @throws Exception
+     * @throws Exception if not successful
      */
     @PostMapping("/get/offers/pending")
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(@RequestBody PendingOffersRequestModel request,
@@ -99,7 +102,7 @@ public class GatewayController {
      *
      * @param request the request wrapped in a SetParticipantRequestModel
      * @return a simple okay status message
-     * @throws Exception
+     * @throws Exception if not successful
      */
     @PostMapping("/set/participant")
     public ResponseEntity<String> setParticipant(@RequestBody SetParticipantRequestModel request,

@@ -1,11 +1,10 @@
-package nl.tudelft.sem.template.common.models.activity_match;
+package nl.tudelft.sem.template.common.models.activitymatch;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
