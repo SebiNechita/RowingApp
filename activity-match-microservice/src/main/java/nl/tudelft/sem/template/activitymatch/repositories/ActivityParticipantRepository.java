@@ -1,7 +1,7 @@
-package nl.tudelft.sem.template.example.repositories;
+package nl.tudelft.sem.template.activitymatch.repositories;
 
 import java.util.Optional;
-import nl.tudelft.sem.template.example.domain.ActivityParticipant;
+import nl.tudelft.sem.template.activitymatch.domain.ActivityParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ActivityParticipantRepository extends JpaRepository<ActivityParticipant, Integer> {

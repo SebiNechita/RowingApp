@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import nl.tudelft.sem.template.activitymatch.domain.ActivityJoinQueueEntry;
+import nl.tudelft.sem.template.activitymatch.domain.ActivityMatch;
+import nl.tudelft.sem.template.activitymatch.domain.ActivityParticipant;
+import nl.tudelft.sem.template.activitymatch.repositories.ActivityJoinQueueRepository;
+import nl.tudelft.sem.template.activitymatch.repositories.ActivityMatchRepository;
+import nl.tudelft.sem.template.activitymatch.repositories.ActivityParticipantRepository;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
-import nl.tudelft.sem.template.common.models.activitymatch.TypesOfActivities;
-import nl.tudelft.sem.template.example.domain.ActivityJoinQueueEntry;
-import nl.tudelft.sem.template.example.domain.ActivityMatch;
-import nl.tudelft.sem.template.example.domain.ActivityParticipant;
-import nl.tudelft.sem.template.example.repositories.ActivityJoinQueueRepository;
-import nl.tudelft.sem.template.example.repositories.ActivityMatchRepository;
-import nl.tudelft.sem.template.example.repositories.ActivityParticipantRepository;
 import org.springframework.stereotype.Service;
 
 @Service

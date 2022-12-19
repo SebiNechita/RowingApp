@@ -2,14 +2,15 @@ package nl.tudelft.sem.template.activity.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
-import nl.tudelft.sem.template.activity.domain.TrainingOffer;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
+import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

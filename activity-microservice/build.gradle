@@ -36,6 +36,8 @@ repositories {
 }
 
 dependencies {
+
+	implementation project(':common')
 	compileOnly 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
 
 	compileOnly 'org.projectlombok:lombok:1.18.24'

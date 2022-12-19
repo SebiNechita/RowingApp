@@ -1,8 +1,8 @@
-package nl.tudelft.sem.template.example.repositories;
+package nl.tudelft.sem.template.activitymatch.repositories;
 
 import java.util.List;
 import java.util.Optional;
-import nl.tudelft.sem.template.example.domain.ActivityJoinQueueEntry;
+import nl.tudelft.sem.template.activitymatch.domain.ActivityJoinQueueEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ActivityJoinQueueRepository extends JpaRepository<ActivityJoinQueueEntry, Integer> {

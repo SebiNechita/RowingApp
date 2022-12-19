@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.example.domain;
+package nl.tudelft.sem.template.activitymatch.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

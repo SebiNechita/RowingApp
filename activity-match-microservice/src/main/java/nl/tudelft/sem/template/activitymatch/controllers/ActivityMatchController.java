@@ -1,10 +1,10 @@
-package nl.tudelft.sem.template.example.controllers;
+package nl.tudelft.sem.template.activitymatch.controllers;
 
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
-import nl.tudelft.sem.template.example.services.ActivityMatchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

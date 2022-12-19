@@ -1,9 +1,13 @@
 package nl.tudelft.sem.template.common.models.activitymatch;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import nl.tudelft.sem.template.activitymatch.domain.TypesOfActivities;
+import lombok.NoArgsConstructor;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MatchCreationRequestModel {
 
     private String ownerId;

@@ -3,9 +3,9 @@ package nl.tudelft.sem.template.activitymatch.services;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.tudelft.sem.template.activitymatch.domain.ActivityMatch;
-import nl.tudelft.sem.template.activitymatch.domain.TypesOfActivities;
-import nl.tudelft.sem.template.activitymatch.models.MatchCreationRequestModel;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityMatchRepository;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

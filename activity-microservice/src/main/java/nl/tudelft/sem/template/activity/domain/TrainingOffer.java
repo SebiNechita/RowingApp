@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 
 @NoArgsConstructor
 @Entity

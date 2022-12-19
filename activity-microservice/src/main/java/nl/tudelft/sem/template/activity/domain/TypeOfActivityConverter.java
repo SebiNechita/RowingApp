@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.activity.domain;
 import java.util.Arrays;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 
 @Converter
 public class TypeOfActivityConverter implements AttributeConverter<TypesOfActivities, String> {
