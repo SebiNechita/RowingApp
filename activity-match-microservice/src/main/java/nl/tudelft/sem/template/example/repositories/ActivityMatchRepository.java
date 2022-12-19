@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface ActivityMatchRepository extends JpaRepository<ActivityMatch, Integer> {
 
     /**
-     * Method to find Actividy in repository by its ID.
+     * Method to find Activity in repository by its ID.
      *
      * @param id id
      * @return ActivityOffer
