@@ -6,7 +6,11 @@ import lombok.Getter;
 
 @Data
 @AllArgsConstructor
-public class PendingOffersRequestModel {
+public class SetParticipantRequestModel {
+
     @Getter
-    private int activityId;
+    public int activityId;
+
+    @Getter
+    public String participantNetId;
 }
