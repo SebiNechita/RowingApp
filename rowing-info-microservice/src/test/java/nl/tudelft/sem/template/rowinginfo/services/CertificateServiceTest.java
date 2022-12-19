@@ -92,4 +92,18 @@ public class CertificateServiceTest {
 
         assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
     }
+
+    @Test
+    public void checkCertificateisUnique_withValidName_throwsException() throws Exception {
+        // Act
+        certificatesService.createCertificate(certificateName, certificateValue, description);
+
+        // Assert
+        Certificates certificate = certificatesRepository.findById(1).orElseThrow();
+
+
+        assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
+        ThrowableAssert.ThrowingCallable action = () -> certificatesService
+                .createCertificate(certificateName, certificateValue, description);
+    }
 }

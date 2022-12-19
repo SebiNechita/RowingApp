@@ -34,6 +34,9 @@ public class CertificatesService {
         if (description.isEmpty()) {
             throw new EmptyStringException("Description");
         }
+        if (checkCertificates(name)) {
+            throw new Exception("Certificate already exists");
+        }
         certificatesRepository.save(new Certificates(name, value, description));
     }
 

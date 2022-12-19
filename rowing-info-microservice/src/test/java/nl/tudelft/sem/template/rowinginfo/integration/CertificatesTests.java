@@ -121,4 +121,25 @@ public class CertificatesTests {
         // Assert
         assertThat(resultActions.andReturn().getResponse().getContentAsString().contains("true")).isEqualTo(false);
     }
+
+    @Test
+    public void checkIfCertificateIsUnique_withWrongData_worksCorrectly() throws Exception {
+        // Arrange
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        // Act
+        ResultActions resultActions = mockMvc.perform(post("/create/certificates")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+        ResultActions resultActions2 = mockMvc.perform(post("/create/certificates")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
+        // Assert
+        resultActions.andExpect(status().isOk());
+        resultActions2.andExpect(status().isBadRequest());
+
+    }
 }

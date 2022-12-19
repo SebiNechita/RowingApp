@@ -74,10 +74,8 @@ public class CertificatesController {
     @GetMapping("/check/certificates")
     public ResponseEntity<Boolean> checkCertificates(@RequestBody CertificatesRequestModel request) throws Exception {
         try {
-            //return ResponseEntity.ok(certificatesService.checkCertificates(request.getCertificateName()));
-           return ResponseEntity.ok(certificatesService.getAllCertificates().stream()
-                   .anyMatch(certificate -> certificate.getCertificateName().equals(request.getCertificateName())));
-
+            String certificateName = request.getCertificateName();
+            return ResponseEntity.ok(certificatesService.checkCertificates(certificateName));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
