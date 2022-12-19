@@ -14,16 +14,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class HttpUtils {
 
     /**
-     * Send a HTTP request to a given URL.
+     * Send an HTTP request to a given URL.
      *
      * @param url The URL to send the request to.
      * @param method The HTTP method to use.
-     * @param body The body of the request.
      * @param headers The headers of the request.
+     * @param body The body of the request.
      * @param responseBodyType The type of the response body.
      */
     public static <RequestBodyT, ResponseBodyT> ResponseEntity<ResponseBodyT> sendHttpRequest(
-            String url, HttpMethod method, RequestBodyT body, Map<String, String> headers,
+            String url, HttpMethod method, Map<String, String> headers, RequestBodyT body,
             Class<ResponseBodyT> responseBodyType) throws ResponseStatusException {
         var restTemplate = new RestTemplate();
         var reqHeaders = new HttpHeaders();
@@ -41,7 +41,7 @@ public class HttpUtils {
     }
 
     /**
-     * Send a HTTP request to a given URL.
+     * Send an HTTP request to a given URL.
      *
      * @param url The URL to send the request to.
      * @param method The HTTP method to use.
@@ -51,6 +51,23 @@ public class HttpUtils {
     public static <RequestBodyT, ResponseBodyT> ResponseEntity<ResponseBodyT> sendHttpRequest(
             String url, HttpMethod method, RequestBodyT body,
             Class<ResponseBodyT> responseBodyType) throws ResponseStatusException {
-        return sendHttpRequest(url, method, body, new HashMap<>(), responseBodyType);
+        return sendHttpRequest(url, method, new HashMap<>(), body, responseBodyType);
+    }
+
+    /**
+     * Send an authorized HTTP request to a given URL.
+     *
+     * @param url The URL to send the request to.
+     * @param method The HTTP method to use.
+     * @param authToken The authorization token.
+     * @param body The body of the request.
+     * @param responseBodyType The type of the response body.
+     */
+    public static <RequestBodyT, ResponseBodyT> ResponseEntity<ResponseBodyT> sendAuthorizedHttpRequest(
+            String url, HttpMethod method, String authToken, RequestBodyT body,
+            Class<ResponseBodyT> responseBodyType) throws ResponseStatusException {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaders.AUTHORIZATION, authToken);
+        return sendHttpRequest(url, method, headers, body, responseBodyType);
     }
 }

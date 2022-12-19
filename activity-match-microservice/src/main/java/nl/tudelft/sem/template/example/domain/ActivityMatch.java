@@ -1,6 +1,5 @@
 package nl.tudelft.sem.template.example.domain;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -15,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import nl.tudelft.sem.template.common.models.activity_match.TypesOfActivities;
 
 @AllArgsConstructor
 @NoArgsConstructor

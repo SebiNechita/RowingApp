@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.example.domain;
+package nl.tudelft.sem.template.common.models.activity_match;
 
 import lombok.Getter;
 

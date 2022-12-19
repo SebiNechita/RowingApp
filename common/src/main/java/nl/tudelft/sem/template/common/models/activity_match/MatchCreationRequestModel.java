@@ -1,21 +1,16 @@
-package nl.tudelft.sem.template.example.models;
+package nl.tudelft.sem.template.common.models.activity_match;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import nl.tudelft.sem.template.example.domain.TypesOfActivities;
-
-import java.time.LocalDateTime;
-
-
+import lombok.NoArgsConstructor;
 
 
 @Data
-@AllArgsConstructor
 public class MatchCreationRequestModel {
+
     private String ownerId;
     private String activityId;
     private String userId;
     private TypesOfActivities type;
-
-
 }
+

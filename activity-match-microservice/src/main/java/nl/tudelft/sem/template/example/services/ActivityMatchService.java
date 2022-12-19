@@ -6,8 +6,8 @@ import nl.tudelft.sem.template.common.models.activity_match.SetParticipantReques
 import nl.tudelft.sem.template.example.domain.ActivityJoinQueueEntry;
 import nl.tudelft.sem.template.example.domain.ActivityMatch;
 import nl.tudelft.sem.template.example.domain.ActivityParticipant;
-import nl.tudelft.sem.template.example.domain.TypesOfActivities;
-import nl.tudelft.sem.template.example.models.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activity_match.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity_match.MatchCreationRequestModel;
 import nl.tudelft.sem.template.example.repositories.ActivityJoinQueueRepository;
 import nl.tudelft.sem.template.example.repositories.ActivityMatchRepository;
 import nl.tudelft.sem.template.example.repositories.ActivityParticipantRepository;
@@ -48,7 +48,6 @@ public class ActivityMatchService {
      */
     public void createActivityMatch(MatchCreationRequestModel request) throws Exception {
         try {
-
             String ownerId = request.getOwnerId();
             String activityId = request.getActivityId();
             String userId = request.getUserId();

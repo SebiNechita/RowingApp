@@ -1,5 +1,7 @@
 package nl.tudelft.sem.template.example.domain;
 
+import nl.tudelft.sem.template.common.models.activity_match.TypesOfActivities;
+
 import java.util.Arrays;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
