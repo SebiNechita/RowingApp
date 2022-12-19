@@ -9,10 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 import nl.tudelft.sem.template.activity.authentication.JwtTokenVerifier;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
+import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,28 +49,43 @@ public class ActivityOfferTests {
     private transient JwtTokenVerifier mockJwtTokenVerifier;
 
     private TrainingCreationRequestModel requestModel;
-    private String position;
+    private TypesOfPositions position;
+
+    private ManyTrainingsCreationRequestModel manyTrainingsRequestModel;
+
+    private Map<TypesOfPositions, Integer> positions;
     private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String ownerId;
     private String boatCertificate;
     private TypesOfActivities type;
+    private String name;
+    private String description;
 
     @BeforeEach
     void setup() {
         // Arrange
-        this.position = "cox";
+        this.position = TypesOfPositions.COX;
         this.isActive = false;
-        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
-                LocalTime.of(10, 0, 0));
-        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
-                LocalTime.of(12, 0, 0));
+        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(10, 0, 0));
+        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(12, 0, 0));
         this.ownerId = "JohnP2";
         this.boatCertificate = "4+";
         this.type = TypesOfActivities.TRAINING;
+        this.name = "Team Blue Training";
+        this.description = "Pumping the iron all day long";
         this.requestModel = new TrainingCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type);
+                startTime, endTime, ownerId, boatCertificate, type, name, description);
+        this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime,
+                ownerId, boatCertificate, type, name, description);
+        this.positions = new HashMap<>() {{
+                    put(TypesOfPositions.COX, 2);
+                    put(TypesOfPositions.COACH, 1);
+                }};
+
+        this.manyTrainingsRequestModel = new ManyTrainingsCreationRequestModel(positions, isActive,
+                startTime, endTime, ownerId, boatCertificate, type, name, description);
 
     }
 
@@ -76,11 +95,11 @@ public class ActivityOfferTests {
         when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
-        ResultActions resultActions = mockMvc.perform(
-                post("/create/training")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.serialize(requestModel))
-                        .header("Authorization", "Bearer MockedToken"));
+        ResultActions resultActions = mockMvc.perform(post("/create/training")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(requestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
 
         // Assert
         resultActions.andExpect(status().isOk());
@@ -94,5 +113,40 @@ public class ActivityOfferTests {
         assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
         assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
         assertThat(activityOffer.getType()).isEqualTo(type);
+        assertThat(activityOffer.getName()).isEqualTo(name);
+        assertThat(activityOffer.getDescription()).isEqualTo(description);
+    }
+
+    @Test
+    public void createManyTrainings_withValidData_worksCorrectly() throws Exception {
+        // Arrange
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        // Act
+        ResultActions resultActions = mockMvc.perform(post("/create/training/many")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(manyTrainingsRequestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
+
+        // Assert
+        int id = 1;
+        for (Map.Entry<TypesOfPositions, Integer> entry : positions.entrySet()) {
+            for (int i = 0; i < entry.getValue(); i++) {
+                ActivityOffer activityOffer = activityOfferRepository.findById(id).orElseThrow();
+                id++;
+
+                assertThat(activityOffer.getPosition()).isEqualTo(entry.getKey());
+                assertThat(activityOffer.isActive()).isEqualTo(isActive);
+                assertThat(activityOffer.getStartTime()).isEqualTo(startTime);
+                assertThat(activityOffer.getEndTime()).isEqualTo(endTime);
+                assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
+                assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
+                assertThat(activityOffer.getType()).isEqualTo(type);
+                assertThat(activityOffer.getName()).isEqualTo(name);
+                assertThat(activityOffer.getDescription()).isEqualTo(description);
+
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ import lombok.NonNull;
 public class TrainingOffer extends ActivityOffer {
 
     /**
-     * Initialises a new TrainingOffer without an Id.
+     * Initialises a new TrainingOffer without an Id, name and description.
      *
      * @param position        position
      * @param isActive        isActive
@@ -20,7 +20,7 @@ public class TrainingOffer extends ActivityOffer {
      * @param boatCertificate boatCertificate
      * @param type            type
      */
-    public TrainingOffer(@NonNull String position,
+    public TrainingOffer(@NonNull TypesOfPositions position,
                          boolean isActive,
                          @NonNull LocalDateTime startTime,
                          @NonNull LocalDateTime endTime,
@@ -28,6 +28,31 @@ public class TrainingOffer extends ActivityOffer {
                          String boatCertificate,
                          TypesOfActivities type) {
         super(position, isActive, startTime, endTime, ownerId, boatCertificate, type);
+    }
+
+    /**
+     * Initialises a new TrainingOffer without an Id.
+     *
+     * @param position        position
+     * @param isActive        isActive
+     * @param startTime       startTime
+     * @param endTime         endTime
+     * @param ownerId         ownerId
+     * @param boatCertificate boatCertificate
+     * @param type            type
+     * @param name            name
+     * @param description     description
+     */
+    public TrainingOffer(@NonNull TypesOfPositions position,
+                         boolean isActive,
+                         @NonNull LocalDateTime startTime,
+                         @NonNull LocalDateTime endTime,
+                         @NonNull String ownerId,
+                         String boatCertificate,
+                         TypesOfActivities type,
+                         String name,
+                         String description) {
+        super(position, isActive, startTime, endTime, ownerId, boatCertificate, type, name, description);
     }
 
     public String toString() {
