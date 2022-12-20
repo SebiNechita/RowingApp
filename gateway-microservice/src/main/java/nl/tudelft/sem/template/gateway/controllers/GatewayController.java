@@ -1,6 +1,6 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
-import nl.tudelft.sem.template.common.http.HttpUtils;
+import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
@@ -9,12 +9,12 @@ import nl.tudelft.sem.template.common.models.authentication.AuthenticationReques
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
 import nl.tudelft.sem.template.gateway.communication.ActivityMatchMicroserviceAdapter;
+import nl.tudelft.sem.template.gateway.communication.ActivityOfferMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +29,7 @@ public class GatewayController {
 
     private final transient AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter;
     private final transient ActivityMatchMicroserviceAdapter activityMatchMicroserviceAdapter;
+    private final transient ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter;
     static final Logger logger = LoggerFactory.getLogger(GatewayController.class.getName());
 
     /**
@@ -36,10 +37,12 @@ public class GatewayController {
      */
     @Autowired
     public GatewayController(AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter,
-                             ActivityMatchMicroserviceAdapter activityMatchMicroserviceAdapter) {
+                             ActivityMatchMicroserviceAdapter activityMatchMicroserviceAdapter,
+                             ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter) {
 
         this.authenticationMicroserviceAdapter = authenticationMicroserviceAdapter;
         this.activityMatchMicroserviceAdapter = activityMatchMicroserviceAdapter;
+        this.activityOfferMicroserviceAdapter = activityOfferMicroserviceAdapter;
     }
 
     /**
@@ -110,5 +113,19 @@ public class GatewayController {
         logger.info(String.format("Received setParticipant request for activity: %s, selected participant: %s",
                 request.getActivityId(), request.getParticipantNetId()));
         return activityMatchMicroserviceAdapter.setParticipant(request, authToken);
+    }
+
+    /**
+     * Endpoint for creating a new competition.
+     *
+     * @param request   request wrapped in a CompetitionCreationRequestModel
+     * @param authToken authentication token
+     * @return status of the message
+     */
+    @PostMapping("/competition/create")
+    public ResponseEntity<String> createCompetition(@RequestBody CompetitionCreationRequestModel request,
+                                                    @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        logger.info(String.format("Received createCompetition request for the following offer: " + request.toString()));
+        return activityOfferMicroserviceAdapter.createCompetition(request, authToken);
     }
 }

@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.common.models.rowingInfo;
+package nl.tudelft.sem.template.common.models.rowinginfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 
 @Entity
 @NoArgsConstructor

@@ -7,12 +7,12 @@ import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
-import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import org.springframework.stereotype.Service;
 
 @Service

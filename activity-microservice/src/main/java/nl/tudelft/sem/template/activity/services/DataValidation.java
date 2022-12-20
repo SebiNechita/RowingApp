@@ -7,8 +7,8 @@ import nl.tudelft.sem.template.activity.domain.exceptions.InvalidOrganisationExc
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.common.communication.MicroServiceAddresses;
 import nl.tudelft.sem.template.common.http.HttpUtils;
-import nl.tudelft.sem.template.common.models.rowingInfo.CertificatesExistanceRequestModel;
-import nl.tudelft.sem.template.common.models.rowingInfo.OrganisationsRequestModel;
+import nl.tudelft.sem.template.common.models.rowinginfo.CertificatesExistanceRequestModel;
+import nl.tudelft.sem.template.common.models.rowinginfo.OrganisationsRequestModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
