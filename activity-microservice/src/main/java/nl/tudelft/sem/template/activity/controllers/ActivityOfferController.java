@@ -42,7 +42,7 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/training")
-    public ResponseEntity createOffer(@RequestBody TrainingCreationRequestModel request) throws Exception {
+    public ResponseEntity createTraining(@RequestBody TrainingCreationRequestModel request) throws Exception {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -64,38 +64,6 @@ public class ActivityOfferController {
     }
 
     /**
-     * Endpoint for creating a new competition offer.
-     *
-     * @param request request
-     * @return ok response if successful
-     * @throws Exception if not successful
-     */
-    @PostMapping("/create/competition")
-    public ResponseEntity createOffer(@RequestBody CompetitionCreationRequestModel request) throws Exception {
-        try {
-            TypesOfPositions position = request.getPosition();
-            boolean isActive = request.isActive();
-            LocalDateTime startTime = request.getStartTime();
-            LocalDateTime endTime = request.getEndTime();
-            String ownerId = request.getOwnerId();
-            String boatCertificate = request.getBoatCertificate();
-            TypesOfActivities type = request.getType();
-            String name = request.getName();
-            String description = request.getDescription();
-            String organisation = request.getOrganisation();
-            boolean isFemale = request.isFemale();
-            boolean isPro = request.isPro();
-
-            activityOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
-                    ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-        return ResponseEntity.ok().build();
-    }
-
-    /**
      * Endpoint for creating multiple new offers.
      *
      * @param request request
@@ -103,7 +71,7 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/training/many")
-    public ResponseEntity createManyOffers(@RequestBody ManyTrainingsCreationRequestModel request) throws Exception {
+    public ResponseEntity createManyTrainings(@RequestBody ManyTrainingsCreationRequestModel request) throws Exception {
         try {
             Map<TypesOfPositions, Integer> positions = request.getPositions();
             boolean isActive = request.isActive();
@@ -140,4 +108,36 @@ public class ActivityOfferController {
         }
     }
 
+
+    /**
+     * Endpoint for creating a new competition offer.
+     *
+     * @param request request
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    @PostMapping("/create/competition")
+    public ResponseEntity createCompetition(@RequestBody CompetitionCreationRequestModel request) throws Exception {
+        try {
+            TypesOfPositions position = request.getPosition();
+            boolean isActive = request.isActive();
+            LocalDateTime startTime = request.getStartTime();
+            LocalDateTime endTime = request.getEndTime();
+            String ownerId = request.getOwnerId();
+            String boatCertificate = request.getBoatCertificate();
+            TypesOfActivities type = request.getType();
+            String name = request.getName();
+            String description = request.getDescription();
+            String organisation = request.getOrganisation();
+            boolean isFemale = request.isFemale();
+            boolean isPro = request.isPro();
+
+            activityOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
+                    ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
 }

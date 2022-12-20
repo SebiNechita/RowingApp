@@ -74,8 +74,10 @@ public class ActivityOfferTests {
         // Arrange
         this.position = TypesOfPositions.COX;
         this.isActive = false;
-        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(10, 0, 0));
-        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(12, 0, 0));
+        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(10, 0, 0));
+        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(12, 0, 0));
         this.ownerId = "JohnP2";
         this.boatCertificate = "4+";
         this.type = TypesOfActivities.TRAINING;
@@ -84,19 +86,20 @@ public class ActivityOfferTests {
         this.organisation = "partia przyjaciol piwa";
         this.isFemale = true;
         this.isPro = false;
+
         this.requestModel = new TrainingCreationRequestModel(position, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description);
-        this.competitionRequestModel = new CompetitionCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
         this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime,
                 ownerId, boatCertificate, type, name, description);
         this.positions = new HashMap<>() {{
-                    put(TypesOfPositions.COX, 2);
-                    put(TypesOfPositions.COACH, 1);
-                }};
+                put(TypesOfPositions.COX, 2);
+                put(TypesOfPositions.COACH, 1);
+            }};
 
         this.manyTrainingsRequestModel = new ManyTrainingsCreationRequestModel(positions, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description);
+        this.competitionRequestModel = new CompetitionCreationRequestModel(position, isActive,
+                startTime, endTime, ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
 
     }
 
@@ -126,37 +129,6 @@ public class ActivityOfferTests {
         assertThat(activityOffer.getType()).isEqualTo(type);
         assertThat(activityOffer.getName()).isEqualTo(name);
         assertThat(activityOffer.getDescription()).isEqualTo(description);
-    }
-
-    @Test
-    public void createCompetition_withValidData_worksCorrectly() throws Exception {
-        // Arrange
-        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
-
-        // Act
-        ResultActions resultActions = mockMvc.perform(
-                post("/create/competition")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.serialize(competitionRequestModel))
-                        .header("Authorization", "Bearer MockedToken"));
-
-        // Assert
-        resultActions.andExpect(status().isOk());
-
-        CompetitionOffer activityOffer = (CompetitionOffer) activityOfferRepository.findById(1).orElseThrow();
-
-        assertThat(activityOffer.getPosition()).isEqualTo(position);
-        assertThat(activityOffer.isActive()).isEqualTo(isActive);
-        assertThat(activityOffer.getStartTime()).isEqualTo(startTime);
-        assertThat(activityOffer.getEndTime()).isEqualTo(endTime);
-        assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
-        assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
-        assertThat(activityOffer.getType()).isEqualTo(type);
-        assertThat(activityOffer.getName()).isEqualTo(name);
-        assertThat(activityOffer.getDescription()).isEqualTo(description);
-        assertThat(activityOffer.getOrganisation()).isEqualTo(organisation);
-        assertThat(activityOffer.isFemale()).isEqualTo(isFemale);
-        assertThat(activityOffer.isPro()).isEqualTo(isPro);
     }
 
     @Test
@@ -190,5 +162,36 @@ public class ActivityOfferTests {
 
             }
         }
+    }
+
+    @Test
+    public void createCompetition_withValidData_worksCorrectly() throws Exception {
+        // Arrange
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        // Act
+        ResultActions resultActions = mockMvc.perform(
+                post("/create/competition")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtil.serialize(competitionRequestModel))
+                        .header("Authorization", "Bearer MockedToken"));
+
+        // Assert
+        resultActions.andExpect(status().isOk());
+
+        CompetitionOffer activityOffer = (CompetitionOffer) activityOfferRepository.findById(1).orElseThrow();
+
+        assertThat(activityOffer.getPosition()).isEqualTo(position);
+        assertThat(activityOffer.isActive()).isEqualTo(isActive);
+        assertThat(activityOffer.getStartTime()).isEqualTo(startTime);
+        assertThat(activityOffer.getEndTime()).isEqualTo(endTime);
+        assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
+        assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
+        assertThat(activityOffer.getType()).isEqualTo(type);
+        assertThat(activityOffer.getName()).isEqualTo(name);
+        assertThat(activityOffer.getDescription()).isEqualTo(description);
+        assertThat(activityOffer.getOrganisation()).isEqualTo(organisation);
+        assertThat(activityOffer.isFemale()).isEqualTo(isFemale);
+        assertThat(activityOffer.isPro()).isEqualTo(isPro);
     }
 }
