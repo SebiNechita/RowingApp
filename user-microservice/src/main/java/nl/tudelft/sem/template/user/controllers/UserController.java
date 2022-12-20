@@ -13,6 +13,7 @@ import nl.tudelft.sem.template.user.models.SetAccountDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,5 +57,15 @@ public class UserController {
         }
 
         return ResponseEntity.ok("Account (" + authManager.getNetId() + ") set successfully");
+    }
+
+    /**
+     * Gets a userId.
+     *
+     * @return userId
+     */
+    @GetMapping("/get/userId")
+    public ResponseEntity<String> helloWorld() {
+        return ResponseEntity.ok(authManager.getNetId());
     }
 }

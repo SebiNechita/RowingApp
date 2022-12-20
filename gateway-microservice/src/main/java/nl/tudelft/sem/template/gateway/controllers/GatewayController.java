@@ -11,6 +11,7 @@ import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestM
 import nl.tudelft.sem.template.gateway.communication.ActivityMatchMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.ActivityOfferMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
+import nl.tudelft.sem.template.gateway.communication.UserMicroserviceAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class GatewayController {
-
     private final transient AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter;
     private final transient ActivityMatchMicroserviceAdapter activityMatchMicroserviceAdapter;
     private final transient ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter;
+    private final transient UserMicroserviceAdapter userMicroserviceAdapter;
     static final Logger logger = LoggerFactory.getLogger(GatewayController.class.getName());
 
     /**
@@ -38,11 +39,13 @@ public class GatewayController {
     @Autowired
     public GatewayController(AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter,
                              ActivityMatchMicroserviceAdapter activityMatchMicroserviceAdapter,
-                             ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter) {
+                             ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter,
+                             UserMicroserviceAdapter userMicroserviceAdapter) {
 
         this.authenticationMicroserviceAdapter = authenticationMicroserviceAdapter;
         this.activityMatchMicroserviceAdapter = activityMatchMicroserviceAdapter;
         this.activityOfferMicroserviceAdapter = activityOfferMicroserviceAdapter;
+        this.userMicroserviceAdapter = userMicroserviceAdapter;
     }
 
     /**
@@ -126,6 +129,9 @@ public class GatewayController {
     public ResponseEntity<String> createCompetition(@RequestBody CompetitionCreationRequestModel request,
                                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         logger.info(String.format("Received createCompetition request for the following offer: " + request.toString()));
+        String userId = userMicroserviceAdapter.getUserId(authToken).getBody();
+
+        request.setOwnerId(userId);
         return activityOfferMicroserviceAdapter.createCompetition(request, authToken);
     }
 }
