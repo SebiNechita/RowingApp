@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 
 @AllArgsConstructor
@@ -30,34 +31,43 @@ public abstract class ActivityOffer {
     private int id;
 
     @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
     @NonNull
     @Column(name = "position", nullable = false)
-    private String position;
+    @Convert(converter = TypeOfPositionConverter.class)
+    private TypesOfPositions position;
 
     @Getter
+    @Setter
     @Column(name = "isActive", nullable = false)
     private boolean isActive;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "startTime", nullable = false)
     private LocalDateTime startTime;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "endTime", nullable = false)
     private LocalDateTime endTime;
 
     @Getter
+    @Setter
     @NonNull
     @Column(name = "ownerName", nullable = false)
     private String ownerId;
 
     @Getter
+    @Setter
     @Column(name = "certificates", nullable = false)
     private String boatCertificate;
 
     @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     @Convert(converter = TypeOfActivityConverter.class)
@@ -84,7 +94,7 @@ public abstract class ActivityOffer {
      * @param boatCertificate boatCertificate
      * @param type            type
      */
-    public ActivityOffer(@NonNull String position,
+    public ActivityOffer(@NonNull TypesOfPositions position,
                          boolean isActive,
                          @NonNull LocalDateTime startTime,
                          @NonNull LocalDateTime endTime,
@@ -113,7 +123,7 @@ public abstract class ActivityOffer {
      * @param name            name
      * @param description     description
      */
-    public ActivityOffer(@NonNull String position,
+    public ActivityOffer(@NonNull TypesOfPositions position,
                          boolean isActive,
                          @NonNull LocalDateTime startTime,
                          @NonNull LocalDateTime endTime,
