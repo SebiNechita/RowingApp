@@ -205,4 +205,17 @@ public class ActivityOfferService {
         }
     }
 
+    /**
+     * Gets a list of ActivityOffers which are all possible trainings.
+     *
+     * @throws Exception exception
+     */
+    public List<ActivityOffer> getAllCompetitionOffers() throws Exception {
+        try {
+            return activityOfferRepository.findByType(TypesOfActivities.COMPETITION);
+        } catch (Exception e) {
+            throw new Exception("Error while retrieving all competitions. " + e.getMessage());
+        }
+    }
+
 }

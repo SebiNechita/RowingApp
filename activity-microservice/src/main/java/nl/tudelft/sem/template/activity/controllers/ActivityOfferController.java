@@ -145,4 +145,20 @@ public class ActivityOfferController {
         }
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Endpoint for getting all competition offers.
+     *
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    @GetMapping("/get/competitions")
+    public ResponseEntity<List<ActivityOffer>> getCompetition() throws Exception {
+        try {
+            return ResponseEntity.ok(activityOfferService.getAllCompetitionOffers());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }
