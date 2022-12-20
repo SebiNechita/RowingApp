@@ -5,9 +5,11 @@ import nl.tudelft.sem.template.authentication.authentication.JwtUserDetailsServi
 import nl.tudelft.sem.template.authentication.domain.user.NetId;
 import nl.tudelft.sem.template.authentication.domain.user.Password;
 import nl.tudelft.sem.template.authentication.domain.user.RegistrationService;
-import nl.tudelft.sem.template.authentication.models.AuthenticationRequestModel;
-import nl.tudelft.sem.template.authentication.models.AuthenticationResponseModel;
-import nl.tudelft.sem.template.authentication.models.RegistrationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
+import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
+import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthenticationController {
 
     private final transient AuthenticationManager authenticationManager;
-
     private final transient JwtTokenGenerator jwtTokenGenerator;
-
     private final transient JwtUserDetailsService jwtUserDetailsService;
-
     private final transient RegistrationService registrationService;
+    static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class.getName());
 
     /**
      * Instantiates a new UsersController.
@@ -45,6 +45,7 @@ public class AuthenticationController {
                                     JwtTokenGenerator jwtTokenGenerator,
                                     JwtUserDetailsService jwtUserDetailsService,
                                     RegistrationService registrationService) {
+
         this.authenticationManager = authenticationManager;
         this.jwtTokenGenerator = jwtTokenGenerator;
         this.jwtUserDetailsService = jwtUserDetailsService;
@@ -62,14 +63,19 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponseModel> authenticate(@RequestBody AuthenticationRequestModel request)
             throws Exception {
 
+        logger.info("Received authentication request from user: " + request.getNetId());
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getNetId(),
                             request.getPassword()));
         } catch (DisabledException e) {
+            logger.info(String.format("User %s is disabled, responding with unauthorized error", request.getNetId()));
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            logger.info(String.format("User %s provided invalid credentials, responding with unauthorized error",
+                    request.getNetId()));
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", e);
         }
 
@@ -88,13 +94,20 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegistrationRequestModel request) throws Exception {
 
+        logger.info("Received registration request from user: " + request.getNetId());
+
         try {
             NetId netId = new NetId(request.getNetId());
             Password password = new Password(request.getPassword());
             registrationService.registerUser(netId, password);
         } catch (Exception e) {
+            logger.info(String.format("User %s could not be registered, responding with bad request error",
+                    request.getNetId()));
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+
+        logger.info(String.format("User %s registered successfully", request.getNetId()));
 
         return ResponseEntity.ok().build();
     }

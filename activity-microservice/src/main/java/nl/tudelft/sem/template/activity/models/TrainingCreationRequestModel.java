@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainingCreationRequestModel {
-    private String position;
+    private TypesOfPositions position;
     private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
