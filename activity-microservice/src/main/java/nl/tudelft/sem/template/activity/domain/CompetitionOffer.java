@@ -42,7 +42,7 @@ public class CompetitionOffer extends ActivityOffer {
      * @param isFemale        boolean is the competition for females
      * @param isPro           boolean is the competition for experienced rowers
      */
-    public CompetitionOffer(@NonNull String position,
+    public CompetitionOffer(@NonNull TypesOfPositions position,
                             boolean isActive,
                             @NonNull LocalDateTime startTime,
                             @NonNull LocalDateTime endTime,

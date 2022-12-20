@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
+import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,7 +29,7 @@ public class CompetitionCreationRequestModel extends TrainingCreationRequestMode
      * @param isFemale        isFemale
      * @param isPro           isPro
      */
-    public CompetitionCreationRequestModel(String position, boolean isActive,
+    public CompetitionCreationRequestModel(TypesOfPositions position, boolean isActive,
                                            LocalDateTime startTime, LocalDateTime endTime,
                                            String ownerId, String boatCertificate,
                                            TypesOfActivities type, String name, String description,

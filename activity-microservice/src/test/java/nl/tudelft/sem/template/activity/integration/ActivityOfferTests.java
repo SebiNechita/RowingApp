@@ -17,8 +17,8 @@ import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
-import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.CompetitionCreationRequestModel;
+import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,8 +74,10 @@ public class ActivityOfferTests {
         // Arrange
         this.position = TypesOfPositions.COX;
         this.isActive = false;
-        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(10, 0, 0));
-        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(12, 0, 0));
+        this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(10, 0, 0));
+        this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(12, 0, 0));
         this.ownerId = "JohnP2";
         this.boatCertificate = "4+";
         this.type = TypesOfActivities.TRAINING;
@@ -84,14 +86,15 @@ public class ActivityOfferTests {
         this.organisation = "partia przyjaciol piwa";
         this.isFemale = true;
         this.isPro = false;
+
         this.requestModel = new TrainingCreationRequestModel(position, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description);
         this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime,
                 ownerId, boatCertificate, type, name, description);
         this.positions = new HashMap<>() {{
-                    put(TypesOfPositions.COX, 2);
-                    put(TypesOfPositions.COACH, 1);
-                }};
+                put(TypesOfPositions.COX, 2);
+                put(TypesOfPositions.COACH, 1);
+            }};
 
         this.manyTrainingsRequestModel = new ManyTrainingsCreationRequestModel(positions, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description);

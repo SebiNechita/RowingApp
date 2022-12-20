@@ -83,7 +83,7 @@ public class ActivityOfferService {
      * @param isPro           boolean is the competition for experienced rowers
      * @throws Exception EmptyStringException
      */
-    public void createCompetitionOffer(String position,
+    public void createCompetitionOffer(TypesOfPositions position,
                                        boolean isActive,
                                        LocalDateTime startTime,
                                        LocalDateTime endTime,

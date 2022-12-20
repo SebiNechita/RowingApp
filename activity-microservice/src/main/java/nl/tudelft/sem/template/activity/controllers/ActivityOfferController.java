@@ -6,20 +6,18 @@ import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
-import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.CompetitionCreationRequestModel;
+import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 
 
 @RestController
@@ -44,7 +42,7 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/training")
-    public ResponseEntity createOffer(@RequestBody TrainingCreationRequestModel request) throws Exception {
+    public ResponseEntity createTraining(@RequestBody TrainingCreationRequestModel request) throws Exception {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -73,7 +71,7 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/training/many")
-    public ResponseEntity createManyOffers(@RequestBody ManyTrainingsCreationRequestModel request) throws Exception {
+    public ResponseEntity createManyTrainings(@RequestBody ManyTrainingsCreationRequestModel request) throws Exception {
         try {
             Map<TypesOfPositions, Integer> positions = request.getPositions();
             boolean isActive = request.isActive();
@@ -119,9 +117,9 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/competition")
-    public ResponseEntity createOffer(@RequestBody CompetitionCreationRequestModel request) throws Exception {
+    public ResponseEntity createCompetition(@RequestBody CompetitionCreationRequestModel request) throws Exception {
         try {
-            String position = request.getPosition();
+            TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
             LocalDateTime startTime = request.getStartTime();
             LocalDateTime endTime = request.getEndTime();
