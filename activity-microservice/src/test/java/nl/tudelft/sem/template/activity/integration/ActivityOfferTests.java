@@ -1,6 +1,7 @@
 package nl.tudelft.sem.template.activity.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,6 +21,7 @@ import nl.tudelft.sem.template.activity.models.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.activity.services.DataValidation;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +38,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles({"test", "mockTokenVerifier"})
+@ActiveProfiles({"test", "mockTokenVerifier", "mockDataValidation"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 public class ActivityOfferTests {
@@ -49,6 +51,9 @@ public class ActivityOfferTests {
 
     @Autowired
     private transient JwtTokenVerifier mockJwtTokenVerifier;
+
+    @Autowired
+    private transient DataValidation mockDataValidation;
 
     private TrainingCreationRequestModel requestModel;
     private CompetitionCreationRequestModel competitionRequestModel;
@@ -70,7 +75,7 @@ public class ActivityOfferTests {
     private boolean isPro;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         // Arrange
         this.position = TypesOfPositions.COX;
         this.isActive = false;
@@ -101,12 +106,18 @@ public class ActivityOfferTests {
         this.competitionRequestModel = new CompetitionCreationRequestModel(position, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
 
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        when(mockDataValidation.validateOrganisation(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateCertificate(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateNameAndDescription(any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateTime(any(), any())).thenCallRealMethod();
     }
 
     @Test
     public void createTraining_withValidData_worksCorrectly() throws Exception {
         // Arrange
-        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
         ResultActions resultActions = mockMvc.perform(post("/create/training")
@@ -134,7 +145,6 @@ public class ActivityOfferTests {
     @Test
     public void createManyTrainings_withValidData_worksCorrectly() throws Exception {
         // Arrange
-        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
         ResultActions resultActions = mockMvc.perform(post("/create/training/many")
@@ -159,7 +169,6 @@ public class ActivityOfferTests {
                 assertThat(activityOffer.getType()).isEqualTo(type);
                 assertThat(activityOffer.getName()).isEqualTo(name);
                 assertThat(activityOffer.getDescription()).isEqualTo(description);
-
             }
         }
     }
@@ -167,7 +176,6 @@ public class ActivityOfferTests {
     @Test
     public void createCompetition_withValidData_worksCorrectly() throws Exception {
         // Arrange
-        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
         ResultActions resultActions = mockMvc.perform(

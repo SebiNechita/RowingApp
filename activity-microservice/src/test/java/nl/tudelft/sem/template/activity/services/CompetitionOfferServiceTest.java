@@ -1,6 +1,9 @@
 package nl.tudelft.sem.template.activity.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles({"test"})
+@ActiveProfiles({"test", "mockDataValidation"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CompetitionOfferServiceTest {
 
@@ -28,6 +31,8 @@ public class CompetitionOfferServiceTest {
     private transient ActivityOfferService activityService;
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
+    @Autowired
+    private transient DataValidation mockDataValidation;
 
     private TypesOfPositions position;
     private boolean isActive;
@@ -44,7 +49,7 @@ public class CompetitionOfferServiceTest {
     private String authToken;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         // Arrange
         this.position = TypesOfPositions.COACH;
         this.isActive = true;
@@ -60,9 +65,12 @@ public class CompetitionOfferServiceTest {
         this.organisation = "Black Panthers";
         this.isFemale = true;
         this.isPro = false;
-    }
 
-    // Todo: Mock data validation
+        when(mockDataValidation.validateOrganisation(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateCertificate(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateNameAndDescription(any(), any())).thenCallRealMethod();
+    }
 
     @Test
     public void createTrainingActivity_withValidData_worksCorrectly() throws Exception {

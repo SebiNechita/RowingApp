@@ -2,6 +2,9 @@ package nl.tudelft.sem.template.activity.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,7 +29,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles({"test"})
+@ActiveProfiles({"test", "mockDataValidation"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ActivityOfferServiceTest {
 
@@ -34,6 +37,8 @@ public class ActivityOfferServiceTest {
     private transient ActivityOfferService activityService;
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
+    @Autowired
+    private transient DataValidation mockDataValidation;
 
     private TypesOfPositions position;
 
@@ -49,7 +54,7 @@ public class ActivityOfferServiceTest {
     private String authToken;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         // Arrange
         this.position = TypesOfPositions.COACH;
         this.isActive = true;
@@ -65,6 +70,12 @@ public class ActivityOfferServiceTest {
         this.positions = new HashMap<>();
         this.positions.put(TypesOfPositions.COX, 2);
         this.positions.put(TypesOfPositions.COACH, 1);
+
+        when(mockDataValidation.validateOrganisation(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateCertificate(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateNameAndDescription(any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateTime(any(), any())).thenCallRealMethod();
     }
 
     @Test
@@ -88,7 +99,7 @@ public class ActivityOfferServiceTest {
     }
 
     @Test
-    public void createActivity_withEmptyName_throwsException() {
+    public void createActivity_withEmptyName_throwsException() throws Exception {
         // Arrange
         this.name = "";
 
@@ -160,5 +171,4 @@ public class ActivityOfferServiceTest {
             }
         }
     }
-
 }

@@ -8,6 +8,9 @@ import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
+import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
+import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
+import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import org.springframework.stereotype.Service;
@@ -55,7 +58,15 @@ public class ActivityOfferService {
                                     String description,
                                     String authToken) throws Exception {
 
-        dataValidation.validateData(startTime, endTime, name, description, boatCertificate, authToken);
+        try {
+            dataValidation.validateData(startTime, endTime, name, description, boatCertificate, authToken);
+        } catch (NotCorrectIntervalException interEx) {
+            throw new NotCorrectIntervalException(interEx.getMessage());
+        } catch (EmptyStringException strEx) {
+            throw new EmptyStringException(strEx.getMessage());
+        } catch (InvalidCertificateException certEx) {
+            throw new InvalidCertificateException(boatCertificate);
+        }
 
         TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
                 ownerId, boatCertificate, type, name, description);
