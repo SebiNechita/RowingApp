@@ -11,8 +11,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import nl.tudelft.sem.template.activity.authentication.JwtTokenVerifier;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
+import nl.tudelft.sem.template.activity.models.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +47,7 @@ public class ActivityOfferTests {
     private transient JwtTokenVerifier mockJwtTokenVerifier;
 
     private TrainingCreationRequestModel requestModel;
+    private CompetitionCreationRequestModel competitionRequestModel;
     private String position;
     private boolean isActive;
     private LocalDateTime startTime;
@@ -54,6 +57,9 @@ public class ActivityOfferTests {
     private TypesOfActivities type;
     private String name;
     private String description;
+    private String organisation;
+    private boolean isFemale;
+    private boolean isPro;
 
     @BeforeEach
     void setup() {
@@ -69,8 +75,13 @@ public class ActivityOfferTests {
         this.type = TypesOfActivities.TRAINING;
         this.name = "Team Blue Training";
         this.description = "Pumping the iron all day long";
+        this.organisation = "partia przyjaciol piwa";
+        this.isFemale = true;
+        this.isPro = false;
         this.requestModel = new TrainingCreationRequestModel(position, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description);
+        this.competitionRequestModel = new CompetitionCreationRequestModel(position, isActive,
+                startTime, endTime, ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
 
     }
 
@@ -100,5 +111,36 @@ public class ActivityOfferTests {
         assertThat(activityOffer.getType()).isEqualTo(type);
         assertThat(activityOffer.getName()).isEqualTo(name);
         assertThat(activityOffer.getDescription()).isEqualTo(description);
+    }
+
+    @Test
+    public void createCompetition_withValidData_worksCorrectly() throws Exception {
+        // Arrange
+        when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
+
+        // Act
+        ResultActions resultActions = mockMvc.perform(
+                post("/create/competition")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtil.serialize(competitionRequestModel))
+                        .header("Authorization", "Bearer MockedToken"));
+
+        // Assert
+        resultActions.andExpect(status().isOk());
+
+        CompetitionOffer activityOffer = (CompetitionOffer) activityOfferRepository.findById(1).orElseThrow();
+
+        assertThat(activityOffer.getPosition()).isEqualTo(position);
+        assertThat(activityOffer.isActive()).isEqualTo(isActive);
+        assertThat(activityOffer.getStartTime()).isEqualTo(startTime);
+        assertThat(activityOffer.getEndTime()).isEqualTo(endTime);
+        assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
+        assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
+        assertThat(activityOffer.getType()).isEqualTo(type);
+        assertThat(activityOffer.getName()).isEqualTo(name);
+        assertThat(activityOffer.getDescription()).isEqualTo(description);
+        assertThat(activityOffer.getOrganisation()).isEqualTo(organisation);
+        assertThat(activityOffer.isFemale()).isEqualTo(isFemale);
+        assertThat(activityOffer.isPro()).isEqualTo(isPro);
     }
 }
