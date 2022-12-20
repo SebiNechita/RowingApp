@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +41,7 @@ public class CompetitionOfferServiceTest {
     private String organisation;
     private boolean isFemale;
     private boolean isPro;
+    private String authToken;
 
     @BeforeEach
     void setup() {
@@ -61,11 +62,13 @@ public class CompetitionOfferServiceTest {
         this.isPro = false;
     }
 
+    // Todo: Mock data validation
+
     @Test
     public void createTrainingActivity_withValidData_worksCorrectly() throws Exception {
         // Act
         activityService.createCompetitionOffer(position, isActive, startTime, endTime, ownerId,
-                boatCertificate, type, name, description, organisation, isFemale, isPro);
+                boatCertificate, type, name, description, organisation, isFemale, isPro, authToken);
 
         // Assert
         CompetitionOffer activityOffer = (CompetitionOffer) activityOfferRepository.findById(1).orElseThrow();

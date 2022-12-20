@@ -46,6 +46,7 @@ public class ActivityOfferServiceTest {
     private TypesOfActivities type;
     private String name;
     private String description;
+    private String authToken;
 
     @BeforeEach
     void setup() {
@@ -70,7 +71,7 @@ public class ActivityOfferServiceTest {
     public void createActivity_withValidData_worksCorrectly() throws Exception {
         // Act
         activityService.createTrainingOffer(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
+                startTime, endTime, ownerId, boatCertificate, type, name, description, authToken);
 
         // Assert
         ActivityOffer activityOffer = activityOfferRepository.findById(1).orElseThrow();
@@ -94,7 +95,7 @@ public class ActivityOfferServiceTest {
         // Act
         ThrowableAssert.ThrowingCallable action = () -> activityService
                 .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
-                        boatCertificate, type, name, description);
+                        boatCertificate, type, name, description, authToken);
 
         // Assert
         assertThatExceptionOfType(EmptyStringException.class)
@@ -109,7 +110,7 @@ public class ActivityOfferServiceTest {
         // Act
         ThrowableAssert.ThrowingCallable action = () -> activityService
                 .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
-                        boatCertificate, type, name, description);
+                        boatCertificate, type, name, description, authToken);
 
         // Assert
         assertThatExceptionOfType(EmptyStringException.class)
@@ -127,7 +128,7 @@ public class ActivityOfferServiceTest {
         // Act
         ThrowableAssert.ThrowingCallable action = () -> activityService
                 .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
-                        boatCertificate, type, name, description);
+                        boatCertificate, type, name, description, authToken);
 
         // Assert
         assertThatExceptionOfType(NotCorrectIntervalException.class)
@@ -138,7 +139,7 @@ public class ActivityOfferServiceTest {
     public void createManyActivities_withValidData_worksCorrectly() throws Exception {
         // Act
         activityService.createManyTrainingOffers(positions, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
+                startTime, endTime, ownerId, boatCertificate, type, name, description, authToken);
 
         // Assert
         int id = 1;

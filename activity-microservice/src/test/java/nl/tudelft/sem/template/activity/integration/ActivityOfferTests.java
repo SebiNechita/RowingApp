@@ -14,7 +14,6 @@ import java.util.Map;
 import nl.tudelft.sem.template.activity.authentication.JwtTokenVerifier;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
 import nl.tudelft.sem.template.activity.models.CompetitionCreationRequestModel;

@@ -72,7 +72,7 @@ public class CertificatesController {
      * @throws Exception if not successful
      */
     @GetMapping("/check/certificates")
-    public ResponseEntity<Boolean> checkCertificates(@RequestBody CertificatesRequestModel request) throws Exception {
+    public ResponseEntity<Boolean> checkCertificates(@RequestBody CertificatesExistanceRequestModel request) throws Exception {
         try {
             String certificateName = request.getCertificateName();
             return ResponseEntity.ok(certificatesService.checkCertificates(certificateName));
