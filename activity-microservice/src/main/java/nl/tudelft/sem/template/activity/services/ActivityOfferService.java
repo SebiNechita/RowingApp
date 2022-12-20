@@ -83,7 +83,7 @@ public class ActivityOfferService {
      * @param isPro           boolean is the competition for experienced rowers
      * @throws Exception EmptyStringException
      */
-    public void createCompetitionOffer(String position,
+    public void createCompetitionOffer(TypesOfPositions position,
                                        boolean isActive,
                                        LocalDateTime startTime,
                                        LocalDateTime endTime,
@@ -163,7 +163,6 @@ public class ActivityOfferService {
         if (description.isEmpty()) {
             throw new EmptyStringException("Description");
         }
-        TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
         return true;
     }
 

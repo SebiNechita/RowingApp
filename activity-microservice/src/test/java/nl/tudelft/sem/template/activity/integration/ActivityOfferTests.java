@@ -52,7 +52,6 @@ public class ActivityOfferTests {
 
     private TrainingCreationRequestModel requestModel;
     private CompetitionCreationRequestModel competitionRequestModel;
-    private String position;
     private TypesOfPositions position;
 
     private ManyTrainingsCreationRequestModel manyTrainingsRequestModel;
