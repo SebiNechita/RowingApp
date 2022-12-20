@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 
 @Data
 @NoArgsConstructor

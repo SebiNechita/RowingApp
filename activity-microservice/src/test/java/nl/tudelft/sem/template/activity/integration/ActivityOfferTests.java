@@ -21,6 +21,7 @@ import nl.tudelft.sem.template.activity.models.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
