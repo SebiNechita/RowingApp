@@ -10,6 +10,8 @@ import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequest
 import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -156,6 +158,30 @@ public class ActivityOfferController {
     public ResponseEntity<List<ActivityOffer>> getCompetition() throws Exception {
         try {
             return ResponseEntity.ok(activityOfferService.getAllCompetitionOffers());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    /**
+     * Get list of ActivityOffers that are active and are competitions and meet your requirements:
+     * have the same gender as you do, are on the same experience level, are from the same organisation
+     * @param request
+     * @return
+     */
+    @GetMapping("/get/competitions/filtered")
+    public ResponseEntity<List<ActivityOffer>> getFilteredCompetitions(@RequestBody UserDetailsModel request) {
+        try {
+            String organisation = request.getOrganisation();
+            boolean isFemale = request.getGender().equals("FEMALE");
+            boolean isPro = request.isPro();;
+            List<TypesOfPositions> positions = request.getPositions();
+            List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
+            List<String> certificates = request.getCertificates();
+
+            return ResponseEntity.ok(activityOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
+                    certificates, positions, availabilities));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.activity.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
@@ -13,6 +14,7 @@ import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalExce
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.Tuple;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -206,16 +208,50 @@ public class ActivityOfferService {
     }
 
     /**
-     * Gets a list of ActivityOffers which are all possible trainings.
+     * Gets a list of ActivityOffers which are all active competitions.
      *
      * @throws Exception exception
      */
     public List<ActivityOffer> getAllCompetitionOffers() throws Exception {
         try {
-            return activityOfferRepository.findByType(TypesOfActivities.COMPETITION);
+            return activityOfferRepository.findByActiveAndType(true, TypesOfActivities.COMPETITION);
         } catch (Exception e) {
             throw new Exception("Error while retrieving all competitions. " + e.getMessage());
         }
     }
 
+    public List<ActivityOffer> getFilteredCompetitionOffers(String organisation,
+                                                            boolean isFemale,
+                                                            boolean isPro,
+                                                            List<String> certificates,
+                                                            List<TypesOfPositions> positions,
+                                                            List<Tuple<LocalDateTime, LocalDateTime>> availabilities)
+            throws Exception {
+        return getAllCompetitionOffers()
+                .stream()
+                .map(x -> (CompetitionOffer) x)
+                .filter(x -> x.isFemale() == isFemale)
+                .filter(x -> x.isPro() == isPro)
+                .filter(x -> x.getOrganisation().equals(organisation))
+                .filter(x -> positions.contains(x.getPosition()))
+                .filter(x -> {
+                    for (Tuple<LocalDateTime, LocalDateTime> tuple : availabilities) {
+                        LocalDateTime avlStartTime = tuple.getFirst();
+                        LocalDateTime avlEndTime = tuple.getSecond();
+
+                        // If the competition doesn't start before our slot and doesn't end after our slot
+                        // we can take part in it
+                        if (!x.getStartTime().isBefore(avlStartTime) && !x.getEndTime().isAfter(avlEndTime)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .filter(x -> {
+                    if (x.getPosition().equals(TypesOfPositions.COX))
+                        return certificates.contains(x.getBoatCertificate());
+                    return true;
+                })
+                .collect(Collectors.toList());
+    }
 }
