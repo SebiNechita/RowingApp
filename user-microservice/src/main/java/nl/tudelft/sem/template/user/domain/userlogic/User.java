@@ -1,55 +1,60 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import nl.tudelft.sem.template.user.domain.HasEvents;
 import nl.tudelft.sem.template.user.domain.userlogic.converters.GenderConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
+import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @NoArgsConstructor
-public class AppUser extends HasEvents {
+public abstract class User extends HasEvents {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private int id;
 
+    @Getter
+    @Setter
     @Column(name = "net_id", nullable = false, unique = true)
     @Convert(converter = NetIdAttributeConverter.class)
     private NetId netId;
 
+    @Getter
+    @Setter
     @Column(name = "password_hash", nullable = false)
     @Convert(converter = HashedPasswordAttributeConverter.class)
     private HashedPassword password;
 
+    @Getter
+    @Setter
     @Column(name = "gender", nullable = false)
     @Convert(converter = GenderConverter.class)
     private Gender gender;
 
-    /**
-     * Create new application user.
-     *
-     * @param netId The NetId for the new user
-     * @param password The password for the new user
-     * @param gender The gender of the user
-     */
-    public AppUser(@NonNull NetId netId,
-                   @NonNull HashedPassword password,
-                   @NonNull Gender gender) {
+    @Getter
+    @Setter
+    @NonNull
+    @ElementCollection
+    //@Convert(converter = TypeOfPositionConverter.class)
+    @Column(name = "positions", nullable = false)
+    private List<TypesOfPositions> positions;
+
+    public User(@NonNull NetId netId,
+                @NonNull HashedPassword password,
+                @NonNull Gender gender,
+                List<TypesOfPositions> positions) {
         this.netId = netId;
         this.password = password;
         this.gender = gender;
+        this.positions = positions;
         this.recordThat(new UserWasCreatedEvent(netId));
     }
 
@@ -58,18 +63,14 @@ public class AppUser extends HasEvents {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        AppUser appUser = (AppUser) o;
-        return id == (appUser.id);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (AmateurUser) o;
+        return id == user.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(netId);
+        return Objects.hash(id);
     }
 }

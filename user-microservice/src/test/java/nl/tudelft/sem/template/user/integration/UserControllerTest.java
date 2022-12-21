@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
 import nl.tudelft.sem.template.user.authentication.JwtTokenVerifier;
-import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
+import nl.tudelft.sem.template.user.domain.userlogic.AmateurUser;
 import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
 import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import nl.tudelft.sem.template.user.domain.userlogic.Password;
@@ -17,7 +17,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.services.PasswordHashingService;
 import nl.tudelft.sem.template.user.integration.util.JsonUtil;
-import nl.tudelft.sem.template.user.models.SetAccountDetailsModel;
+import nl.tudelft.sem.template.user.models.AmateurSetAccountDetailsModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ class UserControllerTest {
         final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
         final String testGender = "MALE";
         when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
-        SetAccountDetailsModel model = new SetAccountDetailsModel();
+        AmateurSetAccountDetailsModel model = new AmateurSetAccountDetailsModel();
         model.setNetId(testUser.toString());
         model.setPassword(testPassword.toString());
         model.setGender(testGender);
@@ -86,7 +86,7 @@ class UserControllerTest {
         // Assert
         result.andExpect(status().isOk());
 
-        AppUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
+        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
 
         assertThat(savedUser.getNetId()).isEqualTo(testUser);
         assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
