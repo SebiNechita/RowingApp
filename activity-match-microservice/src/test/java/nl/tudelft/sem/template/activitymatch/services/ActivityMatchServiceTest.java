@@ -3,8 +3,13 @@ package nl.tudelft.sem.template.activitymatch.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityJoinQueueEntry;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityMatch;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityParticipant;
@@ -12,7 +17,11 @@ import nl.tudelft.sem.template.activitymatch.repositories.ActivityJoinQueueRepos
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityMatchRepository;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityParticipantRepository;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.activitymatch.*;
+import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +33,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

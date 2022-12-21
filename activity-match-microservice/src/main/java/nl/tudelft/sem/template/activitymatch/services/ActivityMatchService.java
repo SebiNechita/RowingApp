@@ -11,11 +11,13 @@ import nl.tudelft.sem.template.activitymatch.repositories.ActivityJoinQueueRepos
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityMatchRepository;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityParticipantRepository;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.activitymatch.*;
+import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -51,7 +53,7 @@ public class ActivityMatchService {
         TypesOfActivities type = request.getType();
         ActivityMatch activityMatch = new ActivityMatch(ownerId, activityId, userId, type);
         activityMatchRepository.save(activityMatch);
-        System.out.println("Activity " + activityMatch + " has been added to the database");
+        System.out.printf("Activity %s has been added to the database\n", activityMatch);
     }
 
     /**
@@ -68,7 +70,7 @@ public class ActivityMatchService {
 
         if (activityMatch.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Activity " + request.getActivityId() + " was not found");
+                    String.format("Activity %d was not found", request.getActivityId()));
         }
 
         int activityMatchId = activityMatch.get().getId();
@@ -98,7 +100,7 @@ public class ActivityMatchService {
 
         if (activityMatch.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Activity " + request.getActivityId() + " was not found");
+                    String.format("Activity %d was not found", request.getActivityId()));
         }
 
         if (!activityMatch.get().getOwnerId().equals(ownerNetId)) {
@@ -106,7 +108,6 @@ public class ActivityMatchService {
         }
 
         int activityMatchId = activityMatch.get().getId();
-        String participantNetId = request.getParticipantNetId();
 
         Optional<List<ActivityJoinQueueEntry>> activityJoinQueue = activityJoinQueueRepository
                 .findByActivityMatchId(activityMatchId);
@@ -116,19 +117,18 @@ public class ActivityMatchService {
         }
 
         if (activityJoinQueue.get().stream()
-                .noneMatch(entry -> entry.getEnrolledUserNetId().equals(participantNetId))) {
+                .noneMatch(entry -> entry.getEnrolledUserNetId().equals(request.getParticipantNetId()))) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "The selected user was not found in the join queue of this activity");
         }
 
-        activityParticipantRepository.save(new ActivityParticipant(activityMatchId, participantNetId));
+        activityParticipantRepository.save(new ActivityParticipant(activityMatchId, request.getParticipantNetId()));
     }
 
     /**
      * Adds a user to the join queue of an activity.
      *
      * @param request the request wrapped in an AddUserToJoinQueueRequestModel
-     * @return a simple okay status message
      * @throws ResponseStatusException when the activity does not exist.
      */
     public void addUserToJoinQueue(AddUserToJoinQueueRequestModel request, String userNetId)
@@ -138,7 +138,7 @@ public class ActivityMatchService {
 
         if (activityMatch.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Activity " + request.getActivityId() + " was not found");
+                    String.format("Activity %d was not found", activityId));
         }
 
         int activityMatchId = activityMatch.get().getId();

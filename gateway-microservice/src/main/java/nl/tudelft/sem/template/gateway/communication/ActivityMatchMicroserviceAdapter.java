@@ -1,15 +1,14 @@
 package nl.tudelft.sem.template.gateway.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
-import nl.tudelft.sem.template.common.models.activitymatch.*;
-import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
-import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component

@@ -1,17 +1,18 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
-import nl.tudelft.sem.template.activitymatch.authentication.JwtTokenVerifier;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
-import nl.tudelft.sem.template.common.models.activitymatch.*;
+import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -92,7 +93,7 @@ public class ActivityMatchController {
      *
      * @param request the request wrapped in an AddUserToJoinQueueRequestModel
      * @return a simple okay status message
-     * @throws ResponseStatusException
+     * @throws ResponseStatusException if not successful
      */
     @PostMapping("/join-queue")
     public ResponseEntity<String> addUserToJoinQueue(@RequestBody AddUserToJoinQueueRequestModel request)
