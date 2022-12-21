@@ -1,13 +1,9 @@
 package nl.tudelft.sem.template.user.domain.userlogic.converters;
 
-import nl.tudelft.sem.template.user.domain.userlogic.Gender;
-import nl.tudelft.sem.template.user.domain.userlogic.NetId;
-import nl.tudelft.sem.template.user.domain.userlogic.TypesOfPositions;
-
+import java.util.Arrays;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.Arrays;
-import java.util.Locale;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 
 
 @Converter

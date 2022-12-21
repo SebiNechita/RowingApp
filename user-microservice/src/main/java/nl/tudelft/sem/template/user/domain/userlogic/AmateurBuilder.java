@@ -1,13 +1,18 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import lombok.NoArgsConstructor;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.PositionEntity;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
-
-import java.time.LocalDateTime;
-import java.util.*;
 
 @NoArgsConstructor
 public class AmateurBuilder implements UserBuilder {

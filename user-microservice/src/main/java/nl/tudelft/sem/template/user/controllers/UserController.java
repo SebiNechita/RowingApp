@@ -3,17 +3,20 @@ package nl.tudelft.sem.template.user.controllers;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
 import nl.tudelft.sem.template.user.models.AmateurSetAccountDetailsModel;
-import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +43,7 @@ public class UserController {
      *
      * @return the example found in the database with the given id
      */
-    @PostMapping ("amateur/set/account/details")
+    @PostMapping("amateur/set/account/details")
     public ResponseEntity setAccountDetails(@RequestBody AmateurSetAccountDetailsModel request) throws Exception {
         try {
             NetId netId = new NetId(request.getNetId());
@@ -51,7 +54,8 @@ public class UserController {
             List<String> certificates = request.getCertificates();
             List<TypesOfPositions> positions = request.getPositions();
             String organization = request.getOrganization();
-            accountDetailsService.setAccountDetails(netId, password, gender, positions, availabilities, certificates, organization);
+            accountDetailsService.setAccountDetails(netId, password, gender, positions,
+                    availabilities, certificates, organization);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -61,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping("user/get/details/{netId}")
-    public ResponseEntity<GetUserDetailsModel> getUserDetails(@PathVariable("netId") NetId netId) throws Exception{
+    public ResponseEntity<UserDetailsModel> getUserDetails(@PathVariable("netId") NetId netId) throws Exception {
         return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
     }
 

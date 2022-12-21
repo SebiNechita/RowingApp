@@ -1,7 +1,7 @@
 package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
-import javax.persistence.*;
-
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -17,9 +17,9 @@ public class AmateurUser extends User {
     /**
      * Create new application user.
      *
-     * @param netId The NetId for the new user
+     * @param netId    The NetId for the new user
      * @param password The password for the new user
-     * @param gender The gender of the user
+     * @param gender   The gender of the user
      */
     public AmateurUser(@NonNull NetId netId,
                        @NonNull HashedPassword password,
@@ -28,9 +28,9 @@ public class AmateurUser extends User {
         super(netId, password, gender, organization);
     }
 
-    /**
-     * Equality is only based on the identifier.
-     */
+    //    /**
+    //     * Equality is only based on the identifier.
+    //     */
 
 
 }

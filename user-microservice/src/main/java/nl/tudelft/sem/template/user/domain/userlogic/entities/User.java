@@ -1,15 +1,27 @@
 package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
-import lombok.*;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 import nl.tudelft.sem.template.user.domain.HasEvents;
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import nl.tudelft.sem.template.user.domain.userlogic.converters.GenderConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.converters.HashedPasswordAttributeConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.converters.NetIdAttributeConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
-
-import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -47,6 +59,14 @@ public abstract class User extends HasEvents {
     @Column(name = "organization")
     private String organization;
 
+    /**
+     * Constructor for the User.
+     *
+     * @param netId        netId
+     * @param password     password
+     * @param gender       gender
+     * @param organization organisation
+     */
     public User(@NonNull NetId netId,
                 @NonNull HashedPassword password,
                 @NonNull Gender gender,
@@ -63,12 +83,21 @@ public abstract class User extends HasEvents {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (AmateurUser) o;
         return id == user.id;
     }
 
+    /**
+     * Hash code for the User.
+     *
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

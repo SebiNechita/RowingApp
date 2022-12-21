@@ -1,9 +1,8 @@
 package nl.tudelft.sem.template.user.domain.userlogic.converters;
 
-import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
 
 /**
  * Converter for the HashedPassword value object.

@@ -1,17 +1,28 @@
 package nl.tudelft.sem.template.user.domain.userlogic.services;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
-
-import nl.tudelft.sem.template.user.domain.userlogic.*;
-import nl.tudelft.sem.template.user.domain.userlogic.entities.*;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
+import nl.tudelft.sem.template.user.domain.userlogic.AmateurBuilder;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.PositionEntity;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.User;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUseException;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserPositionRepository;
-import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +40,7 @@ public class AccountDetailsService {
     /**
      * Instantiates a new UserService.
      *
-     * @param userRepository  the user repository
+     * @param userRepository         the user repository
      * @param passwordHashingService the password encoder
      */
     public AccountDetailsService(UserRepository userRepository,
@@ -47,13 +58,13 @@ public class AccountDetailsService {
     /**
      * The method for setting the details of a user account.
      *
-     * @param netId  user's netId
-     * @param password user's password
-     * @param gender user's gender
+     * @param netId          user's netId
+     * @param password       user's password
+     * @param gender         user's gender
      * @param availabilities user's availabilities
-     * @param certificates user's certificates
-     * TODO: check if organization exists in the Rowing Info
+     * @param certificates   user's certificates
      */
+    // TODO: check if organization exists in the Rowing Info
     public AmateurUser setAccountDetails(NetId netId,
                                          Password password,
                                          Gender gender,
@@ -93,25 +104,48 @@ public class AccountDetailsService {
         return user;
     }
 
-    public GetUserDetailsModel getAccountDetails(NetId netId) throws Exception{
+    public UserDetailsModel getAccountDetails(NetId netId) throws Exception {
         boolean uniqueId = checkNetIdIsUnique(netId);
         if (!userRepository.existsByNetId(netId)) {
             throw new NetIdAlreadyInUseException(netId);
         }
-        GetUserDetailsModel model = new GetUserDetailsModel();
-        UserDetailsModel
+        User user = userRepository.findByNetId(netId).get();
 
-        Optional<User> user = userRepository.findByNetId(netId);
-        model.setNetId(netId.toString());
-        model.setUserType(user.get().getClass().getSimpleName());
-        model.setOrganization(user.get().getOrganization());
-        model.setGender(user.get().getGender().getGender());
-        List<String> availabilities = availabilityRepository.findAllByNetId(netId).stream().map(Availability::toString).collect(Collectors.toList());
-        List<String> certificates = userCertificatesRepository.findAllByNetId(netId).stream().map(UserCertificate::toString).collect(Collectors.toList());
-        List<String> positions = userPositionRepository.findAllByNetId(netId).stream().map(PositionEntity::toString).collect(Collectors.toList());
-        model.setAvailabilities(availabilities);
-        model.setCertificates(certificates);
-        return model;
+        String netIdString = user.getNetId().toString();
+        String gender = user.getGender().toString().toUpperCase();
+        String organisation = user.getOrganization();
+        boolean isPro = !user.getClass().getSimpleName().equals("AmateurUser");
+        List<TypesOfPositions> positions = userPositionRepository.findAllByNetId(netId)
+                .stream()
+                .map(PositionEntity::getPosition)
+                .collect(Collectors.toList());
+        List<String> certificates = userCertificatesRepository.findAllByNetId(netId)
+                .stream()
+                .map(UserCertificate::toString)
+                .collect(Collectors.toList());
+        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = availabilityRepository.findAllByNetId(netId)
+                .stream()
+                .map(x -> new Tuple<>(x.getStart(), x.getEnd()))
+                .collect(Collectors.toList());
+
+        //        GetUserDetailsModel model = new GetUserDetailsModel();
+        //        model.setNetId(netId.toString());
+        //        model.setUserType(user.get().getClass().getSimpleName());
+        //        model.setOrganization(user.get().getOrganization());
+        //        model.setGender(user.get().getGender().getGender());
+        //        List<String> availabilities = availabilityRepository.findAllByNetId(netId)
+        //          .stream().map(Availability::toString).collect(Collectors.toList());
+        //        List<String> certificates = userCertificatesRepository.findAllByNetId(netId)
+        //          .stream().map(UserCertificate::toString).collect(Collectors.toList());
+        //        List<String> positions = userPositionRepository.findAllByNetId(netId)
+        //          .stream().map(PositionEntity::toString).collect(Collectors.toList());
+        //        model.setAvailabilities(availabilities);
+        //        model.setCertificates(certificates);
+
+        UserDetailsModel userModel = new UserDetailsModel(netIdString, gender, organisation,
+                isPro, positions, availabilities, certificates);
+
+        return userModel;
     }
 
     public boolean checkNetIdIsUnique(NetId netId) {
