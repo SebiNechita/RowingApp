@@ -44,7 +44,8 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/training")
-    public ResponseEntity createOffer(@RequestBody TrainingCreationRequestModel request) throws Exception {
+    public ResponseEntity createOffer(@RequestBody TrainingCreationRequestModel request)
+            throws ResponseStatusException {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -73,7 +74,8 @@ public class ActivityOfferController {
      * @throws Exception if not successful
      */
     @PostMapping("/create/training/many")
-    public ResponseEntity createManyOffers(@RequestBody ManyTrainingsCreationRequestModel request) throws Exception {
+    public ResponseEntity createManyOffers(@RequestBody ManyTrainingsCreationRequestModel request)
+            throws ResponseStatusException {
         try {
             Map<TypesOfPositions, Integer> positions = request.getPositions();
             boolean isActive = request.isActive();
@@ -98,10 +100,10 @@ public class ActivityOfferController {
      * Endpoint for getting all trainings offer.
      *
      * @return ok response if successful
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
     @GetMapping("/get/trainings")
-    public ResponseEntity<List<ActivityOffer>> getTraining() throws Exception {
+    public ResponseEntity<List<ActivityOffer>> getTraining() throws ResponseStatusException {
         try {
             return ResponseEntity.ok(activityOfferService.getAllTrainingOffers());
         } catch (Exception e) {
@@ -110,6 +112,13 @@ public class ActivityOfferController {
         }
     }
 
+    /**
+     * Endpoint for checking if a participant is eligible to join a given activity.
+     *
+     * @param request wrapped in a ParticipantIsEligibleRequestModel.
+     * @return boolean indicating eligibility.
+     * @throws ResponseStatusException if not successful.
+     */
     @PostMapping("/competition/participant-is-eligible")
     public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request)
             throws ResponseStatusException {

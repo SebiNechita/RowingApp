@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
@@ -15,7 +14,6 @@ import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -161,6 +159,13 @@ public class ActivityOfferService {
         }
     }
 
+    /**
+     * Endpoint for checking if a participant is eligible to join a given activity.
+     *
+     * @param request wrapped in a ParticipantIsEligibleRequestModel.
+     * @return boolean indicating eligibility.
+     * @throws ResponseStatusException if not successful.
+     */
     public boolean participantIsEligible(ParticipantIsEligibleRequestModel request) throws ResponseStatusException {
         Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
 
