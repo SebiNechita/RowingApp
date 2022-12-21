@@ -6,10 +6,12 @@ import nl.tudelft.sem.template.user.domain.userlogic.*;
 import java.util.List;
 
 @Data
-public class GetAmateurUserDetailsModel {
+public class GetUserDetailsModel {
     String netId;
     String gender;
-    //List<TypesOfPositions> positions;
+    String userType;
+    List<String> positions;
     List<String> availabilities;
     List<String> certificates;
+    String organization;
 }

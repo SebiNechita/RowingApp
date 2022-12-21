@@ -1,9 +1,11 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.NetIdAttributeConverter;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,7 +14,6 @@ import java.util.Objects;
 @Table(name = "userCertificate")
 @Getter
 @NoArgsConstructor
-@ToString
 public class UserCertificate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +30,11 @@ public class UserCertificate {
     public UserCertificate(@NonNull NetId netId, String certificate) {
         this.netId = netId;
         this.certificate = certificate;
+    }
+
+    @Override
+    public String toString() {
+        return certificate;
     }
 
     /**

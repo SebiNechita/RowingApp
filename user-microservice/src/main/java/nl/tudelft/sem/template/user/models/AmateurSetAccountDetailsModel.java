@@ -15,4 +15,5 @@ public class AmateurSetAccountDetailsModel {
     List<TypesOfPositions> positions;
     List<Tuple<String, String>> availabilities;
     List<String> certificates;
+    String organization;
 }

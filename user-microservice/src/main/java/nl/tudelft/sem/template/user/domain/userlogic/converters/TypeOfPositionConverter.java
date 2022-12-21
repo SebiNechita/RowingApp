@@ -1,16 +1,21 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.converters;
+
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.TypesOfPositions;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.Arrays;
+import java.util.Locale;
 
 
 @Converter
 public class TypeOfPositionConverter implements AttributeConverter<TypesOfPositions, String> {
 
     @Override
-    public String convertToDatabaseColumn(TypesOfPositions type) {
-        return type.toString();
+    public String convertToDatabaseColumn(TypesOfPositions position) {
+        return position.getType();
     }
 
     @Override
