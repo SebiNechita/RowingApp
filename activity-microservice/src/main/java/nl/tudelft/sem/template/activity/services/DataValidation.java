@@ -7,7 +7,7 @@ import nl.tudelft.sem.template.activity.domain.exceptions.InvalidOrganisationExc
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.common.communication.MicroServiceAddresses;
 import nl.tudelft.sem.template.common.http.HttpUtils;
-import nl.tudelft.sem.template.common.models.rowinginfo.CertificatesExistanceRequestModel;
+import nl.tudelft.sem.template.common.models.rowinginfo.CertificatesRequestModel;
 import nl.tudelft.sem.template.common.models.rowinginfo.OrganisationsRequestModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -104,7 +104,7 @@ public class DataValidation {
      * @return boolean doesCertificateExist
      */
     public boolean validateCertificate(String certificate, String authToken) throws InvalidCertificateException {
-        CertificatesExistanceRequestModel request = new CertificatesExistanceRequestModel(certificate);
+        CertificatesRequestModel request = new CertificatesRequestModel(certificate, -1, "");
         if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkCertificateExistanceUrl(),
                 HttpMethod.GET, authToken, request, boolean.class).getBody())) {
             return true;

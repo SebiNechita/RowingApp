@@ -12,7 +12,7 @@ public class CompetitionOfferBuilder implements ActivityOfferBuilder<Competition
     private transient LocalDateTime endTime;
     private transient String ownerId;
     private transient String boatCertificate;
-    private transient TypesOfActivities type;
+    private transient TypesOfActivities type = TypesOfActivities.COMPETITION;
     private transient String name;
     private transient String description;
     private transient String organisation;
