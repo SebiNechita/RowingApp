@@ -10,6 +10,7 @@ import nl.tudelft.sem.template.activitymatch.repositories.ActivityJoinQueueRepos
 @Entity
 @Table(name = "joinQueue")
 @ToString
+@EqualsAndHashCode
 public class ActivityJoinQueueEntry {
 
     @Id
