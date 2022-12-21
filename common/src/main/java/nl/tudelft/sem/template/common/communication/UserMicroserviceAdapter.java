@@ -12,13 +12,6 @@ public class UserMicroserviceAdapter {
     public final transient String userMicroserviceAddress;
 
     /**
-     * Instantiates a new UserMicroserviceAdapter.
-     */
-    public UserMicroserviceAdapter() {
-        this.userMicroserviceAddress = MicroServiceAddresses.userMicroservice;
-    }
-
-    /**
      * Instantiates a new UserMicroserviceAdapter with an injected microservice address.
      *
      * @param userMicroserviceAddress The address of the microservice.

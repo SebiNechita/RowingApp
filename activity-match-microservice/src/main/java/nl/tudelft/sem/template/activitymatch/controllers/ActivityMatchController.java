@@ -9,10 +9,12 @@ import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequest
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -96,11 +98,12 @@ public class ActivityMatchController {
      * @throws ResponseStatusException if not successful
      */
     @PostMapping("/join-queue")
-    public ResponseEntity<String> addUserToJoinQueue(@RequestBody AddUserToJoinQueueRequestModel request)
+    public ResponseEntity<String> addUserToJoinQueue(@RequestBody AddUserToJoinQueueRequestModel request,
+                                                     @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authToken)
             throws ResponseStatusException {
         try {
             String userNetId = SecurityContextHolder.getContext().getAuthentication().getName();
-            activityMatchService.addUserToJoinQueue(request, userNetId);
+            activityMatchService.addUserToJoinQueue(request, userNetId, authToken);
             return ResponseEntity.ok("Successfully added participant to activity");
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());

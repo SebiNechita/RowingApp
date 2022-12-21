@@ -14,13 +14,6 @@ public class ActivityMatchMicroserviceAdapter {
     public final transient String activityMatchMicroserviceAddress;
 
     /**
-     * Instantiates a new AuthenticationMicroserviceAdapter.
-     */
-    public ActivityMatchMicroserviceAdapter() {
-        this.activityMatchMicroserviceAddress = MicroServiceAddresses.activityMatchMicroservice;
-    }
-
-    /**
      * Instantiates a new AuthenticationMicroserviceAdapter with an injected microservice address.
      *
      * @param activityMatchMicroserviceAddress The address of the microservice.

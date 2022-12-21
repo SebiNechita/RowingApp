@@ -12,13 +12,6 @@ public class AuthenticationMicroserviceAdapter {
     public final transient String authenticationMicroserviceAddress;
 
     /**
-     * Instantiates a new AuthenticationMicroserviceAdapter.
-     */
-    public AuthenticationMicroserviceAdapter() {
-        this.authenticationMicroserviceAddress = MicroServiceAddresses.authenticationMicroservice;
-    }
-
-    /**
      * Instantiates a new AuthenticationMicroserviceAdapter with an injected microservice address.
      *
      * @param authenticationMicroserviceAddress The address of the microservice.
