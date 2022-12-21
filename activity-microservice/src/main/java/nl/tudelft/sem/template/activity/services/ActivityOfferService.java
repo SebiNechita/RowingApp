@@ -17,11 +17,17 @@ import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
+import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.common.models.user.NetId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,14 +35,18 @@ import org.springframework.web.server.ResponseStatusException;
 public class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
+    private final transient UserMicroserviceAdapter userMicroserviceAdapter;
+    static final Logger logger = LoggerFactory.getLogger(ActivityOfferService.class.getName());
 
     /**
      * Instantiates a new ActivityOfferService.
      *
      * @param activityOfferRepository activityOfferRepository
      */
-    public ActivityOfferService(ActivityOfferRepository activityOfferRepository) {
+    public ActivityOfferService(ActivityOfferRepository activityOfferRepository,
+                                UserMicroserviceAdapter userMicroserviceAdapter) {
         this.activityOfferRepository = activityOfferRepository;
+        this.userMicroserviceAdapter = userMicroserviceAdapter;
     }
 
     /**
@@ -211,14 +221,30 @@ public class ActivityOfferService {
      * @return boolean indicating eligibility.
      * @throws ResponseStatusException if not successful.
      */
-    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request) throws ResponseStatusException {
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request, String authToken)
+            throws ResponseStatusException {
+        logger.info(String.format("received participantIsEligible request for activity %d, user %s",
+                request.getActivityOfferId(), request.getParticipantNetid()));
+
         Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
 
         if (activityOffer.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
         }
 
-        // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
+        NetId participantNetId = new NetId(request.getParticipantNetid());
+
+        GetUserDetailsModel userDetails = userMicroserviceAdapter.getUserDetails(participantNetId, authToken).getBody();
+
+        if (activityOffer.get().getBoatCertificate() != null
+                && !userDetails.getCertificates().contains(activityOffer.get().getBoatCertificate())) {
+            logger.info("user is ineligible because they don't have the required certificate %s",
+                    activityOffer.get().getBoatCertificate());
+            return false;
+        }
+
+        // TODO(iannis): Also check gender, rank & organisation.
+        //               Currently this is not possible, since this data does not exist on the ActivityOffer.
         //               Return false if any of these don't match the activity offer requirements.
 
         return true;

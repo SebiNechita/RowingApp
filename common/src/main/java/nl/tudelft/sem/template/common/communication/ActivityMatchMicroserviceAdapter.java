@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.gateway.communication;
+package nl.tudelft.sem.template.common.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
@@ -8,10 +8,8 @@ import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponse
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-@Component
 public class ActivityMatchMicroserviceAdapter {
     public final transient String activityMatchMicroserviceAddress;
 
@@ -54,7 +52,8 @@ public class ActivityMatchMicroserviceAdapter {
      * @return ok response if successful
      * @throws ResponseStatusException if not successful
      */
-    public ResponseEntity<Void> createActivityMatch(MatchCreationRequestModel request, String authToken) {
+    public ResponseEntity<Void> createActivityMatch(MatchCreationRequestModel request, String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(createActivityMatchEndpointUrl(), HttpMethod.POST, authToken,
                 request, Void.class);
     }
@@ -67,7 +66,8 @@ public class ActivityMatchMicroserviceAdapter {
      * @throws ResponseStatusException if not successful
      */
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(PendingOffersRequestModel request,
-                                                                       String authToken) {
+                                                                       String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(getPendingOffersEndpointUrl(), HttpMethod.POST, authToken, request,
                 PendingOffersResponseModel.class);
     }
@@ -79,7 +79,8 @@ public class ActivityMatchMicroserviceAdapter {
      * @return a simple okay status message
      * @throws ResponseStatusException if not successful
      */
-    public ResponseEntity<String> setParticipant(SetParticipantRequestModel request, String authToken) {
+    public ResponseEntity<String> setParticipant(SetParticipantRequestModel request, String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(setParticipantEndpointUrl(), HttpMethod.POST, authToken, request,
                 String.class);
     }
@@ -91,7 +92,8 @@ public class ActivityMatchMicroserviceAdapter {
      * @return a simple okay status message
      * @throws ResponseStatusException if not successful
      */
-    public ResponseEntity<String> addUserToJoinQueue(AddUserToJoinQueueRequestModel request, String authToken) {
+    public ResponseEntity<String> addUserToJoinQueue(AddUserToJoinQueueRequestModel request, String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(addUserToJoinQueueEndpointUrl(), HttpMethod.POST, authToken, request,
                 String.class);
     }

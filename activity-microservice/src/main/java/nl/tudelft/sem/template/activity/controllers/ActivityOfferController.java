@@ -17,6 +17,7 @@ import nl.tudelft.sem.template.common.models.user.NetId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -141,10 +142,12 @@ public class ActivityOfferController {
      * @throws ResponseStatusException if not successful.
      */
     @PostMapping("/competition/participant-is-eligible")
-    public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request)
+    public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request,
+                                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION)
+                                                         String authToken)
             throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityOfferService.participantIsEligible(request));
+            return ResponseEntity.ok(activityOfferService.participantIsEligible(request, authToken));
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;

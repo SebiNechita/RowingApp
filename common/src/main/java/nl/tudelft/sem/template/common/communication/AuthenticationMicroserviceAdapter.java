@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.gateway.communication;
+package nl.tudelft.sem.template.common.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
@@ -6,11 +6,8 @@ import nl.tudelft.sem.template.common.models.authentication.AuthenticationRespon
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
-@Component
 public class AuthenticationMicroserviceAdapter {
     public final transient String authenticationMicroserviceAddress;
 
@@ -44,7 +41,8 @@ public class AuthenticationMicroserviceAdapter {
      * @param request The login model
      * @return JWT token if the login is successful
      */
-    public ResponseEntity<AuthenticationResponseModel> authenticate(AuthenticationRequestModel request) {
+    public ResponseEntity<AuthenticationResponseModel> authenticate(AuthenticationRequestModel request)
+            throws ResponseStatusException {
         return HttpUtils.sendHttpRequest(authenticateEndpointUrl(), HttpMethod.POST, request,
                 AuthenticationResponseModel.class);
     }
@@ -56,7 +54,8 @@ public class AuthenticationMicroserviceAdapter {
      * @return 200 OK if the registration is successful
      * @throws Exception if a user with this netid already exists
      */
-    public ResponseEntity<Void> register(RegistrationRequestModel request) {
+    public ResponseEntity<Void> register(RegistrationRequestModel request)
+            throws ResponseStatusException {
         return HttpUtils.sendHttpRequest(registerEndpointUrl(), HttpMethod.POST, request,
                 Void.class);
     }

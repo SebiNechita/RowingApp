@@ -8,8 +8,8 @@ import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequest
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
-import nl.tudelft.sem.template.gateway.communication.ActivityMatchMicroserviceAdapter;
-import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
+import nl.tudelft.sem.template.common.communication.ActivityMatchMicroserviceAdapter;
+import nl.tudelft.sem.template.common.communication.AuthenticationMicroserviceAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
