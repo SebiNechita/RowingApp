@@ -11,8 +11,8 @@ import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUs
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserPositionRepository;
+import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
-import nl.tudelft.sem.template.user.models.GetUserDetailsModel;
 import org.springframework.stereotype.Service;
 
 /**
@@ -87,6 +87,7 @@ public class AccountDetailsService {
         Set<PositionEntity> positionsEntities = builder.getPositions();
         userRepository.save(user);
         availabilityRepository.saveAll(availabilitiesParsed);
+
         userCertificatesRepository.saveAll(userCertificates);
         userPositionRepository.saveAll(positionsEntities);
         return user;

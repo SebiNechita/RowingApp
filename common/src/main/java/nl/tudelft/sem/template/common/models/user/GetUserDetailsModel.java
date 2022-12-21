@@ -1,7 +1,6 @@
-package nl.tudelft.sem.template.user.models;
+package nl.tudelft.sem.template.common.models.user;
 
 import lombok.Data;
-import nl.tudelft.sem.template.user.domain.userlogic.*;
 
 import java.util.List;
 

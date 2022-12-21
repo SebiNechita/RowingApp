@@ -8,7 +8,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.*;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
 import nl.tudelft.sem.template.user.models.AmateurSetAccountDetailsModel;
-import nl.tudelft.sem.template.user.models.GetUserDetailsModel;
+import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
