@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
-import nl.tudelft.sem.template.user.domain.userlogic.AmateurUser;
+import nl.tudelft.sem.template.user.domain.userlogic.AppUser;
 import nl.tudelft.sem.template.user.domain.userlogic.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.Gender;
 import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
@@ -17,7 +17,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.UserCertificate;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
-import nl.tudelft.sem.template.user.domain.userlogic.services.AmateurAccountDetailsService;
+import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
 import nl.tudelft.sem.template.user.domain.userlogic.services.PasswordHashingService;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
@@ -33,10 +33,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 // activate profiles to have spring use mocks during auto-injection of certain beans.
 @ActiveProfiles({"test", "mockPasswordEncoder"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class AmateurAccountDetailsServiceTest {
+class AccountDetailsServiceTest {
 
     @Autowired
-    private transient AmateurAccountDetailsService amateurAccountDetailsService;
+    private transient AccountDetailsService accountDetailsService;
 
     @Autowired
     private transient UserAvailabilityRepository availabilityRepository;
@@ -72,10 +72,10 @@ class AmateurAccountDetailsServiceTest {
         List<UserCertificate> userCertificates = List.of(expectedUserCertificateOne, expectedUserCertificateTwo);
         when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
         // Act
-        amateurAccountDetailsService.setAccountDetails(testUser, testPassword, gender, availabilities, certificates);
+        accountDetailsService.setAccountDetails(testUser, testPassword, gender, availabilities, certificates);
 
         // Assert
-        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
+        AppUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
         List<Availability> foundAvailabilities = availabilityRepository.findAllByNetId(testUser);
         List<UserCertificate> foundCertificates = userCertificatesRepository.findAllByNetId(testUser);
 
@@ -93,7 +93,7 @@ class AmateurAccountDetailsServiceTest {
         final HashedPassword existingTestPassword = new HashedPassword("password123");
         final Password newTestPassword = new Password("password456");
         final Gender gender = Gender.MALE;
-        AmateurUser existingAmateurUser = new AmateurUser(testUser, existingTestPassword, gender);
+        AppUser existingAppUser = new AppUser(testUser, existingTestPassword, gender);
         LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
         LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T13:00");
         LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-12T20:59");
@@ -102,10 +102,10 @@ class AmateurAccountDetailsServiceTest {
         availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
         availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
         List<String> certificates = List.of("C4", "8+");
-        userRepository.save(existingAmateurUser);
+        userRepository.save(existingAppUser);
 
         // Act
-        ThrowableAssert.ThrowingCallable action = () -> amateurAccountDetailsService.setAccountDetails(testUser,
+        ThrowableAssert.ThrowingCallable action = () -> accountDetailsService.setAccountDetails(testUser,
                 newTestPassword,
                 gender,
                 availabilities,
@@ -115,7 +115,7 @@ class AmateurAccountDetailsServiceTest {
         assertThatExceptionOfType(Exception.class)
                 .isThrownBy(action);
 
-        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
+        AppUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
 
         assertThat(savedUser.getNetId()).isEqualTo(testUser);
         assertThat(savedUser.getPassword()).isEqualTo(existingTestPassword);
