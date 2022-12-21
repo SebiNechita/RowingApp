@@ -1,16 +1,11 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "userCertificate")
