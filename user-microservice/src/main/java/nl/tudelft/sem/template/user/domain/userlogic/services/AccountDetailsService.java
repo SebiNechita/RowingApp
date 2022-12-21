@@ -95,12 +95,14 @@ public class AccountDetailsService {
         AmateurUser user = builder.getUser();
         List<Availability> availabilitiesParsed = builder.getAvailabilities();
         Set<UserCertificate> userCertificates = builder.getCertificates();
-        Set<PositionEntity> positionsEntities = builder.getPositions();
+        List<PositionEntity> positionsEntities = builder.getPositions();
         userRepository.save(user);
         availabilityRepository.saveAll(availabilitiesParsed);
 
         userCertificatesRepository.saveAll(userCertificates);
+
         userPositionRepository.saveAll(positionsEntities);
+        System.out.println("Added " + userPositionRepository.findAllByNetId(netId).size());
         return user;
     }
 
@@ -119,9 +121,10 @@ public class AccountDetailsService {
                 .stream()
                 .map(PositionEntity::getPosition)
                 .collect(Collectors.toList());
+        System.out.println(positions);
         List<String> certificates = userCertificatesRepository.findAllByNetId(netId)
                 .stream()
-                .map(UserCertificate::toString)
+                .map(UserCertificate::getCertificate)
                 .collect(Collectors.toList());
         List<Tuple<LocalDateTime, LocalDateTime>> availabilities = availabilityRepository.findAllByNetId(netId)
                 .stream()

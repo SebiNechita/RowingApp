@@ -27,7 +27,7 @@ public class PositionEntity {
 
     @Column(name = "net_id", nullable = false)
     @Convert(converter = NetIdAttributeConverter.class)
-    NetId netId;
+    private NetId netId;
 
     @Getter
     @Column(name = "position", nullable = false)

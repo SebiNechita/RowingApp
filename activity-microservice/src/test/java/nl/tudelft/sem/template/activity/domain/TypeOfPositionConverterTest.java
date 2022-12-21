@@ -35,5 +35,10 @@ public class TypeOfPositionConverterTest {
         });
     }
 
+    @Test
+    void convertToEntityAttribute_starboardRower() {
+        this.type = TypesOfPositions.STARBOARD_ROWER;
+        assertThat(converter.convertToEntityAttribute("starboard_rower")).isEqualTo(type);
+    }
 
 }

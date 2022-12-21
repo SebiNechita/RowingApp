@@ -37,5 +37,5 @@ public interface UserBuilder {
 
     Set<UserCertificate> getCertificates();
 
-    Set<PositionEntity> getPositions();
+    List<PositionEntity> getPositions();
 }

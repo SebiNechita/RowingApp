@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
@@ -124,12 +125,11 @@ public class AmateurBuilder implements UserBuilder {
     }
 
     @Override
-    public Set<PositionEntity> getPositions() {
-        Set<PositionEntity> noDuplicatePositions = new HashSet<>();
-        for (TypesOfPositions p : positions) {
-            noDuplicatePositions.add(new PositionEntity(netId, p));
-        }
-        return noDuplicatePositions;
+    public List<PositionEntity> getPositions() {
+        return positions.stream()
+                .distinct()
+                .map(x -> new PositionEntity(netId, x))
+                .collect(Collectors.toList());
     }
 
 }

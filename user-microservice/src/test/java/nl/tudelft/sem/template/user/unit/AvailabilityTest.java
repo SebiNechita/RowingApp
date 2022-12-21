@@ -8,10 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
-import nl.tudelft.sem.template.user.domain.userlogic.AmateurBuilder;
-import nl.tudelft.sem.template.user.domain.userlogic.Gender;
-import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
-import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
@@ -73,14 +69,5 @@ class AvailabilityTest {
         treeMap.put(dateOneIntervalOne, dateTwoIntervalOne);
         treeMap.put(dateOneIntervalTwo, dateTwoIntervalTwo);
         assertFalse(Availability.overlap(treeMap));
-    }
-
-    @Test
-    void test1() {
-        AmateurBuilder builder = new AmateurBuilder();
-        builder.setNetId(new NetId("netId"));
-        builder.setPassword(new HashedPassword("123"));
-        builder.setGender(Gender.FEMALE);
-        System.out.println(builder.getUser().getClass().getSimpleName());
     }
 }
