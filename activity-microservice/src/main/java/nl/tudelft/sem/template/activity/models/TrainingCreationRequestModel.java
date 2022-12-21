@@ -3,8 +3,8 @@ package nl.tudelft.sem.template.activity.models;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 
 @Data
 @AllArgsConstructor

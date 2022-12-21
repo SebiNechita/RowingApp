@@ -3,15 +3,19 @@ package nl.tudelft.sem.template.activity.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ActivityOfferService {
@@ -142,7 +146,7 @@ public class ActivityOfferService {
 
 
     /**
-     * Gets a list of ActivityOffer.
+     * Gets the list with all the ActivityOffer.
      *
      * @throws Exception exception
      */
@@ -155,4 +159,39 @@ public class ActivityOfferService {
         }
     }
 
+    /**
+     * Gets a filtered list of ActivityOffer.
+     *
+     * @throws Exception exception
+     */
+    public List<ActivityOffer> getFilteredOffers() throws Exception{
+        try {
+            //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
+            return activityOfferRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Endpoint for checking if a participant is eligible to join a given activity.
+     *
+     * @param request wrapped in a ParticipantIsEligibleRequestModel.
+     * @return boolean indicating eligibility.
+     * @throws ResponseStatusException if not successful.
+     */
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request) throws ResponseStatusException {
+        Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
+
+        if (activityOffer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
+        }
+
+        // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
+        //               Return false if any of these don't match the activity offer requirements.
+
+        return true;
+    }
 }

@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 
 @AllArgsConstructor
 @NoArgsConstructor
