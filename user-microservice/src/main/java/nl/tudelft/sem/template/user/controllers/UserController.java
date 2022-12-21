@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -59,5 +63,15 @@ public class UserController {
     @GetMapping("user/get/details/{netId}")
     public ResponseEntity<GetUserDetailsModel> getUserDetails(@PathVariable("netId") NetId netId) throws Exception{
         return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
+    }
+
+    /**
+     * Gets a userId.
+     *
+     * @return userId
+     */
+    @GetMapping("/get/userId")
+    public ResponseEntity<String> helloWorld() {
+        return ResponseEntity.ok(authManager.getNetId());
     }
 }

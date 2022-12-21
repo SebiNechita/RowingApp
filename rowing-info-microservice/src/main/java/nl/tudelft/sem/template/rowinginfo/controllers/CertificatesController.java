@@ -2,7 +2,6 @@ package nl.tudelft.sem.template.rowinginfo.controllers;
 
 import java.util.List;
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
-import nl.tudelft.sem.template.rowinginfo.models.CertificatesExistanceRequestModel;
 import nl.tudelft.sem.template.rowinginfo.models.CertificatesRequestModel;
 import nl.tudelft.sem.template.rowinginfo.services.CertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;

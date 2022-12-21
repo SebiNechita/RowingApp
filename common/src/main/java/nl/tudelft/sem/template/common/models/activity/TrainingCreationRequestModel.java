@@ -1,12 +1,12 @@
-package nl.tudelft.sem.template.activity.models;
+package nl.tudelft.sem.template.common.models.activity;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
-import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class TrainingCreationRequestModel {
     private TypesOfPositions position;

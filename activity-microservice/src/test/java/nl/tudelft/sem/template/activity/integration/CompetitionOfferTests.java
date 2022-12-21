@@ -10,13 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
 import nl.tudelft.sem.template.activity.authentication.JwtTokenVerifier;
-import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
-import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.activity.services.DataValidation;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
@@ -41,7 +37,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @ActiveProfiles({"test", "mockTokenVerifier", "mockDataValidation"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
-public class ActivityOfferTests {
+public class CompetitionOfferTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,10 +54,6 @@ public class ActivityOfferTests {
     private TrainingCreationRequestModel requestModel;
     private CompetitionCreationRequestModel competitionRequestModel;
     private TypesOfPositions position;
-
-    private ManyTrainingsCreationRequestModel manyTrainingsRequestModel;
-
-    private Map<TypesOfPositions, Integer> positions;
     private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -88,21 +80,10 @@ public class ActivityOfferTests {
         this.type = TypesOfActivities.TRAINING;
         this.name = "Team Blue Training";
         this.description = "Pumping the iron all day long";
-        this.organisation = "partia przyjaciol piwa";
+        this.organisation = "Partia Przyjaciol Piwa";
         this.isFemale = true;
         this.isPro = false;
 
-        this.requestModel = new TrainingCreationRequestModel(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
-        this.requestModel = new TrainingCreationRequestModel(position, isActive, startTime, endTime,
-                ownerId, boatCertificate, type, name, description);
-        this.positions = new HashMap<>() {{
-                put(TypesOfPositions.COX, 2);
-                put(TypesOfPositions.COACH, 1);
-            }};
-
-        this.manyTrainingsRequestModel = new ManyTrainingsCreationRequestModel(positions, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
         this.competitionRequestModel = new CompetitionCreationRequestModel(position, isActive,
                 startTime, endTime, ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro);
 
@@ -116,73 +97,15 @@ public class ActivityOfferTests {
     }
 
     @Test
-    public void createTraining_withValidData_worksCorrectly() throws Exception {
-        // Arrange
-
-        // Act
-        ResultActions resultActions = mockMvc.perform(post("/create/training")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.serialize(requestModel))
-                .header("Authorization", "Bearer MockedToken"));
-
-
-        // Assert
-        resultActions.andExpect(status().isOk());
-
-        ActivityOffer activityOffer = activityOfferRepository.findById(1).orElseThrow();
-
-        assertThat(activityOffer.getPosition()).isEqualTo(position);
-        assertThat(activityOffer.isActive()).isEqualTo(isActive);
-        assertThat(activityOffer.getStartTime()).isEqualTo(startTime);
-        assertThat(activityOffer.getEndTime()).isEqualTo(endTime);
-        assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
-        assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
-        assertThat(activityOffer.getType()).isEqualTo(type);
-        assertThat(activityOffer.getName()).isEqualTo(name);
-        assertThat(activityOffer.getDescription()).isEqualTo(description);
-    }
-
-    @Test
-    public void createManyTrainings_withValidData_worksCorrectly() throws Exception {
-        // Arrange
-
-        // Act
-        ResultActions resultActions = mockMvc.perform(post("/create/training/many")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.serialize(manyTrainingsRequestModel))
-                .header("Authorization", "Bearer MockedToken"));
-
-
-        // Assert
-        int id = 1;
-        for (Map.Entry<TypesOfPositions, Integer> entry : positions.entrySet()) {
-            for (int i = 0; i < entry.getValue(); i++) {
-                ActivityOffer activityOffer = activityOfferRepository.findById(id).orElseThrow();
-                id++;
-
-                assertThat(activityOffer.getPosition()).isEqualTo(entry.getKey());
-                assertThat(activityOffer.isActive()).isEqualTo(isActive);
-                assertThat(activityOffer.getStartTime()).isEqualTo(startTime);
-                assertThat(activityOffer.getEndTime()).isEqualTo(endTime);
-                assertThat(activityOffer.getOwnerId()).isEqualTo(ownerId);
-                assertThat(activityOffer.getBoatCertificate()).isEqualTo(boatCertificate);
-                assertThat(activityOffer.getType()).isEqualTo(type);
-                assertThat(activityOffer.getName()).isEqualTo(name);
-                assertThat(activityOffer.getDescription()).isEqualTo(description);
-            }
-        }
-    }
-
-    @Test
     public void createCompetition_withValidData_worksCorrectly() throws Exception {
         // Arrange
 
         // Act
-        ResultActions resultActions = mockMvc.perform(
-                post("/create/competition")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.serialize(competitionRequestModel))
-                        .header("Authorization", "Bearer MockedToken"));
+        ResultActions resultActions = mockMvc.perform(post("/create/competition")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.serialize(competitionRequestModel))
+                .header("Authorization", "Bearer MockedToken"));
+
 
         // Assert
         resultActions.andExpect(status().isOk());
@@ -202,4 +125,5 @@ public class ActivityOfferTests {
         assertThat(activityOffer.isFemale()).isEqualTo(isFemale);
         assertThat(activityOffer.isPro()).isEqualTo(isPro);
     }
+
 }
