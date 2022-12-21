@@ -98,6 +98,8 @@ public class AccountDetailsService {
             throw new NetIdAlreadyInUseException(netId);
         }
         GetUserDetailsModel model = new GetUserDetailsModel();
+        UserDetailsModel
+
         Optional<User> user = userRepository.findByNetId(netId);
         model.setNetId(netId.toString());
         model.setUserType(user.get().getClass().getSimpleName());
