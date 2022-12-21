@@ -60,3 +60,4 @@ public class UserController {
         return ResponseEntity.ok(amateurAccountDetailsService.getAccountDetails(netId));
     }
 }
+//jh
