@@ -214,13 +214,28 @@ public class ActivityOfferService {
      */
     public List<ActivityOffer> getAllCompetitionOffers() throws Exception {
         try {
-            return activityOfferRepository.findByActiveAndType(true, TypesOfActivities.COMPETITION);
+            return activityOfferRepository.findByType(TypesOfActivities.COMPETITION)
+                    .stream()
+                    .filter(ActivityOffer::isActive)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new Exception("Error while retrieving all competitions. " + e.getMessage());
         }
     }
 
-    public List<ActivityOffer> getFilteredCompetitionOffers(String organisation,
+    /**
+     * Filters all the competitions such that they match the given requirements.
+     *
+     * @param organisation   organisation
+     * @param isFemale       isFemale
+     * @param isPro          isPro
+     * @param certificates   certificates
+     * @param positions      positions
+     * @param availabilities availabilities
+     * @return list of selected competitions
+     * @throws Exception exception
+     */
+    public List<CompetitionOffer> getFilteredCompetitionOffers(String organisation,
                                                             boolean isFemale,
                                                             boolean isPro,
                                                             List<String> certificates,
@@ -248,8 +263,9 @@ public class ActivityOfferService {
                     return false;
                 })
                 .filter(x -> {
-                    if (x.getPosition().equals(TypesOfPositions.COX))
+                    if (x.getPosition().equals(TypesOfPositions.COX)) {
                         return certificates.contains(x.getBoatCertificate());
+                    }
                     return true;
                 })
                 .collect(Collectors.toList());

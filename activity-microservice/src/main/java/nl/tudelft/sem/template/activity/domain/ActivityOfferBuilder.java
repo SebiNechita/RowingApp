@@ -24,5 +24,11 @@ public interface ActivityOfferBuilder<T extends ActivityOffer> {
 
     ActivityOfferBuilder<T> setDescription(String description);
 
+    ActivityOfferBuilder<T> setOrganisation(String organisation);
+
+    ActivityOfferBuilder<T> setFemale(boolean isFemale);
+
+    ActivityOfferBuilder<T> setPro(boolean isPro);
+
     T build();
 }

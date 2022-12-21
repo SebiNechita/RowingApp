@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
@@ -166,16 +167,18 @@ public class ActivityOfferController {
 
     /**
      * Get list of ActivityOffers that are active and are competitions and meet your requirements:
-     * have the same gender as you do, are on the same experience level, are from the same organisation
-     * @param request
-     * @return
+     * have the same gender as you do, are on the same experience level, are from the same organisation.
+     *
+     * @param request request
+     * @return returns filtered competitions
      */
     @GetMapping("/get/competitions/filtered")
-    public ResponseEntity<List<ActivityOffer>> getFilteredCompetitions(@RequestBody UserDetailsModel request) {
+    public ResponseEntity<List<CompetitionOffer>> getFilteredCompetitions(@RequestBody UserDetailsModel request) {
         try {
             String organisation = request.getOrganisation();
             boolean isFemale = request.getGender().equals("FEMALE");
-            boolean isPro = request.isPro();;
+            boolean isPro = request.isPro();
+
             List<TypesOfPositions> positions = request.getPositions();
             List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
             List<String> certificates = request.getCertificates();

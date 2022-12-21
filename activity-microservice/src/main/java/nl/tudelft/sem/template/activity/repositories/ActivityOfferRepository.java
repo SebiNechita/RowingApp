@@ -19,11 +19,10 @@ public interface ActivityOfferRepository extends JpaRepository<ActivityOffer, In
     Optional<ActivityOffer> findById(int id);
 
     /**
-     * Method to find all Activities by their type that are currently active.
+     * Method to find all Activities by their type.
      *
      * @param type type of activity
      * @return  list of all such activities
      */
-    //    List<ActivityOffer> findByType(TypesOfActivities type);
-    List<ActivityOffer> findByActiveAndType(boolean isActive, TypesOfActivities type);
+    List<ActivityOffer> findByType(TypesOfActivities type);
 }

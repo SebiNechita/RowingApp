@@ -59,7 +59,7 @@ public class ActivityOfferRepositoryTest {
         this.isPro = false;
 
         // Add 4 trainings
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             TrainingOffer offer = new TrainingOffer(position, isActive, startTime, endTime, ownerId + i,
                     boatCertificate, type, name, description);
             activityOfferRepository.save(offer);
