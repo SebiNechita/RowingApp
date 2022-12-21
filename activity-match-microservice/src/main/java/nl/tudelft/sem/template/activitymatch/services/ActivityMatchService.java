@@ -108,6 +108,19 @@ public class ActivityMatchService {
         int activityMatchId = activityMatch.get().getId();
         String participantNetId = request.getParticipantNetId();
 
+        Optional<List<ActivityJoinQueueEntry>> activityJoinQueue = activityJoinQueueRepository
+                .findByActivityMatchId(activityMatchId);
+
+        if (activityJoinQueue.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No users are enrolled in this activity");
+        }
+
+        if (activityJoinQueue.get().stream()
+                .noneMatch(entry -> entry.getEnrolledUserNetId().equals(participantNetId))) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "The selected user was not found in the join queue of this activity");
+        }
+
         activityParticipantRepository.save(new ActivityParticipant(activityMatchId, participantNetId));
     }
 

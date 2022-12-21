@@ -3,6 +3,8 @@ package nl.tudelft.sem.template.activity.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
@@ -10,8 +12,12 @@ import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ActivityOfferService {
@@ -153,5 +159,18 @@ public class ActivityOfferService {
             System.out.println("Exception in the service");
             throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
         }
+    }
+
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request) throws ResponseStatusException {
+        Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
+
+        if (activityOffer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
+        }
+
+        // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
+        //               Return false if any of these don't match the activity offer requirements.
+
+        return true;
     }
 }

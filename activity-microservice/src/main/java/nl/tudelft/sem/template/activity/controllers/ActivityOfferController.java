@@ -8,7 +8,10 @@ import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class ActivityOfferController {
     private final transient ActivityOfferService activityOfferService;
+    static final Logger logger = LoggerFactory.getLogger(ActivityOfferController.class.getName());
 
     /**
      * Instantiates a new ActivityOfferController.
@@ -106,4 +110,14 @@ public class ActivityOfferController {
         }
     }
 
+    @PostMapping("/competition/participant-is-eligible")
+    public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request)
+            throws ResponseStatusException {
+        try {
+            return ResponseEntity.ok(activityOfferService.participantIsEligible(request));
+        } catch (ResponseStatusException e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
 }
