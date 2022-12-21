@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.user.domain.userlogic.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -93,28 +94,36 @@ public class AccountDetailsService {
         builder.setPositions(positions);
         builder.setOrganization(organization);
         AmateurUser user = builder.getUser();
-        List<Availability> availabilitiesParsed = builder.getAvailabilities();
-        Set<UserCertificate> userCertificates = builder.getCertificates();
-        List<PositionEntity> positionsEntities = builder.getPositions();
         userRepository.save(user);
+
+        List<Availability> availabilitiesParsed = builder.getAvailabilities();
         availabilityRepository.saveAll(availabilitiesParsed);
 
+        Set<UserCertificate> userCertificates = builder.getCertificates();
         userCertificatesRepository.saveAll(userCertificates);
 
+        List<PositionEntity> positionsEntities = builder.getPositions();
         userPositionRepository.saveAll(positionsEntities);
+
         System.out.println("Added " + userPositionRepository.findAllByNetId(netId).size());
         return user;
     }
 
+    /**
+     * Retrieves the user's details with a NetId.
+     *
+     * @param netId netId of the user
+     * @return UserDetailsModel
+     * @throws Exception exception
+     */
     public UserDetailsModel getAccountDetails(NetId netId) throws Exception {
-        boolean uniqueId = checkNetIdIsUnique(netId);
-        if (!userRepository.existsByNetId(netId)) {
+        if (checkNetIdIsUnique(netId)) {
             throw new NetIdAlreadyInUseException(netId);
         }
         User user = userRepository.findByNetId(netId).get();
 
         String netIdString = user.getNetId().toString();
-        String gender = user.getGender().toString().toUpperCase();
+        String gender = user.getGender().toString().toUpperCase(Locale.ENGLISH);
         String organisation = user.getOrganization();
         boolean isPro = !user.getClass().getSimpleName().equals("AmateurUser");
         List<TypesOfPositions> positions = userPositionRepository.findAllByNetId(netId)
@@ -151,6 +160,12 @@ public class AccountDetailsService {
         return userModel;
     }
 
+    /**
+     * Check if the NetId is unique.
+     *
+     * @param netId netId
+     * @return boolean
+     */
     public boolean checkNetIdIsUnique(NetId netId) {
         return !userRepository.existsByNetId(netId);
     }

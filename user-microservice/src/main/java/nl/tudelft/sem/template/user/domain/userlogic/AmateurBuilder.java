@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
@@ -15,6 +16,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.PositionEntity;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
 
+@AllArgsConstructor
 @NoArgsConstructor
 public class AmateurBuilder implements UserBuilder {
 
@@ -25,33 +27,6 @@ public class AmateurBuilder implements UserBuilder {
     private transient TreeMap<LocalDateTime, LocalDateTime> availabilities;
     private transient List<TypesOfPositions> positions;
     private transient String organization;
-
-    public AmateurBuilder(NetId netId,
-                          HashedPassword password,
-                          Gender gender,
-                          List<String> certificates,
-                          TreeMap<LocalDateTime, LocalDateTime> availabilities,
-                          List<TypesOfPositions> positions,
-                          String organization) {
-        this.netId = netId;
-        this.password = password;
-        this.gender = gender;
-        this.certificates = certificates;
-        this.availabilities = availabilities;
-        this.positions = positions;
-        this.organization = organization;
-    }
-
-    @Override
-    public void reset() {
-        netId = null;
-        password = null;
-        gender = null;
-        organization = null;
-        certificates = new ArrayList<>();
-        availabilities = new TreeMap<>();
-        positions = new ArrayList<>();
-    }
 
     @Override
     public void setNetId(NetId netId) {

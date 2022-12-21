@@ -53,6 +53,7 @@ class AccountDetailsServiceTest {
 
     private TreeMap<LocalDateTime, LocalDateTime> availabilities;
     private List<Tuple<LocalDateTime, LocalDateTime>> availabilitiesList;
+
     @BeforeEach
     public void setUp() {
         LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
@@ -63,77 +64,79 @@ class AccountDetailsServiceTest {
 
         availabilitiesList = List.of(new Tuple<>(dateOneIntervalOne, dateTwoIntervalOne));
     }
-//    @Test
-//    void setAccountDetailsSuccessfully() throws Exception {
-//        // Arrange
-//        final NetId testUser = new NetId("SomeUser");
-//        final Password testPassword = new Password("password123");
-//        final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
-//        final Gender gender = Gender.MALE;
-//        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
-//        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
-//        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-31T20:59");
-//        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-31T22:00");
-//        Availability expectedAvailabilityOne = new Availability(testUser, dateOneIntervalOne, dateTwoIntervalTwo);
-//        Availability expectedAvailabilityTwo = new Availability(testUser, dateOneIntervalTwo, dateTwoIntervalTwo);
-//        UserCertificate expectedUserCertificateOne = new UserCertificate(testUser, "C4");
-//        UserCertificate expectedUserCertificateTwo = new UserCertificate(testUser, "8+");
-//        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
-//        availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
-//        availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
-//        List<String> certificates = List.of("C4", "8+");
-//        List<UserCertificate> userCertificates = List.of(expectedUserCertificateOne, expectedUserCertificateTwo);
-//        when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
-//        // Act
-//        accountDetailsService.setAccountDetails(testUser, testPassword, gender, availabilities, certificates);
-//
-//        // Assert
-//        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
-//        List<Availability> foundAvailabilities = availabilityRepository.findAllByNetId(testUser);
-//        List<UserCertificate> foundCertificates = userCertificatesRepository.findAllByNetId(testUser);
-//
-//        assertThat(savedUser.getNetId()).isEqualTo(testUser);
-//        assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
-//        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
-//        //assertThat(foundAvailabilities).containsExactlyInAnyOrder(expectedAvailabilityOne, expectedAvailabilityTwo);
-//        //assertThat(foundCertificates).containsExactlyInAnyOrder(expectedUserCertificateOne, expectedUserCertificateTwo);
-//    }
-//
-//    @Test
-//    public void setAccountDetails_throwsAvailabilityException() {
-//        // Arrange
-//        final NetId testUser = new NetId("NewUser");
-//        final HashedPassword existingTestPassword = new HashedPassword("password123");
-//        final Password newTestPassword = new Password("password456");
-//        final Gender gender = Gender.MALE;
-//        AmateurUser existingAmateurUser = new AmateurUser(testUser, existingTestPassword, gender);
-//        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
-//        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T13:00");
-//        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-12T20:59");
-//        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-12T22:00");
-//        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
-//        availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
-//        availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
-//        List<String> certificates = List.of("C4", "8+");
-//        userRepository.save(existingAmateurUser);
-//
-//        // Act
-//        ThrowableAssert.ThrowingCallable action = () -> accountDetailsService.setAccountDetails(testUser,
-//                newTestPassword,
-//                gender,
-//                availabilities,
-//                certificates);
-//
-//        // Assert
-//        assertThatExceptionOfType(Exception.class)
-//                .isThrownBy(action);
-//
-//        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
-//
-//        assertThat(savedUser.getNetId()).isEqualTo(testUser);
-//        assertThat(savedUser.getPassword()).isEqualTo(existingTestPassword);
-//        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
-//    }
+    //    @Test
+    //    void setAccountDetailsSuccessfully() throws Exception {
+    //        // Arrange
+    //        final NetId testUser = new NetId("SomeUser");
+    //        final Password testPassword = new Password("password123");
+    //        final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
+    //        final Gender gender = Gender.MALE;
+    //        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
+    //        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
+    //        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-31T20:59");
+    //        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-31T22:00");
+    //        Availability expectedAvailabilityOne = new Availability(testUser, dateOneIntervalOne, dateTwoIntervalTwo);
+    //        Availability expectedAvailabilityTwo = new Availability(testUser, dateOneIntervalTwo, dateTwoIntervalTwo);
+    //        UserCertificate expectedUserCertificateOne = new UserCertificate(testUser, "C4");
+    //        UserCertificate expectedUserCertificateTwo = new UserCertificate(testUser, "8+");
+    //        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
+    //        availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
+    //        availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
+    //        List<String> certificates = List.of("C4", "8+");
+    //        List<UserCertificate> userCertificates = List.of(expectedUserCertificateOne, expectedUserCertificateTwo);
+    //        when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
+    //        // Act
+    //        accountDetailsService.setAccountDetails(testUser, testPassword, gender, availabilities, certificates);
+    //
+    //        // Assert
+    //        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
+    //        List<Availability> foundAvailabilities = availabilityRepository.findAllByNetId(testUser);
+    //        List<UserCertificate> foundCertificates = userCertificatesRepository.findAllByNetId(testUser);
+    //
+    //        assertThat(savedUser.getNetId()).isEqualTo(testUser);
+    //        assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
+    //        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
+    //        //assertThat(foundAvailabilities)
+    //        .containsExactlyInAnyOrder(expectedAvailabilityOne, expectedAvailabilityTwo);
+    //        //assertThat(foundCertificates)
+    //        .containsExactlyInAnyOrder(expectedUserCertificateOne, expectedUserCertificateTwo);
+    //    }
+    //
+    //    @Test
+    //    public void setAccountDetails_throwsAvailabilityException() {
+    //        // Arrange
+    //        final NetId testUser = new NetId("NewUser");
+    //        final HashedPassword existingTestPassword = new HashedPassword("password123");
+    //        final Password newTestPassword = new Password("password456");
+    //        final Gender gender = Gender.MALE;
+    //        AmateurUser existingAmateurUser = new AmateurUser(testUser, existingTestPassword, gender);
+    //        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
+    //        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T13:00");
+    //        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-12T20:59");
+    //        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-12T22:00");
+    //        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
+    //        availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
+    //        availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
+    //        List<String> certificates = List.of("C4", "8+");
+    //        userRepository.save(existingAmateurUser);
+    //
+    //        // Act
+    //        ThrowableAssert.ThrowingCallable action = () -> accountDetailsService.setAccountDetails(testUser,
+    //                newTestPassword,
+    //                gender,
+    //                availabilities,
+    //                certificates);
+    //
+    //        // Assert
+    //        assertThatExceptionOfType(Exception.class)
+    //                .isThrownBy(action);
+    //
+    //        AmateurUser savedUser = userRepository.findByNetId(testUser).orElseThrow();
+    //
+    //        assertThat(savedUser.getNetId()).isEqualTo(testUser);
+    //        assertThat(savedUser.getPassword()).isEqualTo(existingTestPassword);
+    //        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
+    //    }
 
     @Test
     public void getUserDetails_worksCorrectly() throws Exception {

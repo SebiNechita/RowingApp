@@ -11,7 +11,6 @@ import nl.tudelft.sem.template.user.domain.userlogic.entities.User;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
 
 public interface UserBuilder {
-    void reset();
 
     void setNetId(NetId netId);
 
