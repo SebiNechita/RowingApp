@@ -1,5 +1,6 @@
 package nl.tudelft.sem.template.activity.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -8,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
@@ -18,7 +17,6 @@ import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
-import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
@@ -26,8 +24,6 @@ import nl.tudelft.sem.template.common.models.user.NetId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -182,18 +178,18 @@ public class ActivityOfferService {
      *
      * @throws Exception exception
      */
-    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception{
+    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception {
         try {
 
             //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
+                    .uri(URI.create("http://localhost:8082/user/get/details/" + netId))
                     .build();
             HttpResponse<String> response = httpClient.send(request,
                     HttpResponse.BodyHandlers.ofString());
 
-// Check if the request was successful
+            // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
                 // Parse the response body
                 ObjectMapper mapper = new ObjectMapper();
@@ -202,10 +198,11 @@ public class ActivityOfferService {
                 System.out.println(availabilities);
                 // Use the data in the model object as needed
                 // ...
-            } else {
-                // The request was not successful. Handle the error as appropriate.
-                // ...
             }
+            // else {
+            //     The request was not successful. Handle the error as appropriate.
+            //     ...
+            // }
             return activityOfferRepository.findAll();
         } catch (Exception e) {
             System.out.println("Exception in the service");

@@ -44,7 +44,7 @@ public class ActivityMatchService {
         this.activityMatchRepository = activityMatchRepository;
         this.activityJoinQueueRepository = activityJoinQueueRepository;
         this.activityParticipantRepository = activityParticipantRepository;
-        this.activityOfferMicroserviceAdapter= activityOfferMicroserviceAdapter;
+        this.activityOfferMicroserviceAdapter = activityOfferMicroserviceAdapter;
     }
 
     /**
