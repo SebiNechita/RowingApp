@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
@@ -14,10 +15,10 @@ import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestMod
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.NetId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import nl.tudelft.sem.template.common.models.user.Tuple;
 import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -214,12 +215,16 @@ public class ActivityOfferController {
      * Get list of ActivityOffers that are active and are competitions and meet your requirements:
      * have the same gender as you do, are on the same experience level, are from the same organisation.
      *
-     * @param request request
+     * @param netId netId
      * @return returns filtered competitions
      */
     @GetMapping("/get/competitions/filtered")
-    public ResponseEntity<List<CompetitionOffer>> getFilteredCompetitions(@RequestBody UserDetailsModel request) {
+    public ResponseEntity<List<CompetitionOffer>> getFilteredCompetitions(
+            @RequestBody NetId netId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         try {
+            UserDetailsModel request = activityOfferService.getUserDetailsModel(netId, authToken);
+
             String organisation = request.getOrganisation();
             boolean isFemale = request.getGender().equals("FEMALE");
             boolean isPro = request.isPro();

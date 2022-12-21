@@ -8,9 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
@@ -19,13 +18,16 @@ import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.common.models.user.NetId;
-import org.springframework.http.HttpStatus;
-import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -337,5 +339,12 @@ public class ActivityOfferService {
                     return true;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public UserDetailsModel getUserDetailsModel(NetId netId, String authToken) {
+        String urlAddress = "http://localhost:8085/user/get/details";
+        UserDetailsModel model = HttpUtils.sendAuthorizedHttpRequest(urlAddress, HttpMethod.GET,
+                authToken, netId, UserDetailsModel.class).getBody();
+        return model;
     }
 }
