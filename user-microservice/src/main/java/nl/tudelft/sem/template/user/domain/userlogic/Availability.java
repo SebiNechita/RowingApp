@@ -17,14 +17,12 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.ToString;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 
 @Entity
 @Table(name = "availabilities")
 @Getter
 @NoArgsConstructor
-@ToString
 //class to support users availabilities
 public class Availability {
 
