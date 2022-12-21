@@ -1,10 +1,7 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
-import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
-import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
-import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
-import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.*;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Gateway controller.
@@ -59,7 +57,7 @@ public class GatewayController {
      *
      * @param request The registration model
      * @return 200 OK if the registration is successful
-     * @throws Exception if a user with this netid already exists
+     * @throws ResponseStatusException if a user with this netid already exists
      */
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegistrationRequestModel request) {
@@ -72,7 +70,7 @@ public class GatewayController {
      *
      * @param request request
      * @return ok response if successful
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
     @PostMapping("/create/match")
     public ResponseEntity<Void> createActivityMatch(@RequestBody MatchCreationRequestModel request,
@@ -87,7 +85,7 @@ public class GatewayController {
      *
      * @param request the request wrapped in a PendingOffersRequestModel
      * @return a response wrapped in a PendingOffersResponseModel
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
     @PostMapping("/get/offers/pending")
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(@RequestBody PendingOffersRequestModel request,
@@ -102,7 +100,7 @@ public class GatewayController {
      *
      * @param request the request wrapped in a SetParticipantRequestModel
      * @return a simple okay status message
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
     @PostMapping("/set/participant")
     public ResponseEntity<String> setParticipant(@RequestBody SetParticipantRequestModel request,
@@ -110,5 +108,20 @@ public class GatewayController {
         logger.info(String.format("Received setParticipant request for activity: %s, selected participant: %s",
                 request.getActivityId(), request.getParticipantNetId()));
         return activityMatchMicroserviceAdapter.setParticipant(request, authToken);
+    }
+
+    /**
+     * Adds a user to the join queue of an activity.
+     *
+     * @param request the request wrapped in an AddUserToJoinQueueRequestModel
+     * @return a simple okay status message
+     * @throws ResponseStatusException if not successful
+     */
+    @PostMapping("/join-queue")
+    public ResponseEntity<String> addUserToJoinQueue(@RequestBody AddUserToJoinQueueRequestModel request,
+                                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        logger.info(String.format("Received addUserToJoinQueue request for activity: %s"),
+                request.getActivityId());
+        return activityMatchMicroserviceAdapter.addUserToJoinQueue(request, authToken);
     }
 }
