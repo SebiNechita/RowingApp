@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
 import java.util.Objects;
 import javax.persistence.Column;
@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.NetIdAttributeConverter;
 
 @Entity
 @Table(name = "userCertificate")
@@ -32,6 +34,11 @@ public class UserCertificate {
     public UserCertificate(@NonNull NetId netId, String certificate) {
         this.netId = netId;
         this.certificate = certificate;
+    }
+
+    @Override
+    public String toString() {
+        return certificate;
     }
 
     /**

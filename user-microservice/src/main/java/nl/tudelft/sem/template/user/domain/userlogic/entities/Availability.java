@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +17,9 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.NetIdAttributeConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 
 @Entity
@@ -46,7 +49,7 @@ public class Availability {
      *
      * @param netId The NetId for the new user
      * @param start The start of the interval when a user is available for training/competing
-     * @param end The start of the interval when a user is available for training/competing
+     * @param end   The start of the interval when a user is available for training/competing
      */
     public Availability(@NonNull NetId netId,
                         @NonNull LocalDateTime start,
@@ -86,6 +89,20 @@ public class Availability {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    /**
+     * Return String representation of the object.
+     *
+     * @return string
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(this.start);
+        result.append(",");
+        result.append(this.end);
+        return result.toString();
     }
 
     /**

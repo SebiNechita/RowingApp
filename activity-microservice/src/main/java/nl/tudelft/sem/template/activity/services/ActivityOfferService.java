@@ -1,8 +1,15 @@
 package nl.tudelft.sem.template.activity.services;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
@@ -12,10 +19,15 @@ import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
+import nl.tudelft.sem.template.common.models.user.NetId;
+import org.springframework.http.HttpStatus;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.Tuple;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ActivityOfferService {
@@ -194,7 +206,7 @@ public class ActivityOfferService {
 
 
     /**
-     * Gets a list of ActivityOffer.
+     * Gets the list with all the ActivityOffer.
      *
      * @throws Exception exception
      */
@@ -207,6 +219,62 @@ public class ActivityOfferService {
         }
     }
 
+    /**
+     * Gets a filtered list of ActivityOffer.
+     *
+     * @throws Exception exception
+     */
+    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception{
+        try {
+
+            //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
+// Check if the request was successful
+            if (response.statusCode() == HttpStatus.OK.value()) {
+                // Parse the response body
+                ObjectMapper mapper = new ObjectMapper();
+                GetUserDetailsModel model = mapper.readValue(response.body(), GetUserDetailsModel.class);
+                List<String> availabilities = model.getAvailabilities();
+                System.out.println(availabilities);
+                // Use the data in the model object as needed
+                // ...
+            } else {
+                // The request was not successful. Handle the error as appropriate.
+                // ...
+            }
+            return activityOfferRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Endpoint for checking if a participant is eligible to join a given activity.
+     *
+     * @param request wrapped in a ParticipantIsEligibleRequestModel.
+     * @return boolean indicating eligibility.
+     * @throws ResponseStatusException if not successful.
+     */
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request) throws ResponseStatusException {
+        Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
+
+        if (activityOffer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
+        }
+
+        // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
+        //               Return false if any of these don't match the activity offer requirements.
+
+        return true;
+    }
     /**
      * Gets a list of ActivityOffers which are all active competitions.
      *
