@@ -3,22 +3,23 @@ package nl.tudelft.sem.template.activity.controllers;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.models.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.activity.models.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.user.NetId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -97,15 +98,19 @@ public class ActivityOfferController {
     }
 
     /**
-     * Endpoint for getting all trainings offer.
+     * Endpoint for getting all trainings offer that are good according to the user availability.
      *
      * @return ok response if successful
      * @throws ResponseStatusException if not successful
      */
-    @GetMapping("/get/trainings/forsignup")
-    public ResponseEntity<List<ActivityOffer>> getFilteredOffersForUser() throws ResponseStatusException {
+    @GetMapping("/get/trainings/{netId}")
+    public ResponseEntity<List<TrainingOffer>> getFilteredOffersForUser(@PathVariable("netId") NetId netId) throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityOfferService.getFilteredOffers());
+            List<TrainingOffer> trainings = activityOfferService.getFilteredOffers().stream()
+                    .filter(offer -> offer instanceof TrainingOffer)
+                    .map(offer -> (TrainingOffer) offer)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(trainings);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
