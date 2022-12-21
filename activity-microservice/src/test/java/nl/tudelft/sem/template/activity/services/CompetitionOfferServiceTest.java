@@ -9,11 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
-import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.Tuple;
@@ -118,13 +117,14 @@ public class CompetitionOfferServiceTest {
         activityOfferRepository.save(competitionBuilder.build());
 
         List<CompetitionOffer> result = activityService.getFilteredCompetitionOffers(
-                "Team Blue",
-                true,
-                true,
-                List.of("C4"),
-                List.of(TypesOfPositions.COX, TypesOfPositions.SCULLING_ROWER),
-                List.of(new Tuple(startTime, endTime))
-        );
+                        "Team Blue",
+                        true,
+                        true,
+                        List.of("C4"),
+                        List.of(TypesOfPositions.COX, TypesOfPositions.SCULLING_ROWER),
+                        List.of(new Tuple(startTime, endTime)))
+                .getAvailableOffers();
+
 
         assertThat(result.size()).isEqualTo(1);
     }
@@ -187,7 +187,7 @@ public class CompetitionOfferServiceTest {
         LocalDateTime endAvailability2 = LocalDateTime.of(LocalDate.of(2022, 1, 8),
                 LocalTime.of(15, 10));
 
-        List<ActivityOffer> result = activityService
+        List<CompetitionOffer> result = activityService
                 .getFilteredCompetitionOffers(
                         "Team Blue",
                         true,
@@ -196,7 +196,7 @@ public class CompetitionOfferServiceTest {
                         List.of(TypesOfPositions.COX, TypesOfPositions.SCULLING_ROWER),
                         List.of(new Tuple(startAvailability1, endAvailability1),
                                 new Tuple(startAvailability2, endAvailability2))
-                );
+                ).getAvailableOffers();
 
         // Assert
         assertThat(result.size()).isEqualTo(3);

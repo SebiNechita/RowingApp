@@ -1,7 +1,8 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
-import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
@@ -9,6 +10,7 @@ import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequest
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
+import nl.tudelft.sem.template.common.models.user.NetId;
 import nl.tudelft.sem.template.gateway.communication.ActivityMatchMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.ActivityOfferMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
@@ -17,8 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -152,5 +154,21 @@ public class GatewayController {
 
         request.setOwnerId(userId);
         return activityOfferMicroserviceAdapter.createCompetition(request, authToken);
+    }
+
+    /**
+     * Endpoint for fetching available competitions for an authorized user.
+     *
+     * @param authToken authToken
+     * @return AvailableCompetitionsModel
+     */
+    @GetMapping("/competitions/fetch-available")
+    public ResponseEntity<AvailableCompetitionsModel> fetchAvailableCompetitions(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+
+        String userId = userMicroserviceAdapter.getUserId(authToken).getBody();
+        logger.info(String.format("Received fetchAvailableCompetitions request for the following user " + userId));
+
+        return activityOfferMicroserviceAdapter.fetchAvailableCompetitions(new NetId(userId), authToken);
     }
 }

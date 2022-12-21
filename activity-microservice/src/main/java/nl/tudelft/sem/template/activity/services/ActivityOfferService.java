@@ -1,5 +1,6 @@
 package nl.tudelft.sem.template.activity.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
@@ -17,6 +17,7 @@ import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
+import nl.tudelft.sem.template.activity.models.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
@@ -226,18 +227,18 @@ public class ActivityOfferService {
      *
      * @throws Exception exception
      */
-    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception{
+    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception {
         try {
 
             //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
+                    .uri(URI.create("http://localhost:8082/user/get/details/" + netId))
                     .build();
             HttpResponse<String> response = httpClient.send(request,
                     HttpResponse.BodyHandlers.ofString());
 
-// Check if the request was successful
+            // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
                 // Parse the response body
                 ObjectMapper mapper = new ObjectMapper();
@@ -249,6 +250,7 @@ public class ActivityOfferService {
             } else {
                 // The request was not successful. Handle the error as appropriate.
                 // ...
+                throw new Exception();
             }
             return activityOfferRepository.findAll();
         } catch (Exception e) {
@@ -277,6 +279,7 @@ public class ActivityOfferService {
 
         return true;
     }
+
     /**
      * Gets a list of ActivityOffers which are all active competitions.
      *
@@ -305,42 +308,50 @@ public class ActivityOfferService {
      * @return list of selected competitions
      * @throws Exception exception
      */
-    public List<CompetitionOffer> getFilteredCompetitionOffers(String organisation,
-                                                            boolean isFemale,
-                                                            boolean isPro,
-                                                            List<String> certificates,
-                                                            List<TypesOfPositions> positions,
-                                                            List<Tuple<LocalDateTime, LocalDateTime>> availabilities)
+    public AvailableCompetitionsModel getFilteredCompetitionOffers(String organisation,
+                                                                   boolean isFemale,
+                                                                   boolean isPro,
+                                                                   List<String> certificates,
+                                                                   List<TypesOfPositions> positions,
+                                                                   List<Tuple<LocalDateTime, LocalDateTime>> availabilities)
             throws Exception {
-        return getAllCompetitionOffers()
-                .stream()
-                .map(x -> (CompetitionOffer) x)
-                .filter(x -> x.isFemale() == isFemale)
-                .filter(x -> x.isPro() == isPro)
-                .filter(x -> x.getOrganisation().equals(organisation))
-                .filter(x -> positions.contains(x.getPosition()))
-                .filter(x -> {
-                    for (Tuple<LocalDateTime, LocalDateTime> tuple : availabilities) {
-                        LocalDateTime avlStartTime = tuple.getFirst();
-                        LocalDateTime avlEndTime = tuple.getSecond();
+        return new AvailableCompetitionsModel(
+                getAllCompetitionOffers()
+                        .stream()
+                        .map(x -> (CompetitionOffer) x)
+                        .filter(x -> x.isFemale() == isFemale)
+                        .filter(x -> x.isPro() == isPro)
+                        .filter(x -> x.getOrganisation().equals(organisation))
+                        .filter(x -> positions.contains(x.getPosition()))
+                        .filter(x -> {
+                            for (Tuple<LocalDateTime, LocalDateTime> tuple : availabilities) {
+                                LocalDateTime avlStartTime = tuple.getFirst();
+                                LocalDateTime avlEndTime = tuple.getSecond();
 
-                        // If the competition doesn't start before our slot and doesn't end after our slot
-                        // we can take part in it
-                        if (!x.getStartTime().isBefore(avlStartTime) && !x.getEndTime().isAfter(avlEndTime)) {
+                                // If the competition doesn't start before our slot and doesn't end after our slot
+                                // we can take part in it
+                                if (!x.getStartTime().isBefore(avlStartTime) && !x.getEndTime().isAfter(avlEndTime)) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        })
+                        .filter(x -> {
+                            if (x.getPosition().equals(TypesOfPositions.COX)) {
+                                return certificates.contains(x.getBoatCertificate());
+                            }
                             return true;
-                        }
-                    }
-                    return false;
-                })
-                .filter(x -> {
-                    if (x.getPosition().equals(TypesOfPositions.COX)) {
-                        return certificates.contains(x.getBoatCertificate());
-                    }
-                    return true;
-                })
-                .collect(Collectors.toList());
+                        })
+                        .collect(Collectors.toList()));
     }
 
+    /**
+     * Send request to user microservice to get a user details.
+     *
+     * @param netId     netId
+     * @param authToken authToken
+     * @return UserDetailsModel
+     */
     public UserDetailsModel getUserDetailsModel(NetId netId, String authToken) {
         String urlAddress = "http://localhost:8085/user/get/details";
         UserDetailsModel model = HttpUtils.sendAuthorizedHttpRequest(urlAddress, HttpMethod.GET,

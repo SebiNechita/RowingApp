@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
-import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
+import nl.tudelft.sem.template.activity.models.AvailableCompetitionsModel;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ManyTrainingsCreationRequestModel;
@@ -56,7 +57,8 @@ public class ActivityOfferController {
      */
     @PostMapping("/create/training")
     public ResponseEntity createTraining(@RequestBody TrainingCreationRequestModel request,
-                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws Exception {
+                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
+            throws Exception {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -86,7 +88,8 @@ public class ActivityOfferController {
      */
     @PostMapping("/create/training/many")
     public ResponseEntity createManyTrainings(@RequestBody ManyTrainingsCreationRequestModel request,
-                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws Exception {
+                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
+            throws Exception {
         try {
             Map<TypesOfPositions, Integer> positions = request.getPositions();
             boolean isActive = request.isActive();
@@ -114,7 +117,8 @@ public class ActivityOfferController {
      * @throws ResponseStatusException if not successful
      */
     @GetMapping("/get/trainings/{netId}")
-    public ResponseEntity<List<TrainingOffer>> getFilteredOffersForUser(@PathVariable("netId") NetId netId) throws ResponseStatusException {
+    public ResponseEntity<List<TrainingOffer>> getFilteredOffersForUser(@PathVariable("netId") NetId netId)
+            throws ResponseStatusException {
         try {
             List<TrainingOffer> trainings = activityOfferService.getFilteredOffers(netId).stream()
                     .filter(offer -> offer instanceof TrainingOffer)
@@ -153,7 +157,8 @@ public class ActivityOfferController {
      */
     @PostMapping("/create/competition")
     public ResponseEntity createCompetition(@RequestBody CompetitionCreationRequestModel request,
-                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws Exception {
+                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
+            throws Exception {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -219,7 +224,7 @@ public class ActivityOfferController {
      * @return returns filtered competitions
      */
     @GetMapping("/get/competitions/filtered")
-    public ResponseEntity<List<CompetitionOffer>> getFilteredCompetitions(
+    public ResponseEntity<AvailableCompetitionsModel> getFilteredCompetitions(
             @RequestBody NetId netId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         try {
