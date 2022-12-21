@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.user.domain.userlogic.services;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import nl.tudelft.sem.template.user.domain.userlogic.*;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
@@ -9,6 +10,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUs
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
+import nl.tudelft.sem.template.user.models.GetAmateurUserDetailsModel;
 import org.springframework.stereotype.Service;
 
 /**
@@ -78,6 +80,22 @@ public class AmateurAccountDetailsService {
         availabilityRepository.saveAll(availabilitiesParsed);
         userCertificatesRepository.saveAll(userCertificates);
         return user;
+    }
+
+    public GetAmateurUserDetailsModel getAccountDetails(NetId netId) throws Exception{
+        boolean uniqueId = checkNetIdIsUnique(netId);
+        if (!userRepository.existsByNetId(netId)) {
+            throw new NetIdAlreadyInUseException(netId);
+        }
+        GetAmateurUserDetailsModel model = new GetAmateurUserDetailsModel();
+        Optional<User> user = userRepository.findByNetId(netId);
+        model.setNetId(netId.toString());
+        model.setGender(user.get().getGender().getGender());
+        List<String> availabilities = availabilityRepository.findAllByNetId(netId).stream().map(Availability::toString).collect(Collectors.toList());
+        List<String> certificates = userCertificatesRepository.findAllByNetId(netId).stream().map(UserCertificate::toString).collect(Collectors.toList());
+        model.setAvailabilities(availabilities);
+        model.setCertificates(certificates);
+        return model;
     }
 
     public boolean checkNetIdIsUnique(NetId netId) {

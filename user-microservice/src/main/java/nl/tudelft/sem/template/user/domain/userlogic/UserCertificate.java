@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Table(name = "userCertificate")
 @Getter
 @NoArgsConstructor
+@ToString
 public class UserCertificate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

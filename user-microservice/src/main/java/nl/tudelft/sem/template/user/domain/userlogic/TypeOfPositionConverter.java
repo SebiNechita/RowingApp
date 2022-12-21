@@ -3,29 +3,25 @@ package nl.tudelft.sem.template.user.domain.userlogic;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Converter
-public class TypeOfPositionConverter implements AttributeConverter<List<TypesOfPositions>, String> {
+public class TypeOfPositionConverter implements AttributeConverter<TypesOfPositions, String> {
 
     @Override
-    public String convertToDatabaseColumn(List<TypesOfPositions> type) {
-        return type.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(","));
+    public String convertToDatabaseColumn(TypesOfPositions type) {
+        return type.toString();
     }
 
     @Override
-    public List<TypesOfPositions> convertToEntityAttribute(String dbData) throws IllegalArgumentException {
+    public TypesOfPositions convertToEntityAttribute(String dbData) throws IllegalArgumentException {
         if (dbData == null) {
             throw new IllegalArgumentException();
         }
 
-        return Arrays.stream(dbData.split(","))
-                .map(String::trim)
-                .map(TypesOfPositions::valueOf)
-                .collect(Collectors.toList());
+        return Arrays.stream(TypesOfPositions.values())
+                .filter(v -> v.getType().equals(dbData))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }
