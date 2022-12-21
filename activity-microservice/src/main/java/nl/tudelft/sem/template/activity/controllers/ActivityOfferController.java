@@ -102,6 +102,22 @@ public class ActivityOfferController {
      * @return ok response if successful
      * @throws ResponseStatusException if not successful
      */
+    @GetMapping("/get/trainings/forsignup")
+    public ResponseEntity<List<ActivityOffer>> getFilteredOffersForUser() throws ResponseStatusException {
+        try {
+            return ResponseEntity.ok(activityOfferService.getFilteredOffers());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    /**
+     * Endpoint for getting all trainings offer.
+     *
+     * @return ok response if successful
+     * @throws ResponseStatusException if not successful
+     */
     @GetMapping("/get/trainings")
     public ResponseEntity<List<ActivityOffer>> getTraining() throws ResponseStatusException {
         try {

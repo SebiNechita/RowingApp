@@ -146,7 +146,7 @@ public class ActivityOfferService {
 
 
     /**
-     * Gets a list of ActivityOffer.
+     * Gets the list with all the ActivityOffer.
      *
      * @throws Exception exception
      */
@@ -158,6 +158,22 @@ public class ActivityOfferService {
             throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
         }
     }
+
+    /**
+     * Gets a filtered list of ActivityOffer.
+     *
+     * @throws Exception exception
+     */
+    public List<ActivityOffer> getFilteredOffers() throws Exception{
+        try {
+            //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
+            return activityOfferRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+        }
+    }
+
 
     /**
      * Endpoint for checking if a participant is eligible to join a given activity.
