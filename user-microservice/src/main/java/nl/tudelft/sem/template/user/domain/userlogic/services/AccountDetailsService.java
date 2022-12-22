@@ -1,10 +1,7 @@
 package nl.tudelft.sem.template.user.domain.userlogic.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.Tuple;
@@ -21,6 +18,7 @@ import nl.tudelft.sem.template.user.domain.userlogic.entities.User;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdAlreadyInUseException;
+import nl.tudelft.sem.template.user.domain.userlogic.exceptions.NetIdNotFoundException;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserAvailabilityRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserCertificatesRepository;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserPositionRepository;
@@ -117,11 +115,12 @@ public class AccountDetailsService {
      * @throws Exception exception
      */
     public UserDetailsModel getAccountDetails(NetId netId) throws Exception {
-        if (checkNetIdIsUnique(netId)) {
-            throw new NetIdAlreadyInUseException(netId);
-        }
-        User user = userRepository.findByNetId(netId).get();
 
+        Optional<User> userOptional = userRepository.findByNetId(netId);
+        if (userOptional.isEmpty()) {
+            throw new NetIdNotFoundException();
+        }
+        User user = userOptional.get();
         String netIdString = user.getNetId().toString();
         String gender = user.getGender().toString().toUpperCase(Locale.ENGLISH);
         String organisation = user.getOrganization();
