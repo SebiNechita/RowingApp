@@ -7,7 +7,11 @@ import nl.tudelft.sem.template.rowinginfo.services.OrganisationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -66,7 +70,8 @@ public class OrganisationsController {
      * @throws Exception if not successful
      */
     @GetMapping("/check/organisations/{organisationsName}")
-    public ResponseEntity<Boolean> checkOrganisations(@PathVariable("organisationsName") String organisationsName) throws Exception {
+    public ResponseEntity<Boolean> checkOrganisations(@PathVariable("organisationsName") String organisationsName)
+            throws Exception {
         try {
             return ResponseEntity.ok(organisationsService.checkOrganisations(organisationsName));
         } catch (Exception e) {

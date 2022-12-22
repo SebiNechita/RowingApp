@@ -1,8 +1,7 @@
 package nl.tudelft.sem.template.common.models.user;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class GetUserDetailsModel {

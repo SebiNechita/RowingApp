@@ -92,7 +92,7 @@ public class CertificatesTests {
                 .header("Authorization", "Bearer MockedToken"));
 
         ResultActions resultActions2 = mockMvc.perform(get("/check/certificates/" + certificateName)
-                .header("Authorization","Bearer MockedToken"));
+                .header("Authorization", "Bearer MockedToken"));
 
         // Assert
         resultActions.andExpect(status().isOk());
