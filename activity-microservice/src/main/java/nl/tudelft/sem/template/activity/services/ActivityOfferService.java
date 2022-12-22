@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
@@ -22,10 +23,8 @@ import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalExce
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
-import nl.tudelft.sem.template.common.models.user.NetId;
-import nl.tudelft.sem.template.common.models.user.Tuple;
-import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositionsDeserializer;
+import nl.tudelft.sem.template.common.models.user.*;
 import org.springframework.http.HttpStatus;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import org.springframework.stereotype.Service;
@@ -226,13 +225,14 @@ public class ActivityOfferService {
      *
      * @throws Exception exception
      */
-    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception{
+    public List<ActivityOffer> getFilteredOffers(NetId netId,String authToken) throws Exception{
         try {
 
             //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
+                    .header("Authorization", authToken)
                     .build();
             HttpResponse<String> response = httpClient.send(request,
                     HttpResponse.BodyHandlers.ofString());
@@ -244,6 +244,12 @@ public class ActivityOfferService {
             if (response.statusCode() == HttpStatus.OK.value()) {
                 // Parse the response body
                 ObjectMapper mapper = new ObjectMapper();
+
+                SimpleModule module = new SimpleModule();
+                module.addDeserializer(TypesOfPositions.class, new TypesOfPositionsDeserializer());
+                module.addDeserializer(Tuple.class, new TupleDeserializer());
+                mapper.registerModule(module);
+
                 UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
                 List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
 

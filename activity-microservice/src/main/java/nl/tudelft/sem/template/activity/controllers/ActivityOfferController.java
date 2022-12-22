@@ -110,9 +110,9 @@ public class ActivityOfferController {
      * @throws ResponseStatusException if not successful
      */
     @GetMapping("/get/trainings/{netId}")
-    public ResponseEntity<List<TrainingOffer>> getFilteredOffersForUser(@PathVariable("netId") NetId netId) throws ResponseStatusException {
+    public ResponseEntity<List<TrainingOffer>> getFilteredOffersForUser(@PathVariable("netId") NetId netId,@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws ResponseStatusException {
         try {
-            List<TrainingOffer> trainings = activityOfferService.getFilteredOffers(netId).stream()
+            List<TrainingOffer> trainings = activityOfferService.getFilteredOffers(netId,authToken).stream()
                     .filter(offer -> offer instanceof TrainingOffer)
                     .map(offer -> (TrainingOffer) offer)
                     .collect(Collectors.toList());
