@@ -255,7 +255,7 @@ public class ActivityOfferService {
 
                 for(ActivityOffer offer : offers){
                     for(Tuple<LocalDateTime, LocalDateTime> availability : availabilities){
-                        if(offer.getStartTime().isAfter(availability.getFirst()) && offer.getEndTime().isBefore(availability.getSecond())){
+                        if(!offer.getStartTime().isBefore(availability.getFirst()) && !offer.getEndTime().isAfter(availability.getSecond())){
                             filteredOffers.add(offer);
                         }
                     }
