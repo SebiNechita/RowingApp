@@ -1,5 +1,7 @@
 package nl.tudelft.sem.template.activity.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -10,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
@@ -23,10 +22,13 @@ import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalExce
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.activity.TypesOfPositionsDeserializer;
-import nl.tudelft.sem.template.common.models.user.*;
-import org.springframework.http.HttpStatus;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositionsDeserializer;
+import nl.tudelft.sem.template.common.models.user.NetId;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.TupleDeserializer;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -170,8 +172,8 @@ public class ActivityOfferService {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception in the service");
-            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+            System.out.println("Exception in the service for creating multiple training offers");
+            throw new Exception("Error while creating many ActivityOffer. " + e.getMessage());
         }
     }
 
@@ -215,8 +217,8 @@ public class ActivityOfferService {
         try {
             return activityOfferRepository.findAll();
         } catch (Exception e) {
-            System.out.println("Exception in the service");
-            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+            System.out.println("Exception in the service for getting all training offers");
+            throw new Exception("Error while creating getting all the TrainingOffer. " + e.getMessage());
         }
     }
 
@@ -225,18 +227,15 @@ public class ActivityOfferService {
      *
      * @throws Exception exception
      */
-    public List<ActivityOffer> getFilteredTrainings(NetId netId,String authToken) throws Exception{
+    public List<ActivityOffer> getFilteredTrainings(NetId netId, String authToken) throws Exception {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
+                    .uri(URI.create("http://localhost:8082/user/get/details/" + netId))
                     .header("Authorization", authToken)
                     .build();
             HttpResponse<String> response = httpClient.send(request,
                     HttpResponse.BodyHandlers.ofString());
-
-            List<ActivityOffer> offers = activityOfferRepository.findAll();
-            List<ActivityOffer> filteredOffers = new ArrayList<>();
 
             // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
@@ -251,21 +250,25 @@ public class ActivityOfferService {
                 UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
                 List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
 
-                for(ActivityOffer offer : offers){
-                    for(Tuple<LocalDateTime, LocalDateTime> availability : availabilities){
-                        if(!offer.getStartTime().isBefore(availability.getFirst()) && !offer.getEndTime().isAfter(availability.getSecond())){
+                List<ActivityOffer> offers = activityOfferRepository.findAll();
+                List<ActivityOffer> filteredOffers = new ArrayList<>();
+
+                for (ActivityOffer offer : offers) {
+                    for (Tuple<LocalDateTime, LocalDateTime> availability : availabilities) {
+                        if (!offer.getStartTime().isBefore(availability.getFirst())
+                                && !offer.getEndTime().isAfter(availability.getSecond())) {
                             filteredOffers.add(offer);
                         }
                     }
                 }
                 System.out.println(availabilities);
+                return filteredOffers;
             } else {
                 return List.of();
             }
-            return filteredOffers;
         } catch (Exception e) {
-            System.out.println("Exception in the service");
-            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+            System.out.println("Exception in the service for getting filtered training offers");
+            throw new Exception("Error while filtering the training offers. " + e.getMessage());
         }
     }
 
@@ -277,65 +280,69 @@ public class ActivityOfferService {
      * @return boolean indicating eligibility.
      * @throws ResponseStatusException if not successful.
      */
-    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request, String authToken) throws ResponseStatusException {
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request, String authToken)
+            throws ResponseStatusException {
 
-         try {
-             Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
+        try {
+            Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
 
-             if (activityOffer.isEmpty()) {
-                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
-             }
+            if (activityOffer.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
+            }
 
-             // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
-             //               Return false if any of these don't match the activity offer requirements.
-             HttpClient httpClient = HttpClient.newHttpClient();
+            // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
+            //               Return false if any of these don't match the activity offer requirements.
+            HttpClient httpClient = HttpClient.newHttpClient();
 
-             HttpRequest request2 = HttpRequest.newBuilder()
-                     .uri(URI.create("http://localhost:8082/user/get/details/" + request.getParticipantNetid()))
-                     .header("Authorization", authToken)
-                     .build();
-             HttpResponse<String> response = httpClient.send(request2,
-                     HttpResponse.BodyHandlers.ofString());
+            HttpRequest request2 = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8082/user/get/details/" + request.getParticipantNetid()))
+                    .header("Authorization", authToken)
+                    .build();
+            HttpResponse<String> response = httpClient.send(request2,
+                    HttpResponse.BodyHandlers.ofString());
 
-             List<CompetitionOffer> offers = activityOfferRepository.findAll().stream()
-                     .filter(offer -> offer instanceof CompetitionOffer)
-                     .map(offer -> (CompetitionOffer) offer)
-                     .collect(Collectors.toList());
+            // Check if the request was successful
+            if (response.statusCode() == HttpStatus.OK.value()) {
+                // Parse the response body
+                ObjectMapper mapper = new ObjectMapper();
 
-             CompetitionOffer competitionOffer = offers.get(0);
+                SimpleModule module = new SimpleModule();
+                module.addDeserializer(TypesOfPositions.class, new TypesOfPositionsDeserializer());
+                module.addDeserializer(Tuple.class, new TupleDeserializer());
+                mapper.registerModule(module);
 
-             // Check if the request was successful
-             if (response.statusCode() == HttpStatus.OK.value()) {
-                 // Parse the response body
-                 ObjectMapper mapper = new ObjectMapper();
+                List<CompetitionOffer> offers = activityOfferRepository.findAll().stream()
+                        .filter(offer -> offer instanceof CompetitionOffer)
+                        .map(offer -> (CompetitionOffer) offer)
+                        .collect(Collectors.toList());
 
-                 SimpleModule module = new SimpleModule();
-                 module.addDeserializer(TypesOfPositions.class, new TypesOfPositionsDeserializer());
-                 module.addDeserializer(Tuple.class, new TupleDeserializer());
-                 mapper.registerModule(module);
+                UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
+                CompetitionOffer competitionOffer = offers.get(0);
 
-                 UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
-                 //List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
-                 List<String> certificates = model.getCertificates();
-                 String gender = model.getGender();
-                 boolean pro = model.isPro();
-                 String organisation = model.getOrganisation();
-
-                 if (pro != competitionOffer.isPro())
-                     return false;
-                 if (!organisation.equals(competitionOffer.getOrganisation()))
-                     return false;
-                 // this is not entirely correct because we can have lower certificates which are still valid
-                 if (!certificates.contains(competitionOffer.getBoatCertificate()))
-                     return false;
-                 if (gender.equals("MALE") && competitionOffer.isFemale())
-                     return false;
-                 return true;
-             }
-             return false;
-            }   catch (Exception e){
-             System.out.println("Exception in the service");
-             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while creating ActivityOffer. " + e.getMessage());
-             }
-         }
+                boolean pro = model.isPro();
+                if (pro != competitionOffer.isPro()) {
+                    return false;
+                }
+                String organisation = model.getOrganisation();
+                if (!organisation.equals(competitionOffer.getOrganisation())) {
+                    return false;
+                }
+                // this is not entirely correct because we can have lower certificates which are still valid
+                List<String> certificates = model.getCertificates();
+                if (!certificates.contains(competitionOffer.getBoatCertificate())) {
+                    return false;
+                }
+                String gender = model.getGender();
+                if (gender.equals("MALE") && competitionOffer.isFemale()) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error while creating ActivityOffer. " + e.getMessage());
+        }
+    }
 }

@@ -108,7 +108,8 @@ public class DataValidation {
      * @param authToken   authToken
      * @return boolean doesCertificateExist
      */
-    public boolean validateCertificate(String certificate, String authToken) throws InvalidCertificateException, IOException, InterruptedException {
+    public boolean validateCertificate(String certificate, String authToken)
+            throws InvalidCertificateException, IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(checkCertificateExistanceUrl(certificate)))
@@ -116,10 +117,9 @@ public class DataValidation {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if(Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
+        if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
-        }
-        else {
+        } else {
             throw new InvalidCertificateException(certificate);
         }
     }
@@ -131,7 +131,8 @@ public class DataValidation {
      * @param authToken    authToken
      * @return boolean doesOrganisationExist
      */
-    public boolean validateOrganisation(String organisation, String authToken) throws InvalidOrganisationException, IOException, InterruptedException {
+    public boolean validateOrganisation(String organisation, String authToken)
+            throws InvalidOrganisationException, IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(checkOrganisationExistanceUrl(organisation)))
@@ -139,10 +140,9 @@ public class DataValidation {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        if(Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
+        if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
-        }
-        else {
+        } else {
             throw new InvalidOrganisationException(organisation);
         }
     }
