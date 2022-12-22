@@ -61,7 +61,12 @@ public class UserController {
     }
 
     @GetMapping("user/get/details/{netId}")
-    public ResponseEntity<UserDetailsModel> getUserDetails(@PathVariable NetId netId) throws Exception {
+    public ResponseEntity<UserDetailsModel> getUserDetailsPathVariable(@PathVariable NetId netId) throws Exception {
+        return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
+    }
+
+    @GetMapping("user/get/details")
+    public ResponseEntity<UserDetailsModel> getUserDetails(NetId netId) throws Exception {
         return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
     }
 
