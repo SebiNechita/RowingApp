@@ -183,7 +183,7 @@ public class ActivityOfferController {
      * @return boolean indicating eligibility.
      * @throws ResponseStatusException if not successful.
      */
-    @PostMapping("/competition/participant-is-eligible/{netId}")
+    @PostMapping("/competition/participant-is-eligible")
     public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request,
                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
             throws ResponseStatusException {

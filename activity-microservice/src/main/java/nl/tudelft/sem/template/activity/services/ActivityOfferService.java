@@ -298,11 +298,11 @@ public class ActivityOfferService {
                      HttpResponse.BodyHandlers.ofString());
 
              List<CompetitionOffer> offers = activityOfferRepository.findAll().stream()
-                     .filter(offer -> offer instanceof TrainingOffer)
+                     .filter(offer -> offer instanceof CompetitionOffer)
                      .map(offer -> (CompetitionOffer) offer)
                      .collect(Collectors.toList());
 
-             CompetitionOffer competitionOffer = (CompetitionOffer) offers.stream().filter(offer -> offer.getId() == request.getActivityOfferId());
+             CompetitionOffer competitionOffer = offers.get(0);
 
              // Check if the request was successful
              if (response.statusCode() == HttpStatus.OK.value()) {
