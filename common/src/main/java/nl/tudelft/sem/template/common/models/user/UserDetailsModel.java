@@ -14,8 +14,8 @@ public class UserDetailsModel {
     String netId;
     String gender;
     String organisation;
+    boolean pro;
     List<TypesOfPositions> positions;
     List<Tuple<LocalDateTime, LocalDateTime>> availabilities;
     List<String> certificates;
-    boolean pro;
 }
