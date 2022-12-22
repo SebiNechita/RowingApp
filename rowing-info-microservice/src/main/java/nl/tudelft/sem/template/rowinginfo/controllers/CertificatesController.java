@@ -7,10 +7,7 @@ import nl.tudelft.sem.template.rowinginfo.services.CertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -70,10 +67,10 @@ public class CertificatesController {
      * @return ok response if successful
      * @throws Exception if not successful
      */
-    @GetMapping("/check/certificates")
-    public ResponseEntity<Boolean> checkCertificates(@RequestBody CertificatesRequestModel request) throws Exception {
+    @GetMapping("/check/certificates/{certificateName}")
+    public ResponseEntity<Boolean> checkCertificates(@PathVariable("certificateName") String certificateName) throws Exception {
         try {
-            String certificateName = request.getCertificateName();
+            System.out.println("agffs");
             return ResponseEntity.ok(certificatesService.checkCertificates(certificateName));
         } catch (Exception e) {
             System.out.println(e.getMessage());
