@@ -156,14 +156,14 @@ public class GatewayController {
     /**
      * Endpoint for getting a list of AvailableTrainingModel.
      *
-     * @param request   request wrapped in a AvailableTrainingModel
+     * @param netId    netId of the user
      * @param authToken authentication token
      * @return status of the message
      */
     @GetMapping("/get/trainings/{netId}")
-    public ResponseEntity<AvailableTrainingsModel> getAvailableTrainings(@PathVariable("netId") NetId netId,
+    public ResponseEntity<AvailableTrainingsModel> getFilteredTrainingsForUser(@PathVariable("netId") NetId netId,
                                                                                @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         logger.info(String.format("Received getAvailableTrainings request for the following user: " + netId));
-        return activityOfferMicroserviceAdapter.getFilteredOffers(netId, authToken);
+        return activityOfferMicroserviceAdapter.getFilteredTrainings(netId, authToken);
     }
 }

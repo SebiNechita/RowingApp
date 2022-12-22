@@ -117,12 +117,6 @@ public class DataValidation {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        /*if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkCertificateExistanceUrl(),
-                HttpMethod.GET, authToken, boolean.class).getBody())) {
-            return true;
-        } else {
-            throw new InvalidCertificateException(certificate);
-        }*/
         if(Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
         }
@@ -140,8 +134,8 @@ public class DataValidation {
      */
     public boolean validateOrganisation(String organisation, String authToken) throws InvalidOrganisationException {
         OrganisationsRequestModel request = new OrganisationsRequestModel(organisation);
-        if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkOrganisationExistanceUrl(),
-                HttpMethod.GET, authToken, request, boolean.class).getBody())) {
+        if (Boolean.TRUE.equals(Boolean.valueOf(HttpUtils.sendAuthorizedHttpRequest(checkOrganisationExistanceUrl(),
+                HttpMethod.GET, authToken, request, boolean.class).getBody()))) {
             return true;
         } else {
             throw new InvalidOrganisationException(organisation);

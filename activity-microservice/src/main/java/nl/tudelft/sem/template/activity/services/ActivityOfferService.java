@@ -225,10 +225,8 @@ public class ActivityOfferService {
      *
      * @throws Exception exception
      */
-    public List<ActivityOffer> getFilteredOffers(NetId netId,String authToken) throws Exception{
+    public List<ActivityOffer> getFilteredTrainings(NetId netId,String authToken) throws Exception{
         try {
-
-            //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
@@ -261,12 +259,8 @@ public class ActivityOfferService {
                     }
                 }
                 System.out.println(availabilities);
-                // Use the data in the model object as needed
-                // ...
             } else {
-                // The request was not successful. Handle the error as appropriate.
                 return List.of();
-                // ...
             }
             return filteredOffers;
         } catch (Exception e) {
@@ -283,16 +277,65 @@ public class ActivityOfferService {
      * @return boolean indicating eligibility.
      * @throws ResponseStatusException if not successful.
      */
-    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request) throws ResponseStatusException {
-        Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request, String authToken) throws ResponseStatusException {
 
-        if (activityOffer.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
-        }
+         try {
+             Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
 
-        // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
-        //               Return false if any of these don't match the activity offer requirements.
+             if (activityOffer.isEmpty()) {
+                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
+             }
 
-        return true;
-    }
+             // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
+             //               Return false if any of these don't match the activity offer requirements.
+             HttpClient httpClient = HttpClient.newHttpClient();
+
+             HttpRequest request2 = HttpRequest.newBuilder()
+                     .uri(URI.create("http://localhost:8082/user/get/details/" + request.getParticipantNetid()))
+                     .header("Authorization", authToken)
+                     .build();
+             HttpResponse<String> response = httpClient.send(request2,
+                     HttpResponse.BodyHandlers.ofString());
+
+             List<CompetitionOffer> offers = activityOfferRepository.findAll().stream()
+                     .filter(offer -> offer instanceof TrainingOffer)
+                     .map(offer -> (CompetitionOffer) offer)
+                     .collect(Collectors.toList());
+
+             CompetitionOffer competitionOffer = (CompetitionOffer) offers.stream().filter(offer -> offer.getId() == request.getActivityOfferId());
+
+             // Check if the request was successful
+             if (response.statusCode() == HttpStatus.OK.value()) {
+                 // Parse the response body
+                 ObjectMapper mapper = new ObjectMapper();
+
+                 SimpleModule module = new SimpleModule();
+                 module.addDeserializer(TypesOfPositions.class, new TypesOfPositionsDeserializer());
+                 module.addDeserializer(Tuple.class, new TupleDeserializer());
+                 mapper.registerModule(module);
+
+                 UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
+                 //List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
+                 List<String> certificates = model.getCertificates();
+                 String gender = model.getGender();
+                 boolean pro = model.isPro();
+                 String organisation = model.getOrganisation();
+
+                 if (pro != competitionOffer.isPro())
+                     return false;
+                 if (!organisation.equals(competitionOffer.getOrganisation()))
+                     return false;
+                 // this is not entirely correct because we can have lower certificates which are still valid
+                 if (!certificates.contains(competitionOffer.getBoatCertificate()))
+                     return false;
+                 if (gender.equals("MALE") && competitionOffer.isFemale())
+                     return false;
+                 return true;
+             }
+             return false;
+            }   catch (Exception e){
+             System.out.println("Exception in the service");
+             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while creating ActivityOffer. " + e.getMessage());
+             }
+         }
 }

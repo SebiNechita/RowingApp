@@ -110,9 +110,9 @@ public class ActivityOfferController {
      * @throws ResponseStatusException if not successful
      */
     @GetMapping("/get/trainings/{netId}")
-    public ResponseEntity<List<TrainingOffer>> getFilteredOffersForUser(@PathVariable("netId") NetId netId,@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws ResponseStatusException {
+    public ResponseEntity<List<TrainingOffer>> getFilteredTrainingsForUser(@PathVariable("netId") NetId netId,@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws ResponseStatusException {
         try {
-            List<TrainingOffer> trainings = activityOfferService.getFilteredOffers(netId,authToken).stream()
+            List<TrainingOffer> trainings = activityOfferService.getFilteredTrainings(netId,authToken).stream()
                     .filter(offer -> offer instanceof TrainingOffer)
                     .map(offer -> (TrainingOffer) offer)
                     .collect(Collectors.toList());
@@ -132,7 +132,10 @@ public class ActivityOfferController {
     @GetMapping("/get/trainings")
     public ResponseEntity<List<ActivityOffer>> getTraining() throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityOfferService.getAllTrainingOffers());
+            return ResponseEntity.ok(activityOfferService.getAllTrainingOffers().stream()
+                    .filter(offer -> offer instanceof TrainingOffer)
+                    .map(offer -> (TrainingOffer) offer)
+                    .collect(Collectors.toList()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -180,11 +183,12 @@ public class ActivityOfferController {
      * @return boolean indicating eligibility.
      * @throws ResponseStatusException if not successful.
      */
-    @PostMapping("/competition/participant-is-eligible")
-    public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request)
+    @PostMapping("/competition/participant-is-eligible/{netId}")
+    public ResponseEntity<Boolean> participantIsEligible(@RequestBody ParticipantIsEligibleRequestModel request,
+                                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
             throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityOfferService.participantIsEligible(request));
+            return ResponseEntity.ok(activityOfferService.participantIsEligible(request, authToken));
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
