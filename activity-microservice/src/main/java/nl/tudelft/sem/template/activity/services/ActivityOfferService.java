@@ -1,5 +1,7 @@
 package nl.tudelft.sem.template.activity.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -9,10 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
@@ -23,10 +21,13 @@ import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalExce
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.activity.TypesOfPositionsDeserializer;
-import nl.tudelft.sem.template.common.models.user.*;
-import org.springframework.http.HttpStatus;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositionsDeserializer;
+import nl.tudelft.sem.template.common.models.user.NetId;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.TupleDeserializer;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -225,20 +226,17 @@ public class ActivityOfferService {
      *
      * @throws Exception exception
      */
-    public List<ActivityOffer> getFilteredOffers(NetId netId,String authToken) throws Exception{
+    public List<ActivityOffer> getFilteredOffers(NetId netId, String authToken) throws Exception {
         try {
 
             //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/user/get/details/"+ netId))
+                    .uri(URI.create("http://localhost:8082/user/get/details/" + netId))
                     .header("Authorization", authToken)
                     .build();
             HttpResponse<String> response = httpClient.send(request,
                     HttpResponse.BodyHandlers.ofString());
-
-            List<ActivityOffer> offers = activityOfferRepository.findAll();
-            List<ActivityOffer> filteredOffers = new ArrayList<>();
 
             // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
@@ -253,14 +251,18 @@ public class ActivityOfferService {
                 UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
                 List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
 
-                for(ActivityOffer offer : offers){
-                    for(Tuple<LocalDateTime, LocalDateTime> availability : availabilities){
-                        if(!offer.getStartTime().isBefore(availability.getFirst()) && !offer.getEndTime().isAfter(availability.getSecond())){
+                List<ActivityOffer> offers = activityOfferRepository.findAll();
+                List<ActivityOffer> filteredOffers = new ArrayList<>();
+                for (ActivityOffer offer : offers) {
+                    for (Tuple<LocalDateTime, LocalDateTime> availability : availabilities) {
+                        if (!offer.getStartTime().isBefore(availability.getFirst())
+                                && !offer.getEndTime().isAfter(availability.getSecond())) {
                             filteredOffers.add(offer);
                         }
                     }
                 }
                 System.out.println(availabilities);
+                return filteredOffers;
                 // Use the data in the model object as needed
                 // ...
             } else {
@@ -268,7 +270,6 @@ public class ActivityOfferService {
                 return List.of();
                 // ...
             }
-            return filteredOffers;
         } catch (Exception e) {
             System.out.println("Exception in the service");
             throw new Exception("Error while creating ActivityOffer. " + e.getMessage());

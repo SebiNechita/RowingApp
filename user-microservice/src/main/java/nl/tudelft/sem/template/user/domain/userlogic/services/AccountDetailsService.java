@@ -84,13 +84,13 @@ public class AccountDetailsService {
         HashedPassword hashedPassword = passwordHashingService.hash(password);
         // Create new account
         AmateurBuilder builder = new AmateurBuilder();
-        builder.setNetId(netId);
-        builder.setPassword(hashedPassword);
-        builder.setGender(gender);
-        builder.setCertificates(certificates);
-        builder.setAvailabilities(availabilities);
-        builder.setPositions(positions);
-        builder.setOrganization(organization);
+        builder.setNetId(netId)
+                .setPassword(hashedPassword)
+                .setGender(gender)
+                .setCertificates(certificates)
+                .setAvailabilities(availabilities)
+                .setPositions(positions)
+                .setOrganization(organization);
         AmateurUser user = builder.getUser();
         userRepository.save(user);
 

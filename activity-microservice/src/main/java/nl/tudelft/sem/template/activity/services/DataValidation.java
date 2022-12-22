@@ -108,7 +108,8 @@ public class DataValidation {
      * @param authToken   authToken
      * @return boolean doesCertificateExist
      */
-    public boolean validateCertificate(String certificate, String authToken) throws InvalidCertificateException, IOException, InterruptedException {
+    public boolean validateCertificate(String certificate, String authToken)
+            throws InvalidCertificateException, IOException, InterruptedException {
         //CertificatesRequestModel request = new CertificatesRequestModel(certificate, -1, "");
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -123,10 +124,9 @@ public class DataValidation {
         } else {
             throw new InvalidCertificateException(certificate);
         }*/
-        if(Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
+        if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
-        }
-        else {
+        } else {
             throw new InvalidCertificateException(certificate);
         }
     }
