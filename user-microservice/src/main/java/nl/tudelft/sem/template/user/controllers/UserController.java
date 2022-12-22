@@ -15,10 +15,7 @@ import nl.tudelft.sem.template.user.models.AmateurSetAccountDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -63,8 +60,8 @@ public class UserController {
         return ResponseEntity.ok("Account (" + authManager.getNetId() + ") set successfully");
     }
 
-    @GetMapping("user/get/details")
-    public ResponseEntity<UserDetailsModel> getUserDetails(@RequestBody NetId netId) throws Exception {
+    @GetMapping("user/get/details/{netId}")
+    public ResponseEntity<UserDetailsModel> getUserDetails(@PathVariable NetId netId) throws Exception {
         return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
     }
 
