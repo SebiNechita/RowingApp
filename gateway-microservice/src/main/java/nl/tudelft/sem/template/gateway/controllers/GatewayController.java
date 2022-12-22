@@ -1,5 +1,6 @@
 package nl.tudelft.sem.template.gateway.controllers;
 
+import nl.tudelft.sem.template.common.models.activity.AvailableTrainingsModel;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
@@ -9,6 +10,7 @@ import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequest
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
 import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import nl.tudelft.sem.template.common.models.authentication.RegistrationRequestModel;
+import nl.tudelft.sem.template.common.models.user.NetId;
 import nl.tudelft.sem.template.gateway.communication.ActivityMatchMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.ActivityOfferMicroserviceAdapter;
 import nl.tudelft.sem.template.gateway.communication.AuthenticationMicroserviceAdapter;
@@ -19,10 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -152,5 +151,19 @@ public class GatewayController {
 
         request.setOwnerId(userId);
         return activityOfferMicroserviceAdapter.createCompetition(request, authToken);
+    }
+
+    /**
+     * Endpoint for getting a list of AvailableTrainingModel.
+     *
+     * @param request   request wrapped in a AvailableTrainingModel
+     * @param authToken authentication token
+     * @return status of the message
+     */
+    @GetMapping("/get/trainings/{netId}")
+    public ResponseEntity<AvailableTrainingsModel> getAvailableTrainings(@PathVariable("netId") NetId netId,
+                                                                               @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        logger.info(String.format("Received getAvailableTrainings request for the following user: " + netId));
+        return activityOfferMicroserviceAdapter.getFilteredOffers(netId, authToken);
     }
 }

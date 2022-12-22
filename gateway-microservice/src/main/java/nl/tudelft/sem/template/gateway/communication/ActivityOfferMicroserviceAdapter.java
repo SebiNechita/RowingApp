@@ -1,10 +1,15 @@
 package nl.tudelft.sem.template.gateway.communication;
 
+import nl.tudelft.sem.template.common.domain.ActivityOffer;
 import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
+import nl.tudelft.sem.template.common.models.activity.AvailableTrainingsModel;
+import nl.tudelft.sem.template.common.models.user.NetId;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ActivityOfferMicroserviceAdapter {
@@ -28,6 +33,15 @@ public class ActivityOfferMicroserviceAdapter {
     }
 
     /**
+     * Provides an url for getting a list of filtered activitys based on user's availabilty.
+     *
+     * @return Url
+     */
+    private String getFilteredOffersForUserUrl() {
+        return activityOfferMicroserviceAddress + "/get/trainings/{netId}";
+    }
+
+    /**
      * Endpoint for creating a new competition.
      *
      * @param request   request wrapped in a CompetitionCreationRequestModel
@@ -37,5 +51,10 @@ public class ActivityOfferMicroserviceAdapter {
     public ResponseEntity<String> createCompetition(CompetitionCreationRequestModel request, String authToken) {
         return HttpUtils.sendAuthorizedHttpRequest(createCompetitionUrl(), HttpMethod.POST, authToken, request,
                 String.class);
+    }
+
+    public ResponseEntity<AvailableTrainingsModel> getFilteredOffers(NetId netId, String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(getFilteredOffersForUserUrl(), HttpMethod.GET, authToken, netId,
+                AvailableTrainingsModel.class);
     }
 }
