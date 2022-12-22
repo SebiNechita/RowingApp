@@ -90,11 +90,9 @@ public class CertificatesTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.serialize(requestModel))
                 .header("Authorization", "Bearer MockedToken"));
-        ResultActions resultActions2 = mockMvc.perform(get("/check/certificates")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.serialize(requestModel))
-                .header("Authorization", "Bearer MockedToken"));
 
+        ResultActions resultActions2 = mockMvc.perform(get("/check/certificates/" + certificateName)
+                .header("Authorization","Bearer MockedToken"));
 
         // Assert
         resultActions.andExpect(status().isOk());
@@ -109,11 +107,8 @@ public class CertificatesTests {
         when(mockJwtTokenVerifier.validateToken(anyString())).thenReturn(true);
 
         // Act
-        ResultActions resultActions = mockMvc.perform(get("/check/certificates")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.serialize(requestModel))
+        ResultActions resultActions = mockMvc.perform(get("/check/certificates/" + certificateName)
                 .header("Authorization", "Bearer MockedToken"));
-
 
         // Assert
         resultActions.andExpect(status().isOk());
