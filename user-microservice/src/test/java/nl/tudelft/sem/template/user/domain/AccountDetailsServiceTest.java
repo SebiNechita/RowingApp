@@ -1,6 +1,7 @@
 package nl.tudelft.sem.template.user.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -113,47 +114,47 @@ class AccountDetailsServiceTest {
             //.containsExactlyInAnyOrder(expectedUserCertificateOne, expectedUserCertificateTwo);
         }
 
-        @Test
-        public void setAccountDetails_throwsAvailabilityException() {
-            // Arrange
-            final NetId testUser = new NetId("NewUser");
-            final HashedPassword existingTestPassword = new HashedPassword("password123");
-            final Password newTestPassword = new Password("password456");
-            final Gender gender = Gender.MALE;
-            final String organization = "teamAlpha";
-            List<TypesOfPositions> positions = new ArrayList<>();
-            positions.add(TypesOfPositions.COX);
-            positions.add(TypesOfPositions.COACH);
-            AmateurUser existingAmateurUser = new AmateurUser(testUser, existingTestPassword, gender, organization);
-            LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
-            LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T13:00");
-            LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-12T20:59");
-            LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-12T22:00");
-            TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
-            availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
-            availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
-            List<String> certificates = List.of("C4", "8+");
-            userRepository.save(existingAmateurUser);
+    @Test
+    public void setAccountDetails_throwsAvailabilityException() {
+        // Arrange
+        final NetId testUser = new NetId("NewUser");
+        final HashedPassword existingTestPassword = new HashedPassword("password123");
+        final Password newTestPassword = new Password("password456");
+        final Gender gender = Gender.MALE;
+        List<TypesOfPositions> positions = new ArrayList<>();
+        positions.add(TypesOfPositions.COX);
+        positions.add(TypesOfPositions.COACH);
+        final String organization = "teamAlpha";
+        AmateurUser existingAppUser = new AmateurUser(testUser, existingTestPassword, gender, organization);
+        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
+        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T13:00");
+        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-12T20:59");
+        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-12T22:00");
+        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
+        availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
+        availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
+        List<String> certificates = List.of("C4", "8+");
+        userRepository.save(existingAppUser);
 
-            // Act
-            ThrowableAssert.ThrowingCallable action = () -> accountDetailsService.setAccountDetails(testUser,
-                    newTestPassword,
-                    gender,
-                    positions,
-                    availabilities,
-                    certificates,
-                    organization);
+        // Act
+        ThrowableAssert.ThrowingCallable action = () -> accountDetailsService.setAccountDetails(testUser,
+                newTestPassword,
+                gender,
+                positions,
+                availabilities,
+                certificates,
+                organization);
 
-            // Assert
-            assertThatExceptionOfType(Exception.class)
-                    .isThrownBy(action);
+        // Assert
+        assertThatExceptionOfType(Exception.class)
+                .isThrownBy(action);
 
-            User savedUser = userRepository.findByNetId(testUser).orElseThrow();
+        User savedUser = userRepository.findByNetId(testUser).orElseThrow();
 
-            assertThat(savedUser.getNetId()).isEqualTo(testUser);
-            assertThat(savedUser.getPassword()).isEqualTo(existingTestPassword);
-            assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
-        }
+        assertThat(savedUser.getNetId()).isEqualTo(testUser);
+        assertThat(savedUser.getPassword()).isEqualTo(existingTestPassword);
+        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
+    }
 
     @Test
     public void getUserDetails_worksCorrectly() throws Exception {
@@ -186,5 +187,15 @@ class AccountDetailsServiceTest {
         assertThat(result.getGender()).isEqualTo(expected.getGender());
         assertThat(result.getOrganisation()).isEqualTo(expected.getOrganisation());
         assertThat(expected.getPositions()).hasSameElementsAs(result.getPositions());
+    }
+
+    @Test
+    public void getUsersDetails_throesException() {
+        // Act
+        ThrowableAssert.ThrowingCallable action = () -> accountDetailsService.getAccountDetails(new NetId("mihaita"));
+
+        // Assert
+        assertThatExceptionOfType(Exception.class)
+                .isThrownBy(action);
     }
 }
