@@ -5,9 +5,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
@@ -22,6 +24,8 @@ import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleReque
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.common.models.user.NetId;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.springframework.http.HttpStatus;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import org.springframework.stereotype.Service;
@@ -233,20 +237,32 @@ public class ActivityOfferService {
             HttpResponse<String> response = httpClient.send(request,
                     HttpResponse.BodyHandlers.ofString());
 
-// Check if the request was successful
+            List<ActivityOffer> offers = activityOfferRepository.findAll();
+            List<ActivityOffer> filteredOffers = new ArrayList<>();
+
+            // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
                 // Parse the response body
                 ObjectMapper mapper = new ObjectMapper();
-                GetUserDetailsModel model = mapper.readValue(response.body(), GetUserDetailsModel.class);
-                List<String> availabilities = model.getAvailabilities();
+                UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
+                List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
+
+                for(ActivityOffer offer : offers){
+                    for(Tuple<LocalDateTime, LocalDateTime> availability : availabilities){
+                        if(offer.getStartTime().isAfter(availability.getFirst()) && offer.getEndTime().isBefore(availability.getSecond())){
+                            filteredOffers.add(offer);
+                        }
+                    }
+                }
                 System.out.println(availabilities);
                 // Use the data in the model object as needed
                 // ...
             } else {
                 // The request was not successful. Handle the error as appropriate.
+                return List.of();
                 // ...
             }
-            return activityOfferRepository.findAll();
+            return filteredOffers;
         } catch (Exception e) {
             System.out.println("Exception in the service");
             throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
