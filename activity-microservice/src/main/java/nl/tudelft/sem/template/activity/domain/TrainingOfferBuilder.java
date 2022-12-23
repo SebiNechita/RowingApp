@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.activity.domain;
 
 import java.time.LocalDateTime;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 
 public class TrainingOfferBuilder implements ActivityOfferBuilder<TrainingOffer> {
 

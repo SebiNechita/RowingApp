@@ -1,11 +1,9 @@
 package nl.tudelft.sem.template.user.models;
 
-import lombok.Data;
-import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
-import nl.tudelft.sem.template.user.domain.userlogic.TypesOfPositions;
-import nl.tudelft.sem.template.user.domain.userlogic.UserType;
-
 import java.util.List;
+import lombok.Data;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
 
 @Data
 public class AmateurSetAccountDetailsModel {

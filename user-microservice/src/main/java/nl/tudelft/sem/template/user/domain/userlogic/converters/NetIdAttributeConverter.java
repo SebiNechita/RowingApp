@@ -1,9 +1,8 @@
 package nl.tudelft.sem.template.user.domain.userlogic.converters;
 
-import nl.tudelft.sem.template.user.domain.userlogic.NetId;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 
 /**
  * JPA Converter for the NetID value object.
