@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
-import nl.tudelft.sem.template.user.domain.userlogic.entities.*;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.PositionEntity;
 
 @AllArgsConstructor
 @NoArgsConstructor
