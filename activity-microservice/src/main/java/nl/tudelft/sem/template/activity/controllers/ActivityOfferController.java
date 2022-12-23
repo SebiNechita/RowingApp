@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
@@ -14,6 +16,8 @@ import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestMod
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.NetId;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class ActivityOfferController {
     private final transient ActivityOfferService activityOfferService;
+    private final transient UserMicroserviceAdapter userMicroserviceAdapter;
     static final Logger logger = LoggerFactory.getLogger(ActivityOfferController.class.getName());
 
     /**
@@ -39,8 +44,10 @@ public class ActivityOfferController {
      * @param activityOfferService activityOfferService
      */
     @Autowired
-    public ActivityOfferController(ActivityOfferService activityOfferService) {
+    public ActivityOfferController(ActivityOfferService activityOfferService,
+                                   UserMicroserviceAdapter userMicroserviceAdapter) {
         this.activityOfferService = activityOfferService;
+        this.userMicroserviceAdapter = userMicroserviceAdapter;
     }
 
     /**
@@ -52,7 +59,8 @@ public class ActivityOfferController {
      */
     @PostMapping("/create/training")
     public ResponseEntity createTraining(@RequestBody TrainingCreationRequestModel request,
-                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws Exception {
+                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
+            throws Exception {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -82,7 +90,8 @@ public class ActivityOfferController {
      */
     @PostMapping("/create/training/many")
     public ResponseEntity createManyTrainings(@RequestBody ManyTrainingsCreationRequestModel request,
-                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws Exception {
+                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
+            throws Exception {
         try {
             Map<TypesOfPositions, Integer> positions = request.getPositions();
             boolean isActive = request.isActive();
@@ -154,7 +163,8 @@ public class ActivityOfferController {
      */
     @PostMapping("/create/competition")
     public ResponseEntity createCompetition(@RequestBody CompetitionCreationRequestModel request,
-                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws Exception {
+                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
+            throws Exception {
         try {
             TypesOfPositions position = request.getPosition();
             boolean isActive = request.isActive();
@@ -194,6 +204,51 @@ public class ActivityOfferController {
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
+        }
+    }
+
+    /**
+     * Endpoint for getting all competition offers.
+     *
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    @GetMapping("/get/competitions")
+    public ResponseEntity<List<ActivityOffer>> getCompetition() throws Exception {
+        try {
+            return ResponseEntity.ok(activityOfferService.getAllCompetitionOffers());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    /**
+     * Get list of ActivityOffers that are active and are competitions and meet your requirements:
+     * have the same gender as you do, are on the same experience level, are from the same organisation.
+     *
+     * @param netId netId
+     * @return returns filtered competitions
+     */
+    @GetMapping("/get/competitions/filtered")
+    public ResponseEntity<AvailableCompetitionsModel> getFilteredCompetitions(
+            @RequestBody NetId netId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        try {
+            UserDetailsModel request = userMicroserviceAdapter.getUserDetailsModel(netId, authToken).getBody();
+            String organisation = request.getOrganisation();
+            boolean isFemale = request.getGender().equals("FEMALE");
+            boolean isPro = request.isPro();
+
+            List<TypesOfPositions> positions = request.getPositions();
+            List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
+            List<String> certificates = request.getCertificates();
+
+            return ResponseEntity.ok(activityOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
+                    certificates, positions, availabilities));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

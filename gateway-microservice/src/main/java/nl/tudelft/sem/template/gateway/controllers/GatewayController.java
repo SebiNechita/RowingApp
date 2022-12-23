@@ -4,6 +4,7 @@ import nl.tudelft.sem.template.common.communication.ActivityMatchMicroserviceAda
 import nl.tudelft.sem.template.common.communication.ActivityOfferMicroserviceAdapter;
 import nl.tudelft.sem.template.common.communication.AuthenticationMicroserviceAdapter;
 import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.AvailableTrainingsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
@@ -158,9 +159,25 @@ public class GatewayController {
     }
 
     /**
+     * Endpoint for fetching available competitions for an authorized user.
+     *
+     * @param authToken authToken
+     * @return AvailableCompetitionsModel
+     */
+    @GetMapping("/competitions/fetch-available")
+    public ResponseEntity<AvailableCompetitionsModel> fetchAvailableCompetitions(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+
+        String userId = userMicroserviceAdapter.getUserId(authToken).getBody();
+        logger.info(String.format("Received fetchAvailableCompetitions request for the following user " + userId));
+
+        return activityOfferMicroserviceAdapter.fetchAvailableCompetitions(new NetId(userId), authToken);
+    }
+
+    /**
      * Endpoint for getting a list of AvailableTrainingModel.
      *
-     * @param netId    netId of the user
+     * @param netId     netId of the user
      * @param authToken authentication token
      * @return status of the message
      */

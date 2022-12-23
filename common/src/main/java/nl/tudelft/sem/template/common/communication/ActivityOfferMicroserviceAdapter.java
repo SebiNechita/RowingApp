@@ -1,13 +1,13 @@
 package nl.tudelft.sem.template.common.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.AvailableTrainingsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.user.NetId;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 public class ActivityOfferMicroserviceAdapter {
@@ -33,6 +33,15 @@ public class ActivityOfferMicroserviceAdapter {
 
     private String participantIsEligibleEndpointUrl() {
         return activityOfferMicroserviceAddress + "/competition/participant-is-eligible";
+    }
+
+    /**
+     * Provides an url for fetching available competitions.
+     *
+     * @return Url
+     */
+    private String fetchAvailableCompetitionsUrl() {
+        return activityOfferMicroserviceAddress + "/get/competitions/filtered";
     }
 
     /**
@@ -82,5 +91,17 @@ public class ActivityOfferMicroserviceAdapter {
     public ResponseEntity<AvailableTrainingsModel> getFilteredTrainings(NetId netId, String authToken) {
         return HttpUtils.sendAuthorizedHttpRequest(getFilteredTrainingsForUserUrl(), HttpMethod.GET, authToken, netId,
                 AvailableTrainingsModel.class);
+    }
+
+    /**
+     * Endpoint for fetching available competitions for a certain user.
+     *
+     * @param netId     netId
+     * @param authToken authToken
+     * @return AvailableCompetitionsModel
+     */
+    public ResponseEntity<AvailableCompetitionsModel> fetchAvailableCompetitions(NetId netId, String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(fetchAvailableCompetitionsUrl(), HttpMethod.GET, authToken,
+                netId, AvailableCompetitionsModel.class);
     }
 }

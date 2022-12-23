@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.common.communication;
 import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.common.models.user.NetId;
+import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,7 +14,6 @@ public class UserMicroserviceAdapter {
 
     /**
      * Instantiates a new UserMicroserviceAdapter.
-     *
      */
     public UserMicroserviceAdapter() {
         this.userMicroserviceAddress = MicroServiceAddresses.userMicroservice;
@@ -58,5 +58,21 @@ public class UserMicroserviceAdapter {
     public ResponseEntity<String> getUserId(String authToken) {
         return HttpUtils.sendAuthorizedHttpRequest(getUserIdUrl(), HttpMethod.GET, authToken, "",
                 String.class);
+    }
+
+    private String getUserDetailsUrl() {
+        return userMicroserviceAddress + "/user/get/details";
+    }
+
+    /**
+     * Send request to user microservice to get a user details.
+     *
+     * @param netId     netId
+     * @param authToken authToken
+     * @return UserDetailsModel
+     */
+    public ResponseEntity<UserDetailsModel> getUserDetailsModel(NetId netId, String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(getUserDetailsUrl(), HttpMethod.GET,
+                authToken, netId, UserDetailsModel.class);
     }
 }
