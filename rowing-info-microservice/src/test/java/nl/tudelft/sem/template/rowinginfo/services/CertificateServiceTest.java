@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.rowinginfo.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
@@ -105,5 +106,37 @@ public class CertificateServiceTest {
         assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
         ThrowableAssert.ThrowingCallable action = () -> certificatesService
                 .createCertificate(certificateName, certificateValue, description);
+    }
+
+    @Test
+    public void deleteExistentCertificate() throws Exception {
+        // Act
+        certificatesService.createCertificate(certificateName, certificateValue, description);
+
+        //Assert
+        Certificates certificate = certificatesRepository.findById(1).orElseThrow();
+        certificatesService.deleteCertificate(1);
+
+        assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(false);
+    }
+
+    @Test
+    public void deleteNonExistentCertificate_throwsException() throws Exception {
+        // Act
+        certificatesService.createCertificate(certificateName, certificateValue, description);
+
+        //Assert
+        boolean thrown = false;
+        try {
+            certificatesService.deleteCertificate(2);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+    }
+
+    @Test
+    public void verifyAdminPermissionForNotLoggedInUser() throws Exception {
+        assertThat(certificatesService.adminPermission()).isEqualTo(false);
     }
 }

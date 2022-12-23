@@ -1,9 +1,11 @@
 package nl.tudelft.sem.template.rowinginfo.services;
 
 import java.util.List;
+import java.util.Objects;
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.rowinginfo.repositories.OrganisationsRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +24,7 @@ public class OrganisationsService {
     /**
      * Creates a new Organisations and adds it to database.
      *
-     * @param name            name
+     * @param name name
      * @throws Exception EmptyStringException
      */
     public void createOrganisations(String name) throws Exception {
@@ -33,6 +35,34 @@ public class OrganisationsService {
             throw new Exception("Certificate already exists");
         }
         organisationsRepository.save(new Organisations(name));
+    }
+
+    /**
+     * Verifies if the logged-in user is the admin.
+     */
+    public boolean adminPermission() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            return false;
+        }
+
+        String userNetId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return Objects.equals(userNetId, "admin");
+    }
+
+    /**
+     * Deletes an Organisation by ID.
+     *
+     * @param id certificatesRepository
+     */
+    public void deleteOrganisation(int id) throws Exception {
+        try {
+            organisationsRepository.deleteById(id);
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while deleting the Certificate. " + e.getMessage());
+        }
+
     }
 
     /**
@@ -50,7 +80,7 @@ public class OrganisationsService {
     }
 
     /**
-     * Checks if a Organisations exist.
+     * Checks if an Organisations exist.
      *
      * @throws Exception exception
      */
