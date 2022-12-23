@@ -38,7 +38,7 @@ public class CertificatesController {
     @PostMapping("/create/certificates")
     public ResponseEntity createNewCertificate(@RequestBody CertificatesRequestModel request) throws Exception {
         try {
-            if (certificatesService.adminPermission()) {
+            if (!certificatesService.adminPermission()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
             else {
@@ -63,7 +63,7 @@ public class CertificatesController {
     @DeleteMapping("/delete/certificates/{certificateId}")
     public ResponseEntity<String> deleteCertificate(@PathVariable("certificateId") int certificateId) throws Exception {
         try {
-            if (certificatesService.adminPermission()) {
+            if (!certificatesService.adminPermission()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
             else {
