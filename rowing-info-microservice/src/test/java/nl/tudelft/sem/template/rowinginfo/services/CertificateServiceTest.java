@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -105,5 +107,35 @@ public class CertificateServiceTest {
         assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
         ThrowableAssert.ThrowingCallable action = () -> certificatesService
                 .createCertificate(certificateName, certificateValue, description);
+    }
+
+    @Test
+    public void deleteExistentCertificate() throws Exception {
+        // Act
+        certificatesService.createCertificate(certificateName, certificateValue, description);
+
+        //Assert
+        Certificates certificate = certificatesRepository.findById(1).orElseThrow();
+        certificatesService.deleteCertificate(1);
+
+        assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(false);
+    }
+
+    @Test
+    public void deleteNonExistentCertificate_throwsException() throws Exception {
+        // Act
+        certificatesService.createCertificate(certificateName, certificateValue, description);
+
+        //Assert
+        Certificates certificate = certificatesRepository.findById(1).orElseThrow();
+
+        ThrowableAssert.ThrowingCallable action = () -> certificatesService
+                .deleteCertificate(2);
+        assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
+    }
+
+    @Test
+    public void verifyAdminPermissionForNotLoggedInUser() throws Exception {
+        assertThat(certificatesService.adminPermission()).isEqualTo(false);
     }
 }
