@@ -3,20 +3,18 @@ package nl.tudelft.sem.template.rowinginfo.controllers;
 import java.util.List;
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
 import nl.tudelft.sem.template.rowinginfo.models.CertificatesRequestModel;
+import nl.tudelft.sem.template.rowinginfo.repositories.CertificatesRepository;
 import nl.tudelft.sem.template.rowinginfo.services.CertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class CertificatesController {
     private final transient CertificatesService certificatesService;
+    private final CertificatesRepository certificatesRepository;
 
     /**
      * Instantiates a new CertificatesController.
@@ -24,8 +22,10 @@ public class CertificatesController {
      * @param certificatesService certificatesService
      */
     @Autowired
-    public CertificatesController(CertificatesService certificatesService) {
+    public CertificatesController(CertificatesService certificatesService,
+                                  CertificatesRepository certificatesRepository) {
         this.certificatesService = certificatesService;
+        this.certificatesRepository = certificatesRepository;
     }
 
     /**
@@ -52,6 +52,23 @@ public class CertificatesController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/certificates/{certificateId}")
+    public ResponseEntity<String> deleteCertificate(@PathVariable("certificateId") int certificateId) throws Exception {
+        try {
+            if (certificatesService.adminPermission()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            else {
+                Certificates certificate = certificatesRepository.findById(certificateId).orElseThrow();
+                certificatesService.deleteCertificate(certificateId);
+                return ResponseEntity.ok(certificate.getCertificateName());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     /**
