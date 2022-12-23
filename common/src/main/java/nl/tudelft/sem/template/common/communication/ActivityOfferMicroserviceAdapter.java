@@ -1,16 +1,26 @@
 package nl.tudelft.sem.template.common.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
+import nl.tudelft.sem.template.common.models.activity.AvailableTrainingsModel;
+import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
-import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import nl.tudelft.sem.template.common.models.user.NetId;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 public class ActivityOfferMicroserviceAdapter {
 
     public final transient String activityOfferMicroserviceAddress;
+
+    /**
+     * Instantiates a new UserMicroserviceAdapter.
+     *
+     */
+    public ActivityOfferMicroserviceAdapter() {
+        this.activityOfferMicroserviceAddress = MicroServiceAddresses.activityOfferMicroservice;
+    }
 
     /**
      * Instantiates a new UserMicroserviceAdapter with an injected microservice address.
@@ -36,5 +46,41 @@ public class ActivityOfferMicroserviceAdapter {
             throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(participantIsEligibleEndpointUrl(), HttpMethod.POST, authToken,
                 request, Boolean.class);
+    }
+
+
+    /**
+     * Provides an url for creating a new competition.
+     *
+     * @return Url
+     */
+    private String createCompetitionUrl() {
+        return activityOfferMicroserviceAddress + "/create/competition";
+    }
+
+    /**
+     * Provides an url for getting a list of filtered activitys based on user's availabilty.
+     *
+     * @return Url
+     */
+    private String getFilteredTrainingsForUserUrl() {
+        return activityOfferMicroserviceAddress + "/get/trainings/{netId}";
+    }
+
+    /**
+     * Endpoint for creating a new competition.
+     *
+     * @param request   request wrapped in a CompetitionCreationRequestModel
+     * @param authToken authentication token
+     * @return status of the message
+     */
+    public ResponseEntity<String> createCompetition(CompetitionCreationRequestModel request, String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(createCompetitionUrl(), HttpMethod.POST, authToken, request,
+                String.class);
+    }
+
+    public ResponseEntity<AvailableTrainingsModel> getFilteredTrainings(NetId netId, String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(getFilteredTrainingsForUserUrl(), HttpMethod.GET, authToken, netId,
+                AvailableTrainingsModel.class);
     }
 }

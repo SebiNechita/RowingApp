@@ -20,6 +20,15 @@ public class AuthenticationMicroserviceAdapter {
         this.authenticationMicroserviceAddress = authenticationMicroserviceAddress;
     }
 
+
+    /**
+     * Instantiates a new AuthenticationMicroserviceAdapter.
+     *
+     */
+    public AuthenticationMicroserviceAdapter() {
+        this.authenticationMicroserviceAddress = MicroServiceAddresses.authenticationMicroservice;
+    }
+
     private String authenticateEndpointUrl() {
         return authenticationMicroserviceAddress + "/authenticate";
     }

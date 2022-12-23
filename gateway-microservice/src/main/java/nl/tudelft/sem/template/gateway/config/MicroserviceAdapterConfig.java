@@ -1,6 +1,7 @@
 package nl.tudelft.sem.template.gateway.config;
 
 import nl.tudelft.sem.template.common.communication.ActivityMatchMicroserviceAdapter;
+import nl.tudelft.sem.template.common.communication.ActivityOfferMicroserviceAdapter;
 import nl.tudelft.sem.template.common.communication.AuthenticationMicroserviceAdapter;
 import nl.tudelft.sem.template.common.communication.MicroServiceAddresses;
 import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
@@ -22,5 +23,10 @@ public class MicroserviceAdapterConfig {
     @Bean
     AuthenticationMicroserviceAdapter authenticationMicroserviceAdapter() {
         return new AuthenticationMicroserviceAdapter(MicroServiceAddresses.authenticationMicroservice);
+    }
+
+    @Bean
+    ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter() {
+        return new ActivityOfferMicroserviceAdapter(MicroServiceAddresses.authenticationMicroservice);
     }
 }

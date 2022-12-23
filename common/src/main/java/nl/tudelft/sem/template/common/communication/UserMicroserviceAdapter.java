@@ -12,6 +12,14 @@ public class UserMicroserviceAdapter {
     public final transient String userMicroserviceAddress;
 
     /**
+     * Instantiates a new UserMicroserviceAdapter.
+     *
+     */
+    public UserMicroserviceAdapter() {
+        this.userMicroserviceAddress = MicroServiceAddresses.userMicroservice;
+    }
+
+    /**
      * Instantiates a new UserMicroserviceAdapter with an injected microservice address.
      *
      * @param userMicroserviceAddress The address of the microservice.
@@ -35,5 +43,20 @@ public class UserMicroserviceAdapter {
             throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(getUserDetailsEndpointUrl(netId.toString()), HttpMethod.GET, authToken,
                 null, GetUserDetailsModel.class);
+    }
+
+    private String getUserIdUrl() {
+        return userMicroserviceAddress + "/get/userId";
+    }
+
+    /**
+     * Endpoint to get the UserId.
+     *
+     * @param authToken authToken
+     * @return String
+     */
+    public ResponseEntity<String> getUserId(String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(getUserIdUrl(), HttpMethod.GET, authToken, "",
+                String.class);
     }
 }

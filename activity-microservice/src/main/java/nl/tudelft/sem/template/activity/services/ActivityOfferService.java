@@ -43,8 +43,8 @@ public class ActivityOfferService {
     /**
      * Instantiates a new ActivityOfferService.
      *
-     * @param ActivityOfferRepository activityOfferRepository
-     * @param UserMicroserviceAdapter userMicroserviceAdapter
+     * @param activityOfferRepository activityOfferRepository
+     * @param dataValidation dataValidation
      */
     public ActivityOfferService(ActivityOfferRepository activityOfferRepository,
                                 DataValidation dataValidation) {
@@ -52,17 +52,6 @@ public class ActivityOfferService {
         this.dataValidation = dataValidation;
     }
 
-        /**
-     * Instantiates a new ActivityOfferService.
-     *
-     * @param ActivityOfferRepository activityOfferRepository
-     * @param DataValidation dataValidation
-     */
-    public ActivityOfferService(ActivityOfferRepository activityOfferRepository,
-                                DataValidation dataValidation) {
-        this.activityOfferRepository = activityOfferRepository;
-        this.dataValidation = dataValidation;
-    }
 
     /**
      * Creates a new TrainingOffer and adds it to database.
