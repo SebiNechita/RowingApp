@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,10 +69,10 @@ public class OrganisationsController {
      * @return ok response if successful
      * @throws Exception if not successful
      */
-    @GetMapping("/check/organisations")
-    public ResponseEntity<Boolean> checkOrganisations(@RequestBody OrganisationsRequestModel request) throws Exception {
+    @GetMapping("/check/organisations/{organisationsName}")
+    public ResponseEntity<Boolean> checkOrganisations(@PathVariable("organisationsName") String organisationsName)
+            throws Exception {
         try {
-            String organisationsName = request.getOrganisationsName();
             return ResponseEntity.ok(organisationsService.checkOrganisations(organisationsName));
         } catch (Exception e) {
             System.out.println(e.getMessage());

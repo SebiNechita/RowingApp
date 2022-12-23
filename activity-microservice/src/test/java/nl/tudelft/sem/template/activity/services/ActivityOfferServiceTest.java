@@ -2,6 +2,9 @@ package nl.tudelft.sem.template.activity.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,11 +12,11 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
-import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +29,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles({"test"})
+@ActiveProfiles({"test", "mockDataValidation"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ActivityOfferServiceTest {
 
@@ -34,6 +37,8 @@ public class ActivityOfferServiceTest {
     private transient ActivityOfferService activityService;
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
+    @Autowired
+    private transient DataValidation mockDataValidation;
 
     private TypesOfPositions position;
 
@@ -46,9 +51,10 @@ public class ActivityOfferServiceTest {
     private TypesOfActivities type;
     private String name;
     private String description;
+    private String authToken;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         // Arrange
         this.position = TypesOfPositions.COACH;
         this.isActive = true;
@@ -64,13 +70,19 @@ public class ActivityOfferServiceTest {
         this.positions = new HashMap<>();
         this.positions.put(TypesOfPositions.COX, 2);
         this.positions.put(TypesOfPositions.COACH, 1);
+
+        when(mockDataValidation.validateOrganisation(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateCertificate(anyString(), anyString())).thenReturn(true);
+        when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateNameAndDescription(any(), any())).thenCallRealMethod();
+        when(mockDataValidation.validateTime(any(), any())).thenCallRealMethod();
     }
 
     @Test
     public void createActivity_withValidData_worksCorrectly() throws Exception {
         // Act
         activityService.createTrainingOffer(position, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
+                startTime, endTime, ownerId, boatCertificate, type, name, description, authToken);
 
         // Assert
         ActivityOffer activityOffer = activityOfferRepository.findById(1).orElseThrow();
@@ -87,14 +99,14 @@ public class ActivityOfferServiceTest {
     }
 
     @Test
-    public void createActivity_withEmptyName_throwsException() {
+    public void createActivity_withEmptyName_throwsException() throws Exception {
         // Arrange
         this.name = "";
 
         // Act
         ThrowableAssert.ThrowingCallable action = () -> activityService
                 .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
-                        boatCertificate, type, name, description);
+                        boatCertificate, type, name, description, authToken);
 
         // Assert
         assertThatExceptionOfType(EmptyStringException.class)
@@ -109,7 +121,7 @@ public class ActivityOfferServiceTest {
         // Act
         ThrowableAssert.ThrowingCallable action = () -> activityService
                 .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
-                        boatCertificate, type, name, description);
+                        boatCertificate, type, name, description, authToken);
 
         // Assert
         assertThatExceptionOfType(EmptyStringException.class)
@@ -127,7 +139,7 @@ public class ActivityOfferServiceTest {
         // Act
         ThrowableAssert.ThrowingCallable action = () -> activityService
                 .createTrainingOffer(position, isActive, startTime, endTime, ownerId,
-                        boatCertificate, type, name, description);
+                        boatCertificate, type, name, description, authToken);
 
         // Assert
         assertThatExceptionOfType(NotCorrectIntervalException.class)
@@ -138,7 +150,7 @@ public class ActivityOfferServiceTest {
     public void createManyActivities_withValidData_worksCorrectly() throws Exception {
         // Act
         activityService.createManyTrainingOffers(positions, isActive,
-                startTime, endTime, ownerId, boatCertificate, type, name, description);
+                startTime, endTime, ownerId, boatCertificate, type, name, description, authToken);
 
         // Assert
         int id = 1;
@@ -159,5 +171,4 @@ public class ActivityOfferServiceTest {
             }
         }
     }
-
 }

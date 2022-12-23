@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import nl.tudelft.sem.template.activity.domain.TypesOfActivities;
-import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 
 @Data
 @AllArgsConstructor

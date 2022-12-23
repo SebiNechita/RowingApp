@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeMap;
-import nl.tudelft.sem.template.user.domain.userlogic.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 import org.junit.jupiter.api.Test;
 

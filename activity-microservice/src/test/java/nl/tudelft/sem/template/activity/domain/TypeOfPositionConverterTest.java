@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.activity.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,5 +35,10 @@ public class TypeOfPositionConverterTest {
         });
     }
 
+    @Test
+    void convertToEntityAttribute_starboardRower() {
+        this.type = TypesOfPositions.STARBOARD_ROWER;
+        assertThat(converter.convertToEntityAttribute("starboard_rower")).isEqualTo(type);
+    }
 
 }

@@ -3,7 +3,7 @@ package nl.tudelft.sem.template.activity.domain;
 import java.util.Arrays;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 
 @Converter
 public class TypeOfPositionConverter implements AttributeConverter<TypesOfPositions, String> {
