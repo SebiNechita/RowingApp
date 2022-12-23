@@ -38,11 +38,16 @@ public class CertificatesController {
     @PostMapping("/create/certificates")
     public ResponseEntity createNewCertificate(@RequestBody CertificatesRequestModel request) throws Exception {
         try {
-            String certificateName = request.getCertificateName();
-            int certificateValue = request.getCertificateValue();
-            String description = request.getDescription();
+            if (certificatesService.adminPermission()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            else {
+                String certificateName = request.getCertificateName();
+                int certificateValue = request.getCertificateValue();
+                String description = request.getDescription();
 
-            certificatesService.createCertificate(certificateName, certificateValue, description);
+                certificatesService.createCertificate(certificateName, certificateValue, description);
+            }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
