@@ -55,8 +55,14 @@ public class OrganisationsService {
      *
      * @param id certificatesRepository
      */
-    public void deleteOrganisation(int id) {
-        organisationsRepository.deleteById(id);
+    public void deleteOrganisation(int id) throws Exception {
+        try{
+            organisationsRepository.deleteById(id);
+        } catch (Exception e) {
+        System.out.println("Exception in the service");
+        throw new Exception("Error while deleting the Certificate. " + e.getMessage());
+    }
+
     }
 
     /**

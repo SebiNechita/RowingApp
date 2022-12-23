@@ -2,6 +2,8 @@ package nl.tudelft.sem.template.rowinginfo.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
@@ -125,11 +127,13 @@ public class CertificateServiceTest {
         certificatesService.createCertificate(certificateName, certificateValue, description);
 
         //Assert
-        Certificates certificate = certificatesRepository.findById(1).orElseThrow();
-
-        ThrowableAssert.ThrowingCallable action = () -> certificatesService
-                .deleteCertificate(2);
-        assertThat(certificatesService.checkCertificates(certificate.getCertificateName())).isEqualTo(true);
+        boolean thrown = false;
+        try{
+            certificatesService.deleteCertificate(2);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
 
     @Test

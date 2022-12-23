@@ -60,8 +60,13 @@ public class CertificatesService {
      *
      * @param id certificatesRepository
      */
-    public void deleteCertificate(int id) {
+    public void deleteCertificate(int id) throws Exception {
+        try {
         certificatesRepository.deleteById(id);
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while deleting the Certificate. " + e.getMessage());
+        }
     }
 
     /**

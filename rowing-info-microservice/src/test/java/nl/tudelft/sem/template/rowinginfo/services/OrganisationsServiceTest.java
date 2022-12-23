@@ -2,6 +2,7 @@ package nl.tudelft.sem.template.rowinginfo.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
@@ -99,11 +100,13 @@ public class OrganisationsServiceTest {
         organisationsService.createOrganisations(organisationsName);
 
         //Assert
-        Organisations organisation = organisationsRepository.findById(1).orElseThrow();
-
-        ThrowableAssert.ThrowingCallable action = () -> organisationsService
-                .deleteOrganisation(2);
-        assertThat(organisationsService.checkOrganisations(organisation.getOrganisationsName())).isEqualTo(true);
+        boolean thrown = false;
+        try{
+            organisationsService.deleteOrganisation(2);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
 
     @Test
