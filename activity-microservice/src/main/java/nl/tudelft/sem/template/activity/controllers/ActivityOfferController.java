@@ -6,9 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
-import nl.tudelft.sem.template.activity.models.AvailableCompetitionsModel;
-import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
@@ -228,8 +227,8 @@ public class ActivityOfferController {
             @RequestBody NetId netId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         try {
+            System.out.println("Started test");
             UserDetailsModel request = activityOfferService.getUserDetailsModel(netId, authToken);
-
             String organisation = request.getOrganisation();
             boolean isFemale = request.getGender().equals("FEMALE");
             boolean isPro = request.isPro();

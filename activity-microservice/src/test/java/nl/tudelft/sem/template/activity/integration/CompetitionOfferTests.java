@@ -3,6 +3,7 @@ package nl.tudelft.sem.template.activity.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,20 +15,23 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import nl.tudelft.sem.template.activity.authentication.JwtTokenVerifier;
-import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
-import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
-import nl.tudelft.sem.template.activity.services.DataValidation;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOfferBuilder;
+import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
+import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.activity.services.DataValidation;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.NetId;
 import nl.tudelft.sem.template.common.models.user.Tuple;
 import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,6 +60,8 @@ public class CompetitionOfferTests {
 
     @Autowired
     private transient DataValidation mockDataValidation;
+//    @Autowired
+//    private transient ActivityOfferService mockActivityOfferService;
 
     private TrainingCreationRequestModel requestModel;
     private CompetitionCreationRequestModel competitionRequestModel;
@@ -100,6 +106,24 @@ public class CompetitionOfferTests {
         when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
         when(mockDataValidation.validateNameAndDescription(any(), any())).thenCallRealMethod();
         when(mockDataValidation.validateTime(any(), any())).thenCallRealMethod();
+
+//        if(mockActivityOfferService == null)
+//            System.out.println("LOL");
+//        when(mockActivityOfferService.getFilteredCompetitionOffers(any(), any(), any(), any(), any(), any()))
+//                .thenCallRealMethod();
+//        when(mockActivityOfferService.getAllCompetitionOffers()).thenCallRealMethod();
+//        when(mockActivityOfferService.getAllTrainingOffers()).thenCallRealMethod();
+//        when(mockActivityOfferService.getFilteredOffers(any())).thenCallRealMethod();
+//        when(mockActivityOfferService.setTrainingParameters(any(), any(), any(), any(), any(), any(), any(),
+//                any(), any())).thenCallRealMethod();
+//        doCallRealMethod().when(mockActivityOfferService).createCompetitionOffer(any(), any(), any(), any(),
+//                any(), any(), any(), any(), any(), any(), any(), any(), any());
+//        doCallRealMethod().when(mockActivityOfferService).createTrainingOffer(any(), any(), any(), any(),
+//                any(), any(), any(), any(), any(), any());
+//        doCallRealMethod().when(mockActivityOfferService).createManyTrainingOffers(any(), any(), any(),
+//                any(), any(), any(), any(), any(), any(), any());
+//        when(mockActivityOfferService.participantIsEligible(any())).thenCallRealMethod();
+//        when(mockActivityOfferService.getUserDetailsModel(any(), any())).thenCallRealMethod();
     }
 
     @Test
@@ -155,15 +179,22 @@ public class CompetitionOfferTests {
         activityOfferRepository.save(builder.build());
 
 
-        // Act
         UserDetailsModel user = new UserDetailsModel("NetId", "FEMALE", organisation, isPro,
                 List.of(position),
                 List.of(new Tuple(startTime, endTime)),
                 List.of(boatCertificate));
 
+        ActivityOfferService activityOfferService = Mockito.mock(ActivityOfferService.class);
+
+        when(activityOfferService.getUserDetailsModel(any(), any())).thenReturn(user);
+        when(activityOfferService.getFilteredCompetitionOffers(anyString(), anyBoolean(), anyBoolean(),
+                any(), any(), any())).thenCallRealMethod();
+
+        System.out.println("We are before acting");
+        // Act
         ResultActions resultActions = mockMvc.perform(get("/get/competitions/filtered")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.serialize(user))
+                .content(JsonUtil.serialize(new NetId("NetId")))
                 .header("Authorization", "Bearer MockJWT"));
 
         // Assert

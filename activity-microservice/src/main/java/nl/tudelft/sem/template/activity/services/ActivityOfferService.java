@@ -17,9 +17,10 @@ import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
-import nl.tudelft.sem.template.activity.models.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.http.HttpUtils;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
+import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
@@ -342,6 +343,9 @@ public class ActivityOfferService {
                             }
                             return true;
                         })
+                        .map(x -> new CompetitionResponseModel(x.getId(), x.getPosition(), x.isActive(),
+                                x.getStartTime(), x.getEndTime(), x.getOwnerId(), x.getBoatCertificate(), x.getType(),
+                                x.getName(), x.getDescription(), x.getOrganisation(), x.isFemale(), x.isPro()))
                         .collect(Collectors.toList()));
     }
 

@@ -9,10 +9,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOfferBuilder;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
+import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.Tuple;
@@ -116,7 +117,7 @@ public class CompetitionOfferServiceTest {
                 .setPro(true);
         activityOfferRepository.save(competitionBuilder.build());
 
-        List<CompetitionOffer> result = activityService.getFilteredCompetitionOffers(
+        List<CompetitionResponseModel> result = activityService.getFilteredCompetitionOffers(
                         "Team Blue",
                         true,
                         true,
@@ -187,7 +188,7 @@ public class CompetitionOfferServiceTest {
         LocalDateTime endAvailability2 = LocalDateTime.of(LocalDate.of(2022, 1, 8),
                 LocalTime.of(15, 10));
 
-        List<CompetitionOffer> result = activityService
+        List<CompetitionResponseModel> result = activityService
                 .getFilteredCompetitionOffers(
                         "Team Blue",
                         true,
