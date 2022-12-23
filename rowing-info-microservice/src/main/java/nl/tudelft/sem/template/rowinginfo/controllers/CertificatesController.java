@@ -54,6 +54,12 @@ public class CertificatesController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Endpoint for deleting a certificate.
+     *
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
     @DeleteMapping("/delete/certificates/{certificateId}")
     public ResponseEntity<String> deleteCertificate(@PathVariable("certificateId") int certificateId) throws Exception {
         try {
