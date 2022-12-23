@@ -1,8 +1,5 @@
 package nl.tudelft.sem.template.rowinginfo.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.rowinginfo.repositories.OrganisationsRepository;
@@ -15,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -79,6 +79,31 @@ public class OrganisationsServiceTest {
 
         assertThat(organisationsService.checkOrganisations(organisationsName)).isEqualTo(true);
         ThrowableAssert.ThrowingCallable act = () -> organisationsService.createOrganisations(organisationsName);
+    }
+
+    @Test
+    public void deleteExistentOrganisation() throws Exception {
+        // Act
+        organisationsService.createOrganisations(organisationsName);
+
+        //Assert
+        Organisations organisation = organisationsRepository.findById(1).orElseThrow();
+        organisationsService.deleteOrganisation(1);
+
+        assertThat(organisationsService.checkOrganisations(organisation.getOrganisationsName())).isEqualTo(false);
+    }
+
+    @Test
+    public void deleteNonExistentOrganisation_throwsException() throws Exception {
+        // Act
+        organisationsService.createOrganisations(organisationsName);
+
+        //Assert
+        Organisations organisation = organisationsRepository.findById(1).orElseThrow();
+
+        ThrowableAssert.ThrowingCallable action = () -> organisationsService
+                .deleteOrganisation(2);
+        assertThat(organisationsService.checkOrganisations(organisation.getOrganisationsName())).isEqualTo(true);
     }
 
     @Test
