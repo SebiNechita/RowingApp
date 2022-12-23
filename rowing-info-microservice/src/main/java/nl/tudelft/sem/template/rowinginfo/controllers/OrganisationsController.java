@@ -1,6 +1,7 @@
 package nl.tudelft.sem.template.rowinginfo.controllers;
 
 import java.util.List;
+
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.models.OrganisationsRequestModel;
 import nl.tudelft.sem.template.rowinginfo.repositories.OrganisationsRepository;
@@ -44,13 +45,9 @@ public class OrganisationsController {
     @PostMapping("/create/organisations")
     public ResponseEntity createNewOrganisation(@RequestBody OrganisationsRequestModel request) throws Exception {
         try {
-            if (!organisationsService.adminPermission()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            } else {
-                String organisationsName = request.getOrganisationsName();
+            String organisationsName = request.getOrganisationsName();
 
-                organisationsService.createOrganisations(organisationsName);
-            }
+            organisationsService.createOrganisations(organisationsName);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
