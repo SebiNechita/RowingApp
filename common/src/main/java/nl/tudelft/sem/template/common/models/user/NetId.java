@@ -1,6 +1,5 @@
 package nl.tudelft.sem.template.common.models.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,15 +9,14 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 public class NetId {
     private String netIdValue;
 
-//    public NetId(String netId) {
-//        // validate NetID
-//        this.netIdValue = netId;
-//    }
+    public NetId(String netId) {
+        // validate NetID
+        this.netIdValue = netId;
+    }
 
     @Override
     public String toString() {

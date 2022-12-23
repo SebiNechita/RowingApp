@@ -14,7 +14,6 @@ public class UserMicroserviceAdapter {
 
     /**
      * Instantiates a new UserMicroserviceAdapter.
-     *
      */
     public UserMicroserviceAdapter() {
         this.userMicroserviceAddress = MicroServiceAddresses.userMicroservice;
@@ -61,19 +60,19 @@ public class UserMicroserviceAdapter {
                 String.class);
     }
 
-        private String getUserDetailsUrl() {
-            return userMicroserviceAddress + "/user/get/details";
-        }
+    private String getUserDetailsUrl() {
+        return userMicroserviceAddress + "/user/get/details";
+    }
 
-        /**
-         * Send request to user microservice to get a user details.
-         *
-         * @param netId     netId
-         * @param authToken authToken
-         * @return UserDetailsModel
-         */
-        public ResponseEntity<UserDetailsModel> getUserDetailsModel(NetId netId, String authToken) {
-            return HttpUtils.sendAuthorizedHttpRequest(getUserDetailsUrl(), HttpMethod.GET,
-                    authToken, netId, UserDetailsModel.class);
-        }
+    /**
+     * Send request to user microservice to get a user details.
+     *
+     * @param netId     netId
+     * @param authToken authToken
+     * @return UserDetailsModel
+     */
+    public ResponseEntity<UserDetailsModel> getUserDetailsModel(NetId netId, String authToken) {
+        return HttpUtils.sendAuthorizedHttpRequest(getUserDetailsUrl(), HttpMethod.GET,
+                authToken, netId, UserDetailsModel.class);
+    }
 }

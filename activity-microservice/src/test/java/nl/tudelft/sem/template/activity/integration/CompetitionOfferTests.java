@@ -21,7 +21,6 @@ import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.activity.services.DataValidation;
 import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
-import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.NetId;
@@ -50,20 +49,15 @@ public class CompetitionOfferTests {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
     @Autowired
     private transient UserMicroserviceAdapter mockUserAdapter;
     @Autowired
     private transient JwtTokenVerifier mockJwtTokenVerifier;
-
     @Autowired
     private transient DataValidation mockDataValidation;
-//    @Autowired
-//    private transient ActivityOfferService mockActivityOfferService;
 
-    private TrainingCreationRequestModel requestModel;
     private CompetitionCreationRequestModel competitionRequestModel;
     private TypesOfPositions position;
     private boolean isActive;
@@ -106,24 +100,6 @@ public class CompetitionOfferTests {
         when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
         when(mockDataValidation.validateNameAndDescription(any(), any())).thenCallRealMethod();
         when(mockDataValidation.validateTime(any(), any())).thenCallRealMethod();
-
-//        if(mockActivityOfferService == null)
-//            System.out.println("LOL");
-//        when(mockActivityOfferService.getFilteredCompetitionOffers(any(), any(), any(), any(), any(), any()))
-//                .thenCallRealMethod();
-//        when(mockActivityOfferService.getAllCompetitionOffers()).thenCallRealMethod();
-//        when(mockActivityOfferService.getAllTrainingOffers()).thenCallRealMethod();
-//        when(mockActivityOfferService.getFilteredOffers(any())).thenCallRealMethod();
-//        when(mockActivityOfferService.setTrainingParameters(any(), any(), any(), any(), any(), any(), any(),
-//                any(), any())).thenCallRealMethod();
-//        doCallRealMethod().when(mockActivityOfferService).createCompetitionOffer(any(), any(), any(), any(),
-//                any(), any(), any(), any(), any(), any(), any(), any(), any());
-//        doCallRealMethod().when(mockActivityOfferService).createTrainingOffer(any(), any(), any(), any(),
-//                any(), any(), any(), any(), any(), any());
-//        doCallRealMethod().when(mockActivityOfferService).createManyTrainingOffers(any(), any(), any(),
-//                any(), any(), any(), any(), any(), any(), any());
-//        when(mockActivityOfferService.participantIsEligible(any())).thenCallRealMethod();
-//        when(mockActivityOfferService.getUserDetailsModel(any(), any())).thenCallRealMethod();
     }
 
     @Test
@@ -197,5 +173,4 @@ public class CompetitionOfferTests {
 
         assertTrue(resultActions.andReturn().getResponse().getContentAsString().contains("\"id\":1"));
     }
-
 }
