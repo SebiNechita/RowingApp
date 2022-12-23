@@ -9,7 +9,6 @@ import java.util.Locale;
 public class TypesOfPositionsDeserializer extends StdDeserializer<TypesOfPositions> {
     static final long serialVersionUID = -3387516993124229948L;
 
-    static final long serialVersionUID = 1L;
 
     public TypesOfPositionsDeserializer() {
         this(null);

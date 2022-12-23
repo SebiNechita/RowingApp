@@ -2,10 +2,10 @@ package nl.tudelft.sem.template.user.domain.userlogic.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.Set;
-import java.util.Optional;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
 import nl.tudelft.sem.template.common.models.user.Tuple;

@@ -3,25 +3,26 @@ package nl.tudelft.sem.template.user.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
-import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
 import nl.tudelft.sem.template.user.authentication.JwtTokenVerifier;
-import nl.tudelft.sem.template.user.domain.userlogic.*;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.Password;
+import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.User;
 import nl.tudelft.sem.template.user.domain.userlogic.repos.UserRepository;
-import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
 import nl.tudelft.sem.template.user.domain.userlogic.services.PasswordHashingService;
 import nl.tudelft.sem.template.user.integration.util.JsonUtil;
 import nl.tudelft.sem.template.user.models.AmateurSetAccountDetailsModel;
@@ -115,7 +116,8 @@ class UserControllerTest {
         // Verify that the save method on the mock repository was called
         verify(mockUserRepository, times(1)).save(any(User.class));
 
-        // Since we are returning the mock user from the mock repository, we can just use the mock directly instead of calling findByNetId
+        // Since we are returning the mock user from the mock repository, we can just use the mock directly
+        // instead of calling findByNetId
         assertThat(mockUser.getNetId()).isEqualTo(testUser);
         assertThat(mockUser.getPassword()).isEqualTo(testHashedPassword);
         assertThat(mockUser.getGender().getGender()).isEqualTo(testGender);

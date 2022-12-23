@@ -71,48 +71,55 @@ class AccountDetailsServiceTest {
 
         availabilitiesList = List.of(new Tuple<>(dateOneIntervalOne, dateTwoIntervalOne));
     }
-        @Test
-        void setAccountDetailsSuccessfully() throws Exception {
-            // Arrange
-            final NetId testUser = new NetId("SomeUser");
-            final Password testPassword = new Password("password123");
-            final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
-            final Gender gender = Gender.MALE;
-            final String organization = "teamAlpha";
-            List<TypesOfPositions> positions = new ArrayList<>();
-            positions.add(TypesOfPositions.COX);
-            positions.add(TypesOfPositions.COACH);
-            LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
-            LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
-            LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-31T20:59");
-            LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-31T22:00");
-            Availability expectedAvailabilityOne = new Availability(testUser, dateOneIntervalOne, dateTwoIntervalTwo);
-            Availability expectedAvailabilityTwo = new Availability(testUser, dateOneIntervalTwo, dateTwoIntervalTwo);
-            UserCertificate expectedUserCertificateOne = new UserCertificate(testUser, "C4");
-            UserCertificate expectedUserCertificateTwo = new UserCertificate(testUser, "8+");
-            TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
-            availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
-            availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
-            List<String> certificates = List.of("C4", "8+");
-            List<UserCertificate> userCertificates = List.of(expectedUserCertificateOne, expectedUserCertificateTwo);
-            when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
-            // Act
-            accountDetailsService.setAccountDetails(testUser, testPassword, gender, positions, availabilities, certificates, organization);
 
-            // Assert
-            User savedUser = userRepository.findByNetId(testUser).orElseThrow();
-            List<Availability> foundAvailabilities = availabilityRepository.findAllByNetId(testUser);
-            List<UserCertificate> foundCertificates = userCertificatesRepository.findAllByNetId(testUser);
+    @Test
+    void setAccountDetailsSuccessfully() throws Exception {
+        // Arrange
+        final NetId testUser = new NetId("SomeUser");
+        final Password testPassword = new Password("password123");
+        final HashedPassword testHashedPassword = new HashedPassword("hashedTestPassword");
+        final Gender gender = Gender.MALE;
+        final String organization = "teamAlpha";
+        List<TypesOfPositions> positions = new ArrayList<>();
+        positions.add(TypesOfPositions.COX);
+        positions.add(TypesOfPositions.COACH);
+        LocalDateTime dateOneIntervalOne = LocalDateTime.parse("2022-12-12T13:30");
+        LocalDateTime dateTwoIntervalOne = LocalDateTime.parse("2022-12-12T15:00");
+        LocalDateTime dateOneIntervalTwo = LocalDateTime.parse("2022-12-31T20:59");
+        LocalDateTime dateTwoIntervalTwo = LocalDateTime.parse("2022-12-31T22:00");
+        Availability expectedAvailabilityOne = new Availability(testUser, dateOneIntervalOne, dateTwoIntervalTwo);
+        Availability expectedAvailabilityTwo = new Availability(testUser, dateOneIntervalTwo, dateTwoIntervalTwo);
+        UserCertificate expectedUserCertificateOne = new UserCertificate(testUser, "C4");
+        UserCertificate expectedUserCertificateTwo = new UserCertificate(testUser, "8+");
+        TreeMap<LocalDateTime, LocalDateTime> availabilities = new TreeMap<>();
+        availabilities.put(dateOneIntervalOne, dateTwoIntervalOne);
+        availabilities.put(dateOneIntervalTwo, dateTwoIntervalTwo);
+        List<String> certificates = List.of("C4", "8+");
+        List<UserCertificate> userCertificates = List.of(expectedUserCertificateOne, expectedUserCertificateTwo);
+        when(mockPasswordEncoder.hash(testPassword)).thenReturn(testHashedPassword);
+        // Act
+        accountDetailsService.setAccountDetails(testUser,
+                                                testPassword,
+                                                gender,
+                                                positions,
+                                                availabilities,
+                                                certificates,
+                                                organization);
 
-            assertThat(savedUser.getNetId()).isEqualTo(testUser);
-            assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
-            assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
-            assertThat(savedUser.getOrganization()).isEqualTo("teamAlpha");
-            //assertThat(foundAvailabilities)
-            //.containsExactlyInAnyOrder(expectedAvailabilityOne, expectedAvailabilityTwo);
-            //assertThat(foundCertificates)
-            //.containsExactlyInAnyOrder(expectedUserCertificateOne, expectedUserCertificateTwo);
-        }
+        // Assert
+        User savedUser = userRepository.findByNetId(testUser).orElseThrow();
+        List<Availability> foundAvailabilities = availabilityRepository.findAllByNetId(testUser);
+        List<UserCertificate> foundCertificates = userCertificatesRepository.findAllByNetId(testUser);
+
+        assertThat(savedUser.getNetId()).isEqualTo(testUser);
+        assertThat(savedUser.getPassword()).isEqualTo(testHashedPassword);
+        assertThat(savedUser.getGender().getGender()).isEqualTo(gender.getGender());
+        assertThat(savedUser.getOrganization()).isEqualTo("teamAlpha");
+        //assertThat(foundAvailabilities)
+        //.containsExactlyInAnyOrder(expectedAvailabilityOne, expectedAvailabilityTwo);
+        //assertThat(foundCertificates)
+        //.containsExactlyInAnyOrder(expectedUserCertificateOne, expectedUserCertificateTwo);
+    }
 
     @Test
     public void setAccountDetails_throwsAvailabilityException() {
