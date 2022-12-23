@@ -70,7 +70,7 @@ public class OrganisationsServiceTest {
     }
 
     @Test
-    public void checkOrganisationisUnique_withValidName_throwsException() throws Exception {
+    public void checkOrganisationIsUnique_withValidName_throwsException() throws Exception {
         // Act
         organisationsService.createOrganisations(organisationsName);
 
@@ -79,5 +79,10 @@ public class OrganisationsServiceTest {
 
         assertThat(organisationsService.checkOrganisations(organisationsName)).isEqualTo(true);
         ThrowableAssert.ThrowingCallable act = () -> organisationsService.createOrganisations(organisationsName);
+    }
+
+    @Test
+    public void verifyAdminPermissionForNotLoggedInUser() throws Exception {
+        assertThat(organisationsService.adminPermission()).isEqualTo(false);
     }
 }
