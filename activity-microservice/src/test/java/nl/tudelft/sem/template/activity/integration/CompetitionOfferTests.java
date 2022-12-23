@@ -3,7 +3,6 @@ package nl.tudelft.sem.template.activity.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,8 +18,8 @@ import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOfferBuilder;
 import nl.tudelft.sem.template.activity.integration.utils.JsonUtil;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
-import nl.tudelft.sem.template.activity.services.ActivityOfferService;
 import nl.tudelft.sem.template.activity.services.DataValidation;
+import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
@@ -31,11 +30,11 @@ import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -44,7 +43,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles({"test", "mockTokenVerifier", "mockDataValidation"})
+@ActiveProfiles({"test", "mockUserMicroserviceAdapter", "mockTokenVerifier", "mockDataValidation"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 public class CompetitionOfferTests {
@@ -54,7 +53,8 @@ public class CompetitionOfferTests {
 
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
-
+    @Autowired
+    private transient UserMicroserviceAdapter mockUserAdapter;
     @Autowired
     private transient JwtTokenVerifier mockJwtTokenVerifier;
 
@@ -184,13 +184,8 @@ public class CompetitionOfferTests {
                 List.of(new Tuple(startTime, endTime)),
                 List.of(boatCertificate));
 
-        ActivityOfferService activityOfferService = Mockito.mock(ActivityOfferService.class);
+        when(mockUserAdapter.getUserDetailsModel(any(), anyString())).thenReturn(ResponseEntity.ok(user));
 
-        when(activityOfferService.getUserDetailsModel(any(), any())).thenReturn(user);
-        when(activityOfferService.getFilteredCompetitionOffers(anyString(), anyBoolean(), anyBoolean(),
-                any(), any(), any())).thenCallRealMethod();
-
-        System.out.println("We are before acting");
         // Act
         ResultActions resultActions = mockMvc.perform(get("/get/competitions/filtered")
                 .contentType(MediaType.APPLICATION_JSON)

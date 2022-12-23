@@ -1,19 +1,19 @@
 package nl.tudelft.sem.template.activity.profiles;
 
-import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-@Profile("mockActivityOfferService")
+@Profile("mockUserMicroserviceAdapter")
 @Configuration
-public class MockActivityOfferServiceProfile {
+public class MockUserMicroserviceAdapter {
 
     @Bean
     @Primary
-    public ActivityOfferService getMockActivityOfferService() {
-        return Mockito.mock(ActivityOfferService.class);
+    public UserMicroserviceAdapter getUserMicroserviceAdapter() {
+        return Mockito.mock(UserMicroserviceAdapter.class);
     }
 }

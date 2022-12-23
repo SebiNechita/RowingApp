@@ -20,7 +20,6 @@ import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
-import nl.tudelft.sem.template.common.http.HttpUtils;
 import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
@@ -31,7 +30,6 @@ import nl.tudelft.sem.template.common.models.user.NetId;
 import nl.tudelft.sem.template.common.models.user.Tuple;
 import nl.tudelft.sem.template.common.models.user.TupleDeserializer;
 import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,6 +39,7 @@ public class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
     private final transient DataValidation dataValidation;
+
 
 
     /**
@@ -350,7 +349,6 @@ public class ActivityOfferService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Error while creating ActivityOffer. " + e.getMessage());
         }
-        return true;
     }
 
     /**
@@ -422,17 +420,5 @@ public class ActivityOfferService {
 
     }
 
-    /**
-     * Send request to user microservice to get a user details.
-     *
-     * @param netId     netId
-     * @param authToken authToken
-     * @return UserDetailsModel
-     */
-    public UserDetailsModel getUserDetailsModel(NetId netId, String authToken) {
-        String urlAddress = "http://localhost:8085/user/get/details";
-        UserDetailsModel model = HttpUtils.sendAuthorizedHttpRequest(urlAddress, HttpMethod.GET,
-                authToken, netId, UserDetailsModel.class).getBody();
-        return model;
-    }
+
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
 import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.ManyTrainingsCreationRequestModel;
@@ -34,6 +35,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class ActivityOfferController {
     private final transient ActivityOfferService activityOfferService;
+    private final transient UserMicroserviceAdapter userMicroserviceAdapter;
     static final Logger logger = LoggerFactory.getLogger(ActivityOfferController.class.getName());
 
     /**
@@ -42,8 +44,10 @@ public class ActivityOfferController {
      * @param activityOfferService activityOfferService
      */
     @Autowired
-    public ActivityOfferController(ActivityOfferService activityOfferService) {
+    public ActivityOfferController(ActivityOfferService activityOfferService,
+                                   UserMicroserviceAdapter userMicroserviceAdapter) {
         this.activityOfferService = activityOfferService;
+        this.userMicroserviceAdapter = userMicroserviceAdapter;
     }
 
     /**
@@ -231,8 +235,7 @@ public class ActivityOfferController {
             @RequestBody NetId netId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         try {
-            System.out.println("Started test");
-            UserDetailsModel request = activityOfferService.getUserDetailsModel(netId, authToken);
+            UserDetailsModel request = userMicroserviceAdapter.getUserDetailsModel(netId, authToken).getBody();
             String organisation = request.getOrganisation();
             boolean isFemale = request.getGender().equals("FEMALE");
             boolean isPro = request.isPro();
