@@ -71,10 +71,25 @@ public class TrainingOfferBuilder implements ActivityOfferBuilder<TrainingOffer>
     }
 
     @Override
+    public ActivityOfferBuilder<TrainingOffer> setOrganisation(String organisation) {
+        return null;
+    }
+
+    @Override
+    public ActivityOfferBuilder<TrainingOffer> setFemale(boolean isFemale) {
+        return null;
+    }
+
+    @Override
+    public ActivityOfferBuilder<TrainingOffer> setPro(boolean isPro) {
+        return null;
+    }
+
+    @Override
     public TrainingOffer build() {
         return new TrainingOffer(position, isActive,
-                                startTime, endTime,
-                                ownerId, boatCertificate,
-                                type, name, description);
+                startTime, endTime,
+                ownerId, boatCertificate,
+                type, name, description);
     }
 }

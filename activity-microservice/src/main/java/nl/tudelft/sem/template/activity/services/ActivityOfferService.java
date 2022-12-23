@@ -20,7 +20,8 @@ import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
-import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
+import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
@@ -40,11 +41,12 @@ public class ActivityOfferService {
     private final transient DataValidation dataValidation;
 
 
+
     /**
      * Instantiates a new ActivityOfferService.
      *
      * @param activityOfferRepository activityOfferRepository
-     * @param dataValidation dataValidation
+     * @param dataValidation          dataValidation
      */
     public ActivityOfferService(ActivityOfferRepository activityOfferRepository,
                                 DataValidation dataValidation) {
@@ -303,7 +305,6 @@ public class ActivityOfferService {
                     .build();
             HttpResponse<String> response = httpClient.send(request2,
                     HttpResponse.BodyHandlers.ofString());
-
             // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
                 // Parse the response body
@@ -342,10 +343,82 @@ public class ActivityOfferService {
                 return true;
             }
             return false;
+
         } catch (Exception e) {
             System.out.println("Exception in the service");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Error while creating ActivityOffer. " + e.getMessage());
         }
     }
+
+    /**
+     * Gets a list of ActivityOffers which are all active competitions.
+     *
+     * @throws Exception exception
+     */
+    public List<ActivityOffer> getAllCompetitionOffers() throws Exception {
+        try {
+            return activityOfferRepository.findByType(TypesOfActivities.COMPETITION)
+                    .stream()
+                    .filter(ActivityOffer::isActive)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new Exception("Error while retrieving all competitions. " + e.getMessage());
+        }
+    }
+
+    /**
+     * Filters all the competitions such that they match the given requirements.
+     *
+     * @param organisation   organisation
+     * @param isFemale       isFemale
+     * @param isPro          isPro
+     * @param certificates   certificates
+     * @param positions      positions
+     * @param availabilities availabilities
+     * @return list of selected competitions
+     * @throws Exception exception
+     */
+    public AvailableCompetitionsModel getFilteredCompetitionOffers(String organisation,
+                                                                   boolean isFemale,
+                                                                   boolean isPro,
+                                                                   List<String> certificates,
+                                                                   List<TypesOfPositions> positions,
+                                                                   List<Tuple<LocalDateTime, LocalDateTime>> availabilities)
+            throws Exception {
+        return new AvailableCompetitionsModel(
+                getAllCompetitionOffers()
+                        .stream()
+                        .map(x -> (CompetitionOffer) x)
+                        .filter(x -> x.isFemale() == isFemale)
+                        .filter(x -> x.isPro() == isPro)
+                        .filter(x -> x.getOrganisation().equals(organisation))
+                        .filter(x -> positions.contains(x.getPosition()))
+                        .filter(x -> {
+                            for (Tuple<LocalDateTime, LocalDateTime> tuple : availabilities) {
+                                LocalDateTime avlStartTime = tuple.getFirst();
+                                LocalDateTime avlEndTime = tuple.getSecond();
+
+                                // If the competition doesn't start before our slot and doesn't end after our slot
+                                // we can take part in it
+                                if (!x.getStartTime().isBefore(avlStartTime) && !x.getEndTime().isAfter(avlEndTime)) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        })
+                        .filter(x -> {
+                            if (x.getPosition().equals(TypesOfPositions.COX)) {
+                                return certificates.contains(x.getBoatCertificate());
+                            }
+                            return true;
+                        })
+                        .map(x -> new CompetitionResponseModel(x.getId(), x.getPosition(), x.isActive(),
+                                x.getStartTime(), x.getEndTime(), x.getOwnerId(), x.getBoatCertificate(), x.getType(),
+                                x.getName(), x.getDescription(), x.getOrganisation(), x.isFemale(), x.isPro()))
+                        .collect(Collectors.toList()));
+
+    }
+
+
 }

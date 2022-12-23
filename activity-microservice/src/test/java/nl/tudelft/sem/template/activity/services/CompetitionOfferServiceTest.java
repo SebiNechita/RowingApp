@@ -8,10 +8,15 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
+import nl.tudelft.sem.template.activity.domain.CompetitionOfferBuilder;
+import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,5 +98,108 @@ public class CompetitionOfferServiceTest {
         assertThat(activityOffer.getOrganisation()).isEqualTo(organisation);
         assertThat(activityOffer.isFemale()).isEqualTo(isFemale);
         assertThat(activityOffer.isPro()).isEqualTo(isPro);
+    }
+
+    @Test
+    public void fetchFilteredCompetitions_oneOffer_worksCorrectly() throws Exception {
+        CompetitionOfferBuilder competitionBuilder = new CompetitionOfferBuilder();
+        competitionBuilder.setActive(true)
+                .setFemale(true)
+                .setStartTime(startTime)
+                .setEndTime(endTime)
+                .setPosition(TypesOfPositions.COX)
+                .setBoatCertificate("C4")
+                .setType(TypesOfActivities.COMPETITION)
+                .setOwnerId("owner")
+                .setDescription("description")
+                .setName("name")
+                .setOrganisation("Team Blue")
+                .setPro(true);
+        activityOfferRepository.save(competitionBuilder.build());
+
+        List<CompetitionResponseModel> result = activityService.getFilteredCompetitionOffers(
+                        "Team Blue",
+                        true,
+                        true,
+                        List.of("C4"),
+                        List.of(TypesOfPositions.COX, TypesOfPositions.SCULLING_ROWER),
+                        List.of(new Tuple(startTime, endTime)))
+                .getAvailableOffers();
+
+
+        assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void fetchFilteredCompetitions_aFewOffers_worksCorrectly() throws Exception {
+        // Arrange
+        TrainingOfferBuilder trainingBuilder = new TrainingOfferBuilder();
+        trainingBuilder.setActive(true)
+                .setBoatCertificate("C4")
+                .setType(TypesOfActivities.TRAINING)
+                .setPosition(TypesOfPositions.SCULLING_ROWER)
+                .setStartTime(LocalDateTime.of(LocalDate.of(2022, 12, 12),
+                        LocalTime.of(12, 00)))
+                .setEndTime(LocalDateTime.of(LocalDate.of(2022, 12, 12),
+                        LocalTime.of(14, 00)))
+                .setOwnerId("ownerId")
+                .setDescription("description")
+                .setName("name");
+
+        activityOfferRepository.save(trainingBuilder.build());
+
+        CompetitionOfferBuilder competitionBuilder = new CompetitionOfferBuilder();
+        competitionBuilder.setActive(true)
+                .setFemale(true)
+                .setStartTime(startTime)
+                .setEndTime(endTime)
+                .setPosition(TypesOfPositions.COX)
+                .setBoatCertificate("C4")
+                .setType(TypesOfActivities.COMPETITION)
+                .setOrganisation("Team Blue")
+                .setPro(true)
+                .setOwnerId("owner")
+                .setDescription("description")
+                .setName("name");
+
+        activityOfferRepository.save(competitionBuilder.build());
+        activityOfferRepository.save(competitionBuilder.build());
+
+
+        competitionBuilder
+                .setStartTime(LocalDateTime.of(LocalDate.of(2022, 12, 12),
+                        LocalTime.of(12, 10)))
+                .setEndTime(LocalDateTime.of(LocalDate.of(2022, 12, 12),
+                        LocalTime.of(14, 15)));
+
+        activityOfferRepository.save(competitionBuilder.build());
+
+        competitionBuilder.setOrganisation("Team Red");
+        activityOfferRepository.save(competitionBuilder.build());
+
+        // Act
+        LocalDateTime startAvailability1 = LocalDateTime.of(LocalDate.of(2022, 12, 12),
+                LocalTime.of(10, 10));
+        LocalDateTime endAvailability1 = LocalDateTime.of(LocalDate.of(2022, 12, 12),
+                LocalTime.of(14, 15));
+
+        LocalDateTime startAvailability2 = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(10, 0));
+        LocalDateTime endAvailability2 = LocalDateTime.of(LocalDate.of(2022, 1, 8),
+                LocalTime.of(15, 10));
+
+        List<CompetitionResponseModel> result = activityService
+                .getFilteredCompetitionOffers(
+                        "Team Blue",
+                        true,
+                        true,
+                        List.of("C4"),
+                        List.of(TypesOfPositions.COX, TypesOfPositions.SCULLING_ROWER),
+                        List.of(new Tuple(startAvailability1, endAvailability1),
+                                new Tuple(startAvailability2, endAvailability2))
+                ).getAvailableOffers();
+
+        // Assert
+        assertThat(result.size()).isEqualTo(3);
     }
 }
