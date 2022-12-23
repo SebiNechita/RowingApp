@@ -101,7 +101,7 @@ public class OrganisationsServiceTest {
 
         //Assert
         boolean thrown = false;
-        try{
+        try {
             organisationsService.deleteOrganisation(2);
         } catch (Exception e) {
             thrown = true;

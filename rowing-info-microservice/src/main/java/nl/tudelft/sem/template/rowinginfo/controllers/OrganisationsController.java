@@ -1,7 +1,6 @@
 package nl.tudelft.sem.template.rowinginfo.controllers;
 
 import java.util.List;
-
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.models.OrganisationsRequestModel;
 import nl.tudelft.sem.template.rowinginfo.repositories.OrganisationsRepository;

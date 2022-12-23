@@ -2,7 +2,6 @@ package nl.tudelft.sem.template.rowinginfo.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
@@ -128,7 +127,7 @@ public class CertificateServiceTest {
 
         //Assert
         boolean thrown = false;
-        try{
+        try {
             certificatesService.deleteCertificate(2);
         } catch (Exception e) {
             thrown = true;

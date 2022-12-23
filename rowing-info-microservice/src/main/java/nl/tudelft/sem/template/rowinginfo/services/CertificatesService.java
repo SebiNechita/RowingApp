@@ -62,7 +62,7 @@ public class CertificatesService {
      */
     public void deleteCertificate(int id) throws Exception {
         try {
-        certificatesRepository.deleteById(id);
+            certificatesRepository.deleteById(id);
         } catch (Exception e) {
             System.out.println("Exception in the service");
             throw new Exception("Error while deleting the Certificate. " + e.getMessage());
