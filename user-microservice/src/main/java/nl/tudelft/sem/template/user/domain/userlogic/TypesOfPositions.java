@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public enum TypesOfPositions {
 
     COX("cox"),
@@ -18,6 +17,11 @@ public enum TypesOfPositions {
 
     TypesOfPositions(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return this.getType();
     }
 
 }

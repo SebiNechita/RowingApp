@@ -1,9 +1,9 @@
 package nl.tudelft.sem.template.user.domain.userlogic.repos;
 
 import java.util.Optional;
-import nl.tudelft.sem.template.user.domain.userlogic.AmateurUser;
+
 import nl.tudelft.sem.template.user.domain.userlogic.NetId;
-import nl.tudelft.sem.template.user.domain.userlogic.User;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

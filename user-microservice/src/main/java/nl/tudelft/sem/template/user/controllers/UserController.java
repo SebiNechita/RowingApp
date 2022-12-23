@@ -2,13 +2,13 @@ package nl.tudelft.sem.template.user.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.TreeMap;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
 import nl.tudelft.sem.template.user.domain.userlogic.*;
-import nl.tudelft.sem.template.user.domain.userlogic.services.AmateurAccountDetailsService;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.services.AccountDetailsService;
 import nl.tudelft.sem.template.user.models.AmateurSetAccountDetailsModel;
-import nl.tudelft.sem.template.user.models.GetAmateurUserDetailsModel;
+import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class UserController {
     private final transient AuthManager authManager;
-    private final transient AmateurAccountDetailsService amateurAccountDetailsService;
+    private final transient AccountDetailsService accountDetailsService;
 
     /**
      * Instantiates a new controller.
@@ -26,9 +26,9 @@ public class UserController {
      * @param authManager Spring Security component used to authenticate and authorize the user
      */
     @Autowired
-    public UserController(AuthManager authManager, AmateurAccountDetailsService amateurAccountDetailsService) {
+    public UserController(AuthManager authManager, AccountDetailsService accountDetailsService) {
         this.authManager = authManager;
-        this.amateurAccountDetailsService = amateurAccountDetailsService;
+        this.accountDetailsService = accountDetailsService;
     }
 
     /**
@@ -46,7 +46,8 @@ public class UserController {
                     Availability.generateAvailabilities(request.getAvailabilities());
             List<String> certificates = request.getCertificates();
             List<TypesOfPositions> positions = request.getPositions();
-            amateurAccountDetailsService.setAccountDetails(netId, password, gender, positions, availabilities, certificates);
+            String organization = request.getOrganization();
+            accountDetailsService.setAccountDetails(netId, password, gender, positions, availabilities, certificates, organization);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -55,8 +56,15 @@ public class UserController {
         return ResponseEntity.ok("Account (" + authManager.getNetId() + ") set successfully");
     }
 
-    @GetMapping("amateur/user/get/details/{netId}")
-    public ResponseEntity<GetAmateurUserDetailsModel> getUserDetails(@PathVariable("netId") NetId netId) throws Exception{
-        return ResponseEntity.ok(amateurAccountDetailsService.getAccountDetails(netId));
+    /**
+     * Gets the details of a user given by its NetID.
+     *
+     * @param netId The NetID of the user.
+     * @return The details of the user.
+     * @throws Exception if something goes wrong.
+     */
+    @GetMapping("user/get/details/{netId}")
+    public ResponseEntity<GetUserDetailsModel> getUserDetails(@PathVariable("netId") NetId netId) throws Exception{
+        return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
     }
 }

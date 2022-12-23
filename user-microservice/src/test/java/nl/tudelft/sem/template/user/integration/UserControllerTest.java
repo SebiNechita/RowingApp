@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import nl.tudelft.sem.template.user.authentication.AuthManager;
 import nl.tudelft.sem.template.user.authentication.JwtTokenVerifier;
-import nl.tudelft.sem.template.user.domain.userlogic.AmateurUser;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
 import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
 import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 import nl.tudelft.sem.template.user.domain.userlogic.Password;

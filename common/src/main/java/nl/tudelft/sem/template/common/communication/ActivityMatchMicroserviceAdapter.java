@@ -1,29 +1,17 @@
-package nl.tudelft.sem.template.gateway.communication;
+package nl.tudelft.sem.template.common.communication;
 
 import nl.tudelft.sem.template.common.http.HttpUtils;
+import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
-import nl.tudelft.sem.template.common.models.authentication.AuthenticationRequestModel;
-import nl.tudelft.sem.template.common.models.authentication.AuthenticationResponseModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
-@Component
 public class ActivityMatchMicroserviceAdapter {
     public final transient String activityMatchMicroserviceAddress;
-
-    /**
-     * Instantiates a new AuthenticationMicroserviceAdapter.
-     */
-    public ActivityMatchMicroserviceAdapter() {
-        this.activityMatchMicroserviceAddress = MicroServiceAddresses.activityMatchMicroservice;
-    }
 
     /**
      * Instantiates a new AuthenticationMicroserviceAdapter with an injected microservice address.
@@ -46,14 +34,19 @@ public class ActivityMatchMicroserviceAdapter {
         return activityMatchMicroserviceAddress + "/set/participant";
     }
 
+    private String addUserToJoinQueueEndpointUrl() {
+        return activityMatchMicroserviceAddress + "/join-queue";
+    }
+
     /**
      * Endpoint for creating a new offer.
      *
      * @param request request
      * @return ok response if successful
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
-    public ResponseEntity<Void> createActivityMatch(MatchCreationRequestModel request, String authToken) {
+    public ResponseEntity<Void> createActivityMatch(MatchCreationRequestModel request, String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(createActivityMatchEndpointUrl(), HttpMethod.POST, authToken,
                 request, Void.class);
     }
@@ -63,10 +56,11 @@ public class ActivityMatchMicroserviceAdapter {
      *
      * @param request the request wrapped in a PendingOffersRequestModel
      * @return a response wrapped in a PendingOffersResponseModel
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(PendingOffersRequestModel request,
-                                                                       String authToken) {
+                                                                       String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(getPendingOffersEndpointUrl(), HttpMethod.POST, authToken, request,
                 PendingOffersResponseModel.class);
     }
@@ -76,10 +70,24 @@ public class ActivityMatchMicroserviceAdapter {
      *
      * @param request the request wrapped in a SetParticipantRequestModel
      * @return a simple okay status message
-     * @throws Exception if not successful
+     * @throws ResponseStatusException if not successful
      */
-    public ResponseEntity<String> setParticipant(SetParticipantRequestModel request, String authToken) {
+    public ResponseEntity<String> setParticipant(SetParticipantRequestModel request, String authToken)
+            throws ResponseStatusException {
         return HttpUtils.sendAuthorizedHttpRequest(setParticipantEndpointUrl(), HttpMethod.POST, authToken, request,
+                String.class);
+    }
+
+    /**
+     * Adds a user to the join queue of an activity.
+     *
+     * @param request the request wrapped in an AddUserToJoinQueueRequestModel
+     * @return a simple okay status message
+     * @throws ResponseStatusException if not successful
+     */
+    public ResponseEntity<String> addUserToJoinQueue(AddUserToJoinQueueRequestModel request, String authToken)
+            throws ResponseStatusException {
+        return HttpUtils.sendAuthorizedHttpRequest(addUserToJoinQueueEndpointUrl(), HttpMethod.POST, authToken, request,
                 String.class);
     }
 }

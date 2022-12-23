@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,13 +18,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.NetIdAttributeConverter;
+import nl.tudelft.sem.template.user.domain.userlogic.Tuple;
 import nl.tudelft.sem.template.user.domain.userlogic.exceptions.AvailabilityOverlapException;
 
 @Entity
 @Table(name = "availabilities")
 @Getter
 @NoArgsConstructor
-@ToString
 //class to support users availabilities
 public class Availability {
 
@@ -88,6 +90,15 @@ public class Availability {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(this.start);
+        result.append(",");
+        result.append(this.end);
+        return result.toString();
     }
 
     /**

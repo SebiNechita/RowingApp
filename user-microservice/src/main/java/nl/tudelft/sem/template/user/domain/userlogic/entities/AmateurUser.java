@@ -1,15 +1,13 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
 import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.TreeMap;
+import nl.tudelft.sem.template.user.domain.userlogic.Gender;
+import nl.tudelft.sem.template.user.domain.userlogic.HashedPassword;
+import nl.tudelft.sem.template.user.domain.userlogic.NetId;
 
 @NoArgsConstructor
 @Entity
@@ -26,8 +24,8 @@ public class AmateurUser extends User {
     public AmateurUser(@NonNull NetId netId,
                        @NonNull HashedPassword password,
                        @NonNull Gender gender,
-                       List<TypesOfPositions> positions) {
-        super(netId, password, gender, positions);
+                       String organization) {
+        super(netId, password, gender, organization);
     }
 
     /**

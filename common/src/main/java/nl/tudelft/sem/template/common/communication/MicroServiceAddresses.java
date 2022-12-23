@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.gateway.communication;
+package nl.tudelft.sem.template.common.communication;
 
 public class MicroServiceAddresses {
     public static final String hostname = "http://localhost";

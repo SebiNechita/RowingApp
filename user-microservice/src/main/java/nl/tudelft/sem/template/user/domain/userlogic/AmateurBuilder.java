@@ -1,6 +1,10 @@
 package nl.tudelft.sem.template.user.domain.userlogic;
 
 import lombok.NoArgsConstructor;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.AmateurUser;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.Availability;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.PositionEntity;
+import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -14,19 +18,22 @@ public class AmateurBuilder implements UserBuilder {
     private transient List<String> certificates;
     private transient TreeMap<LocalDateTime, LocalDateTime> availabilities;
     private transient List<TypesOfPositions> positions;
+    private transient String organization;
 
     public AmateurBuilder(NetId netId,
                           HashedPassword password,
                           Gender gender,
                           List<String> certificates,
                           TreeMap<LocalDateTime, LocalDateTime> availabilities,
-                          List<TypesOfPositions> positions) {
+                          List<TypesOfPositions> positions,
+                          String organization) {
         this.netId = netId;
         this.password = password;
         this.gender = gender;
         this.certificates = certificates;
         this.availabilities = availabilities;
         this.positions = positions;
+        this.organization = organization;
     }
 
     @Override
@@ -34,6 +41,7 @@ public class AmateurBuilder implements UserBuilder {
         netId = null;
         password = null;
         gender = null;
+        organization = null;
         certificates = new ArrayList<>();
         availabilities = new TreeMap<>();
         positions = new ArrayList<>();
@@ -75,18 +83,19 @@ public class AmateurBuilder implements UserBuilder {
     }
 
     @Override
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    @Override
     public void setPositions(List<TypesOfPositions> positions) {
         this.positions = positions;
     }
 
-    @Override
-    public void addPosition(TypesOfPositions position) {
-        this.positions.add(position);
-    }
 
     @Override
     public AmateurUser getUser() {
-        return new AmateurUser(netId, password, gender, positions);
+        return new AmateurUser(netId, password, gender, organization);
     }
 
     @Override
@@ -107,6 +116,15 @@ public class AmateurBuilder implements UserBuilder {
             noDuplicateCertificates.add(new UserCertificate(netId, certificate));
         }
         return noDuplicateCertificates;
+    }
+
+    @Override
+    public Set<PositionEntity> getPositions() {
+        Set<PositionEntity> noDuplicatePositions = new HashSet<>();
+        for (TypesOfPositions p : positions) {
+            noDuplicatePositions.add(new PositionEntity(netId, p));
+        }
+        return noDuplicatePositions;
     }
 
 }

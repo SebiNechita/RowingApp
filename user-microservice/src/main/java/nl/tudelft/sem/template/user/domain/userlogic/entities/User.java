@@ -1,12 +1,14 @@
-package nl.tudelft.sem.template.user.domain.userlogic;
+package nl.tudelft.sem.template.user.domain.userlogic.entities;
 
 import lombok.*;
 import nl.tudelft.sem.template.user.domain.HasEvents;
+import nl.tudelft.sem.template.user.domain.userlogic.*;
 import nl.tudelft.sem.template.user.domain.userlogic.converters.GenderConverter;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.HashedPasswordAttributeConverter;
+import nl.tudelft.sem.template.user.domain.userlogic.converters.NetIdAttributeConverter;
 import nl.tudelft.sem.template.user.domain.userlogic.events.UserWasCreatedEvent;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -42,19 +44,17 @@ public abstract class User extends HasEvents {
     @Getter
     @Setter
     @NonNull
-    @ElementCollection
-    //@Convert(converter = TypeOfPositionConverter.class)
-    @Column(name = "positions", nullable = false)
-    private List<TypesOfPositions> positions;
+    @Column(name = "organization")
+    private String organization;
 
     public User(@NonNull NetId netId,
                 @NonNull HashedPassword password,
                 @NonNull Gender gender,
-                List<TypesOfPositions> positions) {
+                String organization) {
         this.netId = netId;
         this.password = password;
         this.gender = gender;
-        this.positions = positions;
+        this.organization = organization;
         this.recordThat(new UserWasCreatedEvent(netId));
     }
 

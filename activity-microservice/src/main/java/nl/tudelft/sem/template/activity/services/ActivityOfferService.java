@@ -1,8 +1,14 @@
 package nl.tudelft.sem.template.activity.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
@@ -10,21 +16,33 @@ import nl.tudelft.sem.template.activity.domain.TypesOfPositions;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.user.GetUserDetailsModel;
+import nl.tudelft.sem.template.common.models.user.NetId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
+    private final transient UserMicroserviceAdapter userMicroserviceAdapter;
+    static final Logger logger = LoggerFactory.getLogger(ActivityOfferService.class.getName());
 
     /**
      * Instantiates a new ActivityOfferService.
      *
      * @param activityOfferRepository activityOfferRepository
      */
-    public ActivityOfferService(ActivityOfferRepository activityOfferRepository) {
+    public ActivityOfferService(ActivityOfferRepository activityOfferRepository,
+                                UserMicroserviceAdapter userMicroserviceAdapter) {
         this.activityOfferRepository = activityOfferRepository;
+        this.userMicroserviceAdapter = userMicroserviceAdapter;
     }
 
     /**
@@ -142,7 +160,7 @@ public class ActivityOfferService {
 
 
     /**
-     * Gets a list of ActivityOffer.
+     * Gets the list with all the ActivityOffer.
      *
      * @throws Exception exception
      */
@@ -153,5 +171,79 @@ public class ActivityOfferService {
             System.out.println("Exception in the service");
             throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
         }
+    }
+
+    /**
+     * Gets a filtered list of ActivityOffer.
+     *
+     * @throws Exception exception
+     */
+    public List<ActivityOffer> getFilteredOffers(NetId netId) throws Exception {
+        try {
+
+            //return activityOfferRepository.findAll().filterActivityBasedOnUserDetails();
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8082/user/get/details/" + netId))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
+            // Check if the request was successful
+            if (response.statusCode() == HttpStatus.OK.value()) {
+                // Parse the response body
+                ObjectMapper mapper = new ObjectMapper();
+                GetUserDetailsModel model = mapper.readValue(response.body(), GetUserDetailsModel.class);
+                List<String> availabilities = model.getAvailabilities();
+                System.out.println(availabilities);
+                // Use the data in the model object as needed
+                // ...
+            }
+            // else {
+            //     The request was not successful. Handle the error as appropriate.
+            //     ...
+            // }
+            return activityOfferRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Exception in the service");
+            throw new Exception("Error while creating ActivityOffer. " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Endpoint for checking if a participant is eligible to join a given activity.
+     *
+     * @param request wrapped in a ParticipantIsEligibleRequestModel.
+     * @return boolean indicating eligibility.
+     * @throws ResponseStatusException if not successful.
+     */
+    public boolean participantIsEligible(ParticipantIsEligibleRequestModel request, String authToken)
+            throws ResponseStatusException {
+        logger.info(String.format("received participantIsEligible request for activity %d, user %s",
+                request.getActivityOfferId(), request.getParticipantNetid()));
+
+        Optional<ActivityOffer> activityOffer = activityOfferRepository.findById(request.getActivityOfferId());
+
+        if (activityOffer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity with given ID not found");
+        }
+
+        NetId participantNetId = new NetId(request.getParticipantNetid());
+
+        GetUserDetailsModel userDetails = userMicroserviceAdapter.getUserDetails(participantNetId, authToken).getBody();
+
+        if (activityOffer.get().getBoatCertificate() != null
+                && !userDetails.getCertificates().contains(activityOffer.get().getBoatCertificate())) {
+            logger.info("user is ineligible because they don't have the required certificate %s",
+                    activityOffer.get().getBoatCertificate());
+            return false;
+        }
+
+        // TODO(iannis): Also check gender, rank & organisation.
+        //               Currently this is not possible, since this data does not exist on the ActivityOffer.
+        //               Return false if any of these don't match the activity offer requirements.
+
+        return true;
     }
 }
