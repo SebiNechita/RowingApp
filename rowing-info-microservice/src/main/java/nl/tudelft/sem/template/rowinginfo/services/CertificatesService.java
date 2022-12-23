@@ -1,9 +1,12 @@
 package nl.tudelft.sem.template.rowinginfo.services;
 
 import java.util.List;
+import java.util.Objects;
+
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.rowinginfo.repositories.CertificatesRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,6 +41,28 @@ public class CertificatesService {
             throw new Exception("Certificate already exists");
         }
         certificatesRepository.save(new Certificates(name, value, description));
+    }
+
+    /**
+     * Verifies if the logged-in user is the admin
+     */
+    public boolean adminPermission() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            return false;
+        }
+
+        String userNetId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return Objects.equals(userNetId, "admin");
+    }
+
+    /**
+     * Deletes a Certificate by ID.
+     *
+     * @param id certificatesRepository
+     */
+    public void deleteCertificate(int id) {
+        certificatesRepository.deleteById(id);
     }
 
     /**
