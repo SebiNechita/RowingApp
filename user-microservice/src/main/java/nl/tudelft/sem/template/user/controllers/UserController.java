@@ -63,6 +63,18 @@ public class UserController {
         return ResponseEntity.ok("Account (" + authManager.getNetId() + ") set successfully");
     }
 
+    /**
+     * Gets the details of a user given by its NetID.
+     *
+     * @param netId The NetID of the user.
+     * @return The details of the user.
+     * @throws Exception if something goes wrong.
+     */
+    @GetMapping("user/get/details/{netId}")
+    public ResponseEntity<UserDetailsModel> getUserDetailsPathVariable(@PathVariable NetId netId) throws Exception {
+        return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));
+    }
+
     @GetMapping("user/get/details")
     public ResponseEntity<UserDetailsModel> getUserDetails(NetId netId) throws Exception {
         return ResponseEntity.ok(accountDetailsService.getAccountDetails(netId));

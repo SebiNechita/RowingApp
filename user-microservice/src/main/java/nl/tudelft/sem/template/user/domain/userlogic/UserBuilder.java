@@ -10,25 +10,25 @@ import nl.tudelft.sem.template.user.domain.userlogic.entities.PositionEntity;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.User;
 import nl.tudelft.sem.template.user.domain.userlogic.entities.UserCertificate;
 
-public interface UserBuilder {
+public interface UserBuilder<T extends User> {
 
-    void setNetId(NetId netId);
+    UserBuilder<T> setNetId(NetId netId);
 
-    void setPassword(HashedPassword password);
+    UserBuilder<T> setPassword(HashedPassword password);
 
-    void setGender(Gender gender);
+    UserBuilder<T> setGender(Gender gender);
 
-    void setCertificates(List<String> certificates);
+    UserBuilder<T> setCertificates(List<String> certificates);
 
-    void addCertificates(String certificate);
+    UserBuilder<T> addCertificates(String certificate);
 
-    void setAvailabilities(TreeMap<LocalDateTime, LocalDateTime> availabilities);
+    UserBuilder<T> setAvailabilities(TreeMap<LocalDateTime, LocalDateTime> availabilities);
 
-    void addAvailability(LocalDateTime start, LocalDateTime end);
+    UserBuilder<T> addAvailability(LocalDateTime start, LocalDateTime end);
 
-    void setPositions(List<TypesOfPositions> positions);
+    UserBuilder<T> setPositions(List<TypesOfPositions> positions);
 
-    void setOrganization(String organization);
+    UserBuilder<T> setOrganization(String organization);
 
     User getUser();
 

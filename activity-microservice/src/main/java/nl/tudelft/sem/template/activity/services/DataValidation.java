@@ -1,5 +1,10 @@
 package nl.tudelft.sem.template.activity.services;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
@@ -29,8 +34,8 @@ public class DataValidation {
      *
      * @return Url
      */
-    private String checkCertificateExistanceUrl() {
-        return rowingInfoMicroserviceAddress + "/check/certificates";
+    private String checkCertificateExistanceUrl(String certificate) {
+        return rowingInfoMicroserviceAddress + "/check/certificates/" + certificate;
     }
 
     /**
@@ -38,8 +43,8 @@ public class DataValidation {
      *
      * @return Url
      */
-    private String checkOrganisationExistanceUrl() {
-        return rowingInfoMicroserviceAddress + "/check/organisations";
+    private String checkOrganisationExistanceUrl(String organisation) {
+        return rowingInfoMicroserviceAddress + "/check/organisations/" + organisation;
     }
 
     /**
@@ -103,10 +108,16 @@ public class DataValidation {
      * @param authToken   authToken
      * @return boolean doesCertificateExist
      */
-    public boolean validateCertificate(String certificate, String authToken) throws InvalidCertificateException {
-        CertificatesRequestModel request = new CertificatesRequestModel(certificate, -1, "");
-        if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkCertificateExistanceUrl(),
-                HttpMethod.GET, authToken, request, boolean.class).getBody())) {
+    public boolean validateCertificate(String certificate, String authToken)
+            throws InvalidCertificateException, IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(checkCertificateExistanceUrl(certificate)))
+                .header("Authorization", authToken)
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
         } else {
             throw new InvalidCertificateException(certificate);
@@ -120,10 +131,16 @@ public class DataValidation {
      * @param authToken    authToken
      * @return boolean doesOrganisationExist
      */
-    public boolean validateOrganisation(String organisation, String authToken) throws InvalidOrganisationException {
-        OrganisationsRequestModel request = new OrganisationsRequestModel(organisation);
-        if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkOrganisationExistanceUrl(),
-                HttpMethod.GET, authToken, request, boolean.class).getBody())) {
+    public boolean validateOrganisation(String organisation, String authToken)
+            throws InvalidOrganisationException, IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(checkOrganisationExistanceUrl(organisation)))
+                .header("Authorization", authToken)
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
         } else {
             throw new InvalidOrganisationException(organisation);

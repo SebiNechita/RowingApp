@@ -10,6 +10,8 @@ import nl.tudelft.sem.template.activitymatch.domain.ActivityParticipant;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityJoinQueueRepository;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityMatchRepository;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityParticipantRepository;
+import nl.tudelft.sem.template.common.communication.ActivityOfferMicroserviceAdapter;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
@@ -25,6 +27,7 @@ public class ActivityMatchService {
     private final transient ActivityMatchRepository activityMatchRepository;
     private final transient ActivityJoinQueueRepository activityJoinQueueRepository;
     private final transient ActivityParticipantRepository activityParticipantRepository;
+    private final transient ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter;
 
     /**
      * Instantiates a new ActivityMatchService.
@@ -32,13 +35,16 @@ public class ActivityMatchService {
      * @param activityMatchRepository activityMatchRepository
      * @param activityJoinQueueRepository activityJoinQueueRepository
      * @param activityParticipantRepository activityParticipantRepository
+     * @param activityOfferMicroserviceAdapter activityOfferMicroserviceAdapter
      */
     public ActivityMatchService(ActivityMatchRepository activityMatchRepository,
                                 ActivityJoinQueueRepository activityJoinQueueRepository,
-                                ActivityParticipantRepository activityParticipantRepository) {
+                                ActivityParticipantRepository activityParticipantRepository,
+                                ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter) {
         this.activityMatchRepository = activityMatchRepository;
         this.activityJoinQueueRepository = activityJoinQueueRepository;
         this.activityParticipantRepository = activityParticipantRepository;
+        this.activityOfferMicroserviceAdapter = activityOfferMicroserviceAdapter;
     }
 
     /**
@@ -131,7 +137,7 @@ public class ActivityMatchService {
      * @param request the request wrapped in an AddUserToJoinQueueRequestModel
      * @throws ResponseStatusException when the activity does not exist.
      */
-    public void addUserToJoinQueue(AddUserToJoinQueueRequestModel request, String userNetId)
+    public void addUserToJoinQueue(AddUserToJoinQueueRequestModel request, String userNetId, String authToken)
             throws ResponseStatusException {
         int activityId = request.getActivityId();
         Optional<ActivityMatch> activityMatch = activityMatchRepository.findByActivityId(activityId);
@@ -139,6 +145,14 @@ public class ActivityMatchService {
         if (activityMatch.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     String.format("Activity %d was not found", activityId));
+        }
+
+        Boolean eligible = activityOfferMicroserviceAdapter.participantIsEligible(new ParticipantIsEligibleRequestModel(
+            activityId, userNetId
+        ), authToken).getBody();
+
+        if (!eligible) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You're not eligible to join this activity");
         }
 
         int activityMatchId = activityMatch.get().getId();
