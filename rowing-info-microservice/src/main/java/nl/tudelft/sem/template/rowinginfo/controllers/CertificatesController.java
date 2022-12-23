@@ -75,7 +75,6 @@ public class CertificatesController {
     public ResponseEntity<Boolean> checkCertificates(@PathVariable("certificateName") String certificateName)
             throws Exception {
         try {
-            System.out.println("agffs");
             return ResponseEntity.ok(certificatesService.checkCertificates(certificateName));
         } catch (Exception e) {
             System.out.println(e.getMessage());

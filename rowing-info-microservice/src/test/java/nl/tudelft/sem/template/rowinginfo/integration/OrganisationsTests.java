@@ -1,4 +1,4 @@
-package nl.tudelft.sem.template.rowinginfo.integration.utils;
+package nl.tudelft.sem.template.rowinginfo.integration;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,9 +82,7 @@ public class OrganisationsTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.serialize(requestModel))
                 .header("Authorization", "Bearer MockedToken"));
-        ResultActions resultActions2 = mockMvc.perform(get("/check/organisations")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.serialize(requestModel))
+        ResultActions resultActions2 = mockMvc.perform(get("/check/organisations/" + organisationsName)
                 .header("Authorization", "Bearer MockedToken"));
 
 

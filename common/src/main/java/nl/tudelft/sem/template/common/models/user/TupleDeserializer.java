@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TupleDeserializer extends StdDeserializer<Tuple<LocalDateTime, LocalDateTime>> {
 
-    static final long serialVersionUID = 1L;
+    static final long serialVersionUID = -3387516993124229948L;
 
     public TupleDeserializer() {
         this(null);
@@ -21,9 +21,8 @@ public class TupleDeserializer extends StdDeserializer<Tuple<LocalDateTime, Loca
     }
 
     @Override
-    public Tuple<LocalDateTime, LocalDateTime> deserialize(JsonParser jsonParser,
-                                                           DeserializationContext deserializationContext)
-            throws IOException {
+    public Tuple<LocalDateTime, LocalDateTime> deserialize(
+            JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String first = node.get("first").asText();
         String second = node.get("second").asText();

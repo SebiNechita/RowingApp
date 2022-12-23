@@ -22,7 +22,7 @@ public class UserMicroserviceAdapter {
      * Endpoint to get the UserId.
      *
      * @param authToken authToken
-     * @return ResponseEntity
+     * @return String
      */
     public ResponseEntity<String> getUserId(String authToken) {
         return HttpUtils.sendAuthorizedHttpRequest(getUserIdUrl(), HttpMethod.GET, authToken, "",

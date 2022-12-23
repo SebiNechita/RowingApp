@@ -43,8 +43,8 @@ public class DataValidation {
      *
      * @return Url
      */
-    private String checkOrganisationExistanceUrl() {
-        return rowingInfoMicroserviceAddress + "/check/organisations";
+    private String checkOrganisationExistanceUrl(String organisation) {
+        return rowingInfoMicroserviceAddress + "/check/organisations/" + organisation;
     }
 
     /**
@@ -110,7 +110,6 @@ public class DataValidation {
      */
     public boolean validateCertificate(String certificate, String authToken)
             throws InvalidCertificateException, IOException, InterruptedException {
-        //CertificatesRequestModel request = new CertificatesRequestModel(certificate, -1, "");
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(checkCertificateExistanceUrl(certificate)))
@@ -118,12 +117,6 @@ public class DataValidation {
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        /*if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkCertificateExistanceUrl(),
-                HttpMethod.GET, authToken, boolean.class).getBody())) {
-            return true;
-        } else {
-            throw new InvalidCertificateException(certificate);
-        }*/
         if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
         } else {
@@ -138,10 +131,16 @@ public class DataValidation {
      * @param authToken    authToken
      * @return boolean doesOrganisationExist
      */
-    public boolean validateOrganisation(String organisation, String authToken) throws InvalidOrganisationException {
-        OrganisationsRequestModel request = new OrganisationsRequestModel(organisation);
-        if (Boolean.TRUE.equals(HttpUtils.sendAuthorizedHttpRequest(checkOrganisationExistanceUrl(),
-                HttpMethod.GET, authToken, request, boolean.class).getBody())) {
+    public boolean validateOrganisation(String organisation, String authToken)
+            throws InvalidOrganisationException, IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(checkOrganisationExistanceUrl(organisation)))
+                .header("Authorization", authToken)
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (Boolean.TRUE.equals(Boolean.valueOf(response.body()))) {
             return true;
         } else {
             throw new InvalidOrganisationException(organisation);
