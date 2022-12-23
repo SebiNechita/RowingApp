@@ -8,13 +8,18 @@ import nl.tudelft.sem.template.rowinginfo.services.CertificatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class CertificatesController {
     private final transient CertificatesService certificatesService;
-    private final CertificatesRepository certificatesRepository;
+    private final transient CertificatesRepository certificatesRepository;
 
     /**
      * Instantiates a new CertificatesController.
@@ -40,8 +45,7 @@ public class CertificatesController {
         try {
             if (!certificatesService.adminPermission()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            }
-            else {
+            } else {
                 String certificateName = request.getCertificateName();
                 int certificateValue = request.getCertificateValue();
                 String description = request.getDescription();
@@ -65,8 +69,7 @@ public class CertificatesController {
         try {
             if (!certificatesService.adminPermission()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            }
-            else {
+            } else {
                 Certificates certificate = certificatesRepository.findById(certificateId).orElseThrow();
                 certificatesService.deleteCertificate(certificateId);
                 return ResponseEntity.ok(certificate.getCertificateName());

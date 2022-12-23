@@ -1,5 +1,8 @@
 package nl.tudelft.sem.template.rowinginfo.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.rowinginfo.repositories.OrganisationsRepository;
@@ -12,9 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

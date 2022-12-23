@@ -2,7 +2,6 @@ package nl.tudelft.sem.template.rowinginfo.services;
 
 import java.util.List;
 import java.util.Objects;
-
 import nl.tudelft.sem.template.rowinginfo.domain.Certificates;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.rowinginfo.repositories.CertificatesRepository;
@@ -25,9 +24,9 @@ public class CertificatesService {
     /**
      * Creates a new Certificates and adds it to database.
      *
-     * @param name            name
-     * @param value           value
-     * @param description     description
+     * @param name        name
+     * @param value       value
+     * @param description description
      * @throws Exception EmptyStringException
      */
     public void createCertificate(String name, int value, String description) throws Exception {
@@ -44,7 +43,7 @@ public class CertificatesService {
     }
 
     /**
-     * Verifies if the logged-in user is the admin
+     * Verifies if the logged-in user is the admin.
      */
     public boolean adminPermission() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {

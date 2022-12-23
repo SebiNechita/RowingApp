@@ -2,7 +2,6 @@ package nl.tudelft.sem.template.rowinginfo.services;
 
 import java.util.List;
 import java.util.Objects;
-
 import nl.tudelft.sem.template.rowinginfo.domain.Organisations;
 import nl.tudelft.sem.template.rowinginfo.domain.exceptions.EmptyStringException;
 import nl.tudelft.sem.template.rowinginfo.repositories.OrganisationsRepository;
@@ -25,7 +24,7 @@ public class OrganisationsService {
     /**
      * Creates a new Organisations and adds it to database.
      *
-     * @param name            name
+     * @param name name
      * @throws Exception EmptyStringException
      */
     public void createOrganisations(String name) throws Exception {
@@ -39,7 +38,7 @@ public class OrganisationsService {
     }
 
     /**
-     * Verifies if the logged-in user is the admin
+     * Verifies if the logged-in user is the admin.
      */
     public boolean adminPermission() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
