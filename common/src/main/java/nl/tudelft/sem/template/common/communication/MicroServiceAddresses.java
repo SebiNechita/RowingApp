@@ -7,5 +7,5 @@ public class MicroServiceAddresses {
     public static final String rowingInfoMicroservice     = hostname + ":8088";
     public static final String activityOfferMicroservice  = hostname + ":8083";
     public static final String activityMatchMicroservice  = hostname + ":8086";
-    public static final String userMicroservice           = hostname + ":8085";
+    public static final String userMicroservice           = hostname + ":8082";
 }
