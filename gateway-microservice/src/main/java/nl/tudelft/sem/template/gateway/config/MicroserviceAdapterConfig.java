@@ -27,6 +27,6 @@ public class MicroserviceAdapterConfig {
 
     @Bean
     ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter() {
-        return new ActivityOfferMicroserviceAdapter(MicroServiceAddresses.authenticationMicroservice);
+        return new ActivityOfferMicroserviceAdapter(MicroServiceAddresses.activityOfferMicroservice);
     }
 }
