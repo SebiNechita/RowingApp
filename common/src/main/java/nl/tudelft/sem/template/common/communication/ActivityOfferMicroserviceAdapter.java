@@ -72,8 +72,8 @@ public class ActivityOfferMicroserviceAdapter {
      *
      * @return Url
      */
-    private String getFilteredTrainingsForUserUrl() {
-        return activityOfferMicroserviceAddress + "/get/trainings/{netId}";
+    private String getFilteredTrainingsForUserUrl(NetId netId) {
+        return activityOfferMicroserviceAddress + "/get/trainings/" + netId;
     }
 
     /**
@@ -89,7 +89,7 @@ public class ActivityOfferMicroserviceAdapter {
     }
 
     public ResponseEntity<AvailableTrainingsModel> getFilteredTrainings(NetId netId, String authToken) {
-        return HttpUtils.sendAuthorizedHttpRequest(getFilteredTrainingsForUserUrl(), HttpMethod.GET, authToken, netId,
+        return HttpUtils.sendAuthorizedHttpRequest(getFilteredTrainingsForUserUrl(netId), HttpMethod.GET, authToken, netId,
                 AvailableTrainingsModel.class);
     }
 
