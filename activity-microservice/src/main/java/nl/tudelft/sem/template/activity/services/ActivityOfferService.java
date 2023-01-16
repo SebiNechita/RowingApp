@@ -1,7 +1,9 @@
 package nl.tudelft.sem.template.activity.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -39,7 +41,6 @@ public class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
     private final transient DataValidation dataValidation;
-
 
 
     /**
@@ -234,40 +235,11 @@ public class ActivityOfferService {
      */
     public List<ActivityOffer> getFilteredTrainings(NetId netId, String authToken) throws Exception {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/user/get/details/" + netId))
-                    .header("Authorization", authToken)
-                    .build();
-            HttpResponse<String> response = httpClient.send(request,
-                    HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = getUserDetails("http://localhost:8082/user/get/details/" + netId, authToken);
 
             // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
-                // Parse the response body
-                ObjectMapper mapper = new ObjectMapper();
-
-                SimpleModule module = new SimpleModule();
-                module.addDeserializer(TypesOfPositions.class, new TypesOfPositionsDeserializer());
-                module.addDeserializer(Tuple.class, new TupleDeserializer());
-                mapper.registerModule(module);
-
-                UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
-                List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
-
-                List<ActivityOffer> offers = activityOfferRepository.findAll();
-                List<ActivityOffer> filteredOffers = new ArrayList<>();
-
-                for (ActivityOffer offer : offers) {
-                    for (Tuple<LocalDateTime, LocalDateTime> availability : availabilities) {
-                        if (!offer.getStartTime().isBefore(availability.getFirst())
-                                && !offer.getEndTime().isAfter(availability.getSecond())) {
-                            filteredOffers.add(offer);
-                        }
-                    }
-                }
-                System.out.println(availabilities);
-                return filteredOffers;
+                return parseResponseAndFilter(response);
             } else {
                 return List.of();
             }
@@ -275,6 +247,61 @@ public class ActivityOfferService {
             System.out.println("Exception in the service for getting filtered training offers");
             throw new Exception("Error while filtering the training offers. " + e.getMessage());
         }
+    }
+
+    /**
+     * Send request to the User microservice to get the user details.
+     *
+     * @param netId     netId
+     * @param authToken authToken
+     * @return HttpResponse         HttpResponse
+     * @throws IOException          exception
+     * @throws InterruptedException exceptions
+     */
+    private static HttpResponse<String> getUserDetails(String netId, String authToken)
+            throws IOException, InterruptedException {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(netId))
+                .header("Authorization", authToken)
+                .build();
+        HttpResponse<String> response = httpClient.send(request,
+                HttpResponse.BodyHandlers.ofString());
+        return response;
+    }
+
+    /**
+     * Parse the retrieved response and filter offers that match the user detials.
+     *
+     * @param response user details
+     * @return list of ActivityOffers (Trainings)
+     * @throws JsonProcessingException exception
+     */
+    private List<ActivityOffer> parseResponseAndFilter(HttpResponse<String> response) throws JsonProcessingException {
+        // Parse the response body
+        ObjectMapper mapper = new ObjectMapper();
+
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(TypesOfPositions.class, new TypesOfPositionsDeserializer());
+        module.addDeserializer(Tuple.class, new TupleDeserializer());
+        mapper.registerModule(module);
+
+        UserDetailsModel model = mapper.readValue(response.body(), UserDetailsModel.class);
+        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = model.getAvailabilities();
+
+        List<ActivityOffer> offers = activityOfferRepository.findAll();
+        List<ActivityOffer> filteredOffers = new ArrayList<>();
+
+        for (ActivityOffer offer : offers) {
+            for (Tuple<LocalDateTime, LocalDateTime> availability : availabilities) {
+                if (!offer.getStartTime().isBefore(availability.getFirst())
+                        && !offer.getEndTime().isAfter(availability.getSecond())) {
+                    filteredOffers.add(offer);
+                }
+            }
+        }
+        System.out.println(availabilities);
+        return filteredOffers;
     }
 
 
@@ -297,14 +324,7 @@ public class ActivityOfferService {
 
             // TODO(iannis): Retrieve certificates, gender, rank & organisation from user microservice.
             //               Return false if any of these don't match the activity offer requirements.
-            HttpClient httpClient = HttpClient.newHttpClient();
-
-            HttpRequest request2 = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8082/user/get/details/" + request.getParticipantNetid()))
-                    .header("Authorization", authToken)
-                    .build();
-            HttpResponse<String> response = httpClient.send(request2,
-                    HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = getUserDetails("http://localhost:8082/user/get/details/" + request.getParticipantNetid(), authToken);
             // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
                 // Parse the response body
