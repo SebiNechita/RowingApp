@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ActivityMatchCreationController extends ActivityMatchController {
 
     /**
-     * Instantiates a new ActivityMatchController.
+     * Instantiates a new ActivityMatchCreationController.
      *
      * @param activityMatchService activityMatchService
      */
