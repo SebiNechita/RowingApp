@@ -99,49 +99,6 @@ public abstract class ActivityOfferService {
         System.out.println("Competition " + competition.toString() + " has been added to the database");
     }
 
-    /**
-     * Creates a multiple TrainingOffers and adds them to database.
-     *
-     * @param positions       positions
-     * @param isActive        isActive
-     * @param startTime       startTime
-     * @param endTime         endTime
-     * @param ownerId         ownerId
-     * @param boatCertificate boatCertificate
-     * @param type            type
-     * @param name            name
-     * @param description     description
-     * @throws Exception exception
-     */
-    public void createManyTrainingOffers(Map<TypesOfPositions, Integer> positions,
-                                         boolean isActive,
-                                         LocalDateTime startTime,
-                                         LocalDateTime endTime,
-                                         String ownerId,
-                                         String boatCertificate,
-                                         TypesOfActivities type,
-                                         String name,
-                                         String description,
-                                         String authToken) throws Exception {
-        try {
-
-            for (TypesOfPositions position : positions.keySet()) {
-                int amountToCreate = positions.get(position);
-                for (int i = 0; i < amountToCreate; i++) {
-                    TrainingOffer training = setTrainingParameters(position, isActive,
-                            startTime, endTime,
-                            ownerId, boatCertificate,
-                            type, name, description);
-                    dataValidation.validateData(startTime, endTime, name, description, boatCertificate, authToken);
-                    activityOfferRepository.save(training);
-                    System.out.println("Training " + training + " has been added to the database");
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Exception in the service for creating multiple training offers");
-            throw new Exception("Error while creating many ActivityOffer. " + e.getMessage());
-        }
-    }
 
     /**
      * Creates a training from given parameters.
