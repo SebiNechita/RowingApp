@@ -1,12 +1,11 @@
 package nl.tudelft.sem.template.activity.services;
 
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ActivityClient {

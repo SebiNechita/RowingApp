@@ -1,12 +1,13 @@
 package nl.tudelft.sem.template.activity.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
-import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
-import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
-import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
@@ -15,15 +16,11 @@ import nl.tudelft.sem.template.common.models.user.NetId;
 import nl.tudelft.sem.template.common.models.user.Tuple;
 import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.net.http.HttpResponse;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-public class TrainingOfferService extends ActivityOfferService{
+@Service
+public class TrainingOfferService extends ActivityOfferService {
 
     public TrainingOfferService(ActivityOfferRepository activityOfferRepository,
                                 DataValidation dataValidation,
@@ -100,7 +97,8 @@ public class TrainingOfferService extends ActivityOfferService{
                             startTime, endTime,
                             ownerId, boatCertificate,
                             type, name, description);
-                    super.getDataValidation().validateData(startTime, endTime, name, description, boatCertificate, authToken);
+                    super.getDataValidation()
+                            .validateData(startTime, endTime, name, description, boatCertificate, authToken);
                     super.getActivityOfferRepository().save(training);
                     System.out.println("Training " + training + " has been added to the database");
                 }

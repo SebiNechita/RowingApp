@@ -1,17 +1,22 @@
 package nl.tudelft.sem.template.activity.services;
 
-import nl.tudelft.sem.template.activity.domain.ActivityOffer;
-import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
-import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
-import nl.tudelft.sem.template.common.models.activity.*;
-import nl.tudelft.sem.template.common.models.user.Tuple;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import nl.tudelft.sem.template.activity.domain.ActivityOffer;
+import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
+import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
+import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
+import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
+import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
+import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
+import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
+import nl.tudelft.sem.template.common.models.user.Tuple;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-public class CompetitionOfferService extends ActivityOfferService{
+@Service
+public class CompetitionOfferService extends ActivityOfferService {
 
     public CompetitionOfferService(ActivityOfferRepository activityOfferRepository,
                                    DataValidation dataValidation,

@@ -6,19 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class ActivityOfferController {
-    protected final transient ActivityOfferService activityOfferService;
     protected final transient UserMicroserviceAdapter userMicroserviceAdapter;
     static final Logger logger = LoggerFactory.getLogger(ActivityOfferController.class.getName());
 
     /**
      * Constructor for an ActivityOfferController.
      *
-     * @param activityOfferService    activityOfferService
      * @param userMicroserviceAdapter userMicroserviceAdapter
      */
-    public ActivityOfferController(ActivityOfferService activityOfferService,
-                                   UserMicroserviceAdapter userMicroserviceAdapter) {
-        this.activityOfferService = activityOfferService;
+    public ActivityOfferController(UserMicroserviceAdapter userMicroserviceAdapter) {
         this.userMicroserviceAdapter = userMicroserviceAdapter;
     }
 }

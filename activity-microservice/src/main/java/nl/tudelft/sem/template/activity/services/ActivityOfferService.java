@@ -36,7 +36,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-@Service
 public class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
@@ -83,7 +82,7 @@ public class ActivityOfferService {
             // Check if the request was successful
             if (response.statusCode() == HttpStatus.OK.value()) {
 
-               UserDetailsModel model = userModelParser.getModel(response);
+                UserDetailsModel model = userModelParser.getModel(response);
 
                 List<CompetitionOffer> offers = activityOfferRepository.findAll().stream()
                         .filter(offer -> offer instanceof CompetitionOffer)

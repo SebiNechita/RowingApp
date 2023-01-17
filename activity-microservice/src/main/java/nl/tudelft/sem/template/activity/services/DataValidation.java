@@ -66,8 +66,7 @@ public class DataValidation {
             boolean isNameDescriptionOk = validateNameAndDescription(name, description);
             boolean isCertificateOk = validateCertificate(certificate, authToken);
             return isTimeOk && isNameDescriptionOk && isCertificateOk;
-        }
-        catch (NotCorrectIntervalException interEx) {
+        } catch (NotCorrectIntervalException interEx) {
             System.err.println("Not a correct interval");
         } catch (EmptyStringException strEx) {
             System.err.println("Empty string was provided");

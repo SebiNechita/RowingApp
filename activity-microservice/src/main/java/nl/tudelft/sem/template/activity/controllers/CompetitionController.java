@@ -3,7 +3,7 @@ package nl.tudelft.sem.template.activity.controllers;
 import java.time.LocalDateTime;
 import java.util.List;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
-import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.activity.services.CompetitionOfferService;
 import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
 import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
 import nl.tudelft.sem.template.common.models.activity.CompetitionCreationRequestModel;
@@ -27,16 +27,18 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class CompetitionController extends ActivityOfferController {
 
+    private final transient CompetitionOfferService competitionOfferService;
+
     /**
      * Instantiates a new Competition Controller.
      *
-     * @param activityOfferService    activityOfferService
      * @param userMicroserviceAdapter userMicroserviceAdapter
      */
     @Autowired
-    public CompetitionController(ActivityOfferService activityOfferService,
+    public CompetitionController(CompetitionOfferService competitionOfferService,
                                  UserMicroserviceAdapter userMicroserviceAdapter) {
-        super(activityOfferService, userMicroserviceAdapter);
+        super(userMicroserviceAdapter);
+        this.competitionOfferService = competitionOfferService;
     }
 
     /**
@@ -64,7 +66,7 @@ public class CompetitionController extends ActivityOfferController {
             boolean isFemale = request.isFemale();
             boolean isPro = request.isPro();
 
-            activityOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
+            competitionOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
                     ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -85,7 +87,7 @@ public class CompetitionController extends ActivityOfferController {
                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
             throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityOfferService.participantIsEligible(request, authToken));
+            return ResponseEntity.ok(competitionOfferService.participantIsEligible(request, authToken));
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
@@ -101,7 +103,7 @@ public class CompetitionController extends ActivityOfferController {
     @GetMapping("/get/competitions")
     public ResponseEntity<List<ActivityOffer>> getCompetition() throws Exception {
         try {
-            return ResponseEntity.ok(activityOfferService.getAllCompetitionOffers());
+            return ResponseEntity.ok(competitionOfferService.getAllCompetitionOffers());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -129,7 +131,7 @@ public class CompetitionController extends ActivityOfferController {
             List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
             List<String> certificates = request.getCertificates();
 
-            return ResponseEntity.ok(super.activityOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
+            return ResponseEntity.ok(competitionOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
                     certificates, positions, availabilities));
         } catch (Exception e) {
             logger.error(e.getMessage());
