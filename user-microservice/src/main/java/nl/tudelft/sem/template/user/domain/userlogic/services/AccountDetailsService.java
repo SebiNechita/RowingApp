@@ -76,18 +76,19 @@ public class AccountDetailsService {
                                          List<String> certificates,
                                          String organization) throws Exception {
 
-        boolean uniqueId = checkNetIdIsUnique(netId);
-        if (!uniqueId) {
-            throw new NetIdAlreadyInUseException(netId);
-        }
-        boolean availabilitiesOverlap = Availability.overlap(availabilities);
-        if (availabilitiesOverlap) {
-            throw new AvailabilityOverlapException();
-        }
+        dataValidation(netId, availabilities);
+        AmateurUser user = setupAmateurUser(netId, password, gender, positions, availabilities, certificates, organization);
+
+        System.out.println("Added " + userPositionRepository.findAllByNetId(netId).size());
+        return user;
+    }
+
+    private AmateurUser setupAmateurUser(NetId netId, Password password, Gender gender, List<TypesOfPositions> positions, TreeMap<LocalDateTime, LocalDateTime> availabilities, List<String> certificates, String organization) {
+        AmateurBuilder builder = new AmateurBuilder();
+
         // Hash password
         HashedPassword hashedPassword = passwordHashingService.hash(password);
         // Create new account
-        AmateurBuilder builder = new AmateurBuilder();
         builder.setNetId(netId)
                 .setPassword(hashedPassword)
                 .setGender(gender)
@@ -95,20 +96,46 @@ public class AccountDetailsService {
                 .setAvailabilities(availabilities)
                 .setPositions(positions)
                 .setOrganization(organization);
+
         AmateurUser user = builder.getUser();
+
         userRepository.save(user);
+        saveAllProperties(builder);
+        return user;
+    }
 
-        List<Availability> availabilitiesParsed = builder.getAvailabilities();
-        availabilityRepository.saveAll(availabilitiesParsed);
+    private void dataValidation(NetId netId, TreeMap<LocalDateTime, LocalDateTime> availabilities)
+            throws NetIdAlreadyInUseException, AvailabilityOverlapException {
+        boolean uniqueId = checkNetIdIsUnique(netId);
+        boolean availabilitiesOverlap = Availability.overlap(availabilities);
 
-        Set<UserCertificate> userCertificates = builder.getCertificates();
-        userCertificatesRepository.saveAll(userCertificates);
+        if (!uniqueId) {
+            throw new NetIdAlreadyInUseException(netId);
+        }
+        if (availabilitiesOverlap) {
+            throw new AvailabilityOverlapException();
+        }
+    }
 
+    private void saveAllProperties(AmateurBuilder builder) {
+        saveAvailabilities(builder);
+        saveCertificates(builder);
+        savePositions(builder);
+    }
+
+    private void savePositions(AmateurBuilder builder) {
         List<PositionEntity> positionsEntities = builder.getPositions();
         userPositionRepository.saveAll(positionsEntities);
+    }
 
-        System.out.println("Added " + userPositionRepository.findAllByNetId(netId).size());
-        return user;
+    private void saveCertificates(AmateurBuilder builder) {
+        Set<UserCertificate> userCertificates = builder.getCertificates();
+        userCertificatesRepository.saveAll(userCertificates);
+    }
+
+    private void saveAvailabilities(AmateurBuilder builder) {
+        List<Availability> availabilitiesParsed = builder.getAvailabilities();
+        availabilityRepository.saveAll(availabilitiesParsed);
     }
 
     /**
