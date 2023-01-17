@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class ActivityOfferService {
+public abstract class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
     private final transient DataValidation dataValidation;
@@ -56,47 +56,7 @@ public class ActivityOfferService {
     }
 
 
-    /**
-     * Creates a new TrainingOffer and adds it to database.
-     *
-     * @param position        position
-     * @param isActive        isActive
-     * @param startTime       startTime
-     * @param endTime         endTime
-     * @param ownerId         ownerId
-     * @param boatCertificate boatCertificate
-     * @param type            type
-     * @param name            name
-     * @param description     description
-     * @throws Exception EmptyStringException
-     */
-    public void createTrainingOffer(TypesOfPositions position,
-                                    boolean isActive,
-                                    LocalDateTime startTime,
-                                    LocalDateTime endTime,
-                                    String ownerId,
-                                    String boatCertificate,
-                                    TypesOfActivities type,
-                                    String name,
-                                    String description,
-                                    String authToken) throws Exception {
 
-        try {
-            dataValidation.validateData(startTime, endTime, name, description, boatCertificate, authToken);
-        } catch (NotCorrectIntervalException interEx) {
-            throw new NotCorrectIntervalException(interEx.getMessage());
-        } catch (EmptyStringException strEx) {
-            throw new EmptyStringException(strEx.getMessage());
-        } catch (InvalidCertificateException certEx) {
-            throw new InvalidCertificateException(boatCertificate);
-        }
-
-        TrainingOffer training = new TrainingOffer(position, isActive, startTime, endTime,
-                ownerId, boatCertificate, type, name, description);
-
-        activityOfferRepository.save(training);
-        System.out.println("Training " + training.toString() + " has been added to the database");
-    }
 
     /**
      * Creates a new CompetitionOffer and adds it to database.
@@ -440,5 +400,11 @@ public class ActivityOfferService {
 
     }
 
+    public DataValidation getDataValidation() {
+        return dataValidation;
+    }
 
+    public ActivityOfferRepository getActivityOfferRepository() {
+        return activityOfferRepository;
+    }
 }
