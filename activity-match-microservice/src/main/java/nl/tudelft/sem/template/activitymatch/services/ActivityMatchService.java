@@ -74,10 +74,7 @@ public class ActivityMatchService {
         int activityId = request.getActivityId();
         Optional<ActivityMatch> activityMatch = activityMatchRepository.findByActivityId(activityId);
 
-        if (activityMatch.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("Activity %d was not found", request.getActivityId()));
-        }
+        checkActivityMatch(activityMatch, request.getActivityId());
 
         int activityMatchId = activityMatch.get().getId();
         Optional<List<ActivityJoinQueueEntry>> activityJoinQueue = activityJoinQueueRepository
@@ -94,25 +91,28 @@ public class ActivityMatchService {
     }
 
     /**
-     * Sets the participant of a given activity by its activity ID.
+     * Checks activity match if activity is empty.
      *
-     * @param request the request wrapped in a SetParticipantRequestModel.
-     * @throw ResponseStatusException when the given activity ID does not exist, or the caller of the endpoint is not
-     *                                the owner of the activity.
+     * @param activityMatch activityMatch.
+     * @param id activityId.
+     * @throws ResponseStatusException when the given activity ID does not exist.
      */
-    public void setParticipant(SetParticipantRequestModel request, String ownerNetId) throws ResponseStatusException {
-        int activityId = request.getActivityId();
-        Optional<ActivityMatch> activityMatch = activityMatchRepository.findByActivityId(activityId);
-
+    public void checkActivityMatch(Optional<ActivityMatch> activityMatch, int id) throws ResponseStatusException {
         if (activityMatch.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("Activity %d was not found", request.getActivityId()));
+                    String.format("Activity %d was not found", id));
         }
+    }
 
-        if (!activityMatch.get().getOwnerId().equals(ownerNetId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You're not the owner of this activity");
-        }
-
+    /**
+     * Checks if participant is eligible.
+     *
+     * @param activityMatch activityMatch.
+     * @param participantId participantId.
+     * @throws ResponseStatusException when the given activity ID does not exist.
+     */
+    public void invalidParticipant(Optional<ActivityMatch> activityMatch, String participantId)
+            throws ResponseStatusException {
         int activityMatchId = activityMatch.get().getId();
 
         Optional<List<ActivityJoinQueueEntry>> activityJoinQueue = activityJoinQueueRepository
@@ -123,12 +123,30 @@ public class ActivityMatchService {
         }
 
         if (activityJoinQueue.get().stream()
-                .noneMatch(entry -> entry.getEnrolledUserNetId().equals(request.getParticipantNetId()))) {
+                .noneMatch(entry -> entry.getEnrolledUserNetId().equals(participantId))) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "The selected user was not found in the join queue of this activity");
         }
+    }
 
-        activityParticipantRepository.save(new ActivityParticipant(activityMatchId, request.getParticipantNetId()));
+    /**
+     * Sets the participant of a given activity by its activity ID.
+     *
+     * @param request the request wrapped in a SetParticipantRequestModel.
+     * @throw ResponseStatusException when the given activity ID does not exist, or the caller of the endpoint is not
+     *                                the owner of the activity.
+     */
+    public void setParticipant(SetParticipantRequestModel request, String ownerNetId)
+            throws ResponseStatusException {
+        int activityId = request.getActivityId();
+        String participantId = request.getParticipantNetId();
+        Optional<ActivityMatch> activityMatch = activityMatchRepository.findByActivityId(activityId);
+
+        checkActivityMatch(activityMatch, activityId);
+
+        invalidParticipant(activityMatch, participantId);
+
+        activityParticipantRepository.save(new ActivityParticipant(activityMatch.get().getId(), participantId));
     }
 
     /**
@@ -142,10 +160,7 @@ public class ActivityMatchService {
         int activityId = request.getActivityId();
         Optional<ActivityMatch> activityMatch = activityMatchRepository.findByActivityId(activityId);
 
-        if (activityMatch.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("Activity %d was not found", activityId));
-        }
+        checkActivityMatch(activityMatch, activityId);
 
         Boolean eligible = activityOfferMicroserviceAdapter.participantIsEligible(new ParticipantIsEligibleRequestModel(
             activityId, userNetId
