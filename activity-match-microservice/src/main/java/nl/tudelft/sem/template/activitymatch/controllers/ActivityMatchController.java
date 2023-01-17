@@ -3,7 +3,6 @@ package nl.tudelft.sem.template.activitymatch.controllers;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ActivityMatchController {
     protected final transient ActivityMatchService activityMatchService;
@@ -14,7 +13,6 @@ public abstract class ActivityMatchController {
      *
      * @param activityMatchService activityMatchService
      */
-    @Autowired
     public ActivityMatchController(ActivityMatchService activityMatchService) {
         this.activityMatchService = activityMatchService;
     }
