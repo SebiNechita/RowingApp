@@ -1,5 +1,7 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
@@ -20,10 +22,14 @@ public class ActivityMatchJoiningController extends ActivityMatchController {
      * Instantiates a new ActivityMatchJoiningController.
      *
      * @param activityMatchService activityMatchService
+     * @param activityMatchCreationService activityMatchCreationService
+     * @param activityMatchJoiningService activityMatchJoiningService
      */
     @Autowired
-    public ActivityMatchJoiningController(ActivityMatchService activityMatchService) {
-        super(activityMatchService);
+    public ActivityMatchJoiningController(ActivityMatchService activityMatchService,
+                                          ActivityMatchCreationService activityMatchCreationService,
+                                          ActivityMatchJoiningService activityMatchJoiningService) {
+        super(activityMatchService, activityMatchCreationService, activityMatchJoiningService);
     }
 
     /**
@@ -38,7 +44,7 @@ public class ActivityMatchJoiningController extends ActivityMatchController {
             throws ResponseStatusException {
         try {
             String ownerNetId = SecurityContextHolder.getContext().getAuthentication().getName();
-            activityMatchService.setParticipant(request, ownerNetId);
+            activityMatchJoiningService.setParticipant(request);
             return ResponseEntity.ok("Successfully set participant");
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
@@ -59,7 +65,7 @@ public class ActivityMatchJoiningController extends ActivityMatchController {
             throws ResponseStatusException {
         try {
             String userNetId = SecurityContextHolder.getContext().getAuthentication().getName();
-            activityMatchService.addUserToJoinQueue(request, userNetId, authToken);
+            activityMatchJoiningService.addUserToJoinQueue(request, userNetId, authToken);
             return ResponseEntity.ok("Successfully added participant to activity");
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());

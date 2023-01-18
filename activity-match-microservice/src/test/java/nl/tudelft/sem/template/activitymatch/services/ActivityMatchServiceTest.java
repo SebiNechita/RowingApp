@@ -8,7 +8,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityJoinQueueEntry;
@@ -28,7 +27,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +41,8 @@ import org.springframework.web.server.ResponseStatusException;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ActivityMatchServiceTest {
 
-    private ActivityMatchService activityMatchService;
+    private ActivityMatchCreationService activityMatchCreationService;
+    private ActivityMatchJoiningService activityMatchJoiningService;
     @Mock
     private ActivityMatchRepository activityMatchRepository;
     @Mock
@@ -55,7 +54,9 @@ public class ActivityMatchServiceTest {
 
     @BeforeEach
     void setup() {
-        this.activityMatchService = new ActivityMatchService(activityMatchRepository,
+        this.activityMatchCreationService = new ActivityMatchCreationService(activityMatchRepository,
+                activityJoinQueueRepository);
+        this.activityMatchJoiningService = new ActivityMatchJoiningService(activityMatchRepository,
                 activityJoinQueueRepository, activityParticipantRepository, activityOfferMicroserviceAdapter);
     }
 
@@ -67,7 +68,7 @@ public class ActivityMatchServiceTest {
         TypesOfActivities type = TypesOfActivities.TRAINING;
         MatchCreationRequestModel req = new MatchCreationRequestModel(ownerId, activityId, userId, type);
 
-        activityMatchService.createActivityMatch(req);
+        activityMatchCreationService.createActivityMatch(req);
 
         when(activityMatchRepository.findById(1)).thenReturn(Optional.of(new ActivityMatch(
                 req.getOwnerId(),
@@ -92,7 +93,7 @@ public class ActivityMatchServiceTest {
         when(activityMatchRepository.findByActivityId(activityId)).thenReturn(Optional.empty());
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.getPendingOffers(req));
+                () -> activityMatchCreationService.getPendingOffers(req));
 
         assertThat(exc.getStatus().equals(HttpStatus.NOT_FOUND));
     }
@@ -107,7 +108,7 @@ public class ActivityMatchServiceTest {
 
         when(activityMatchRepository.findByActivityId(activityId)).thenReturn(Optional.of(activityMatch));
 
-        PendingOffersResponseModel res = activityMatchService.getPendingOffers(req);
+        PendingOffersResponseModel res = activityMatchCreationService.getPendingOffers(req);
 
         assertThat(res.getJoinRequests().isEmpty());
     }
@@ -127,7 +128,7 @@ public class ActivityMatchServiceTest {
                         new ActivityJoinQueueEntry(activityMatch.getId(), "Shrek")
                 )));
 
-        PendingOffersResponseModel res = activityMatchService.getPendingOffers(req);
+        PendingOffersResponseModel res = activityMatchCreationService.getPendingOffers(req);
 
         assertThat(res.getJoinRequests().containsAll(List.of("Rick Astley", "Shrek")));
     }
@@ -141,7 +142,7 @@ public class ActivityMatchServiceTest {
         when(activityMatchRepository.findByActivityId(activityId)).thenReturn(Optional.empty());
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.setParticipant(req, userId));
+                () -> activityMatchJoiningService.setParticipant(req));
 
         assertThat(exc.getStatus().equals(HttpStatus.NOT_FOUND));
 
@@ -160,7 +161,7 @@ public class ActivityMatchServiceTest {
         when(activityMatchRepository.findByActivityId(activityId)).thenReturn(Optional.of(activityMatch));
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.setParticipant(req, userId));
+                () -> activityMatchJoiningService.setParticipant(req));
 
         assertThat(exc.getStatus().equals(HttpStatus.UNAUTHORIZED));
 
@@ -181,7 +182,7 @@ public class ActivityMatchServiceTest {
                 .thenReturn(Optional.empty());
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.setParticipant(req, userId));
+                () -> activityMatchJoiningService.setParticipant(req));
 
         assertThat(exc.getStatus().equals(HttpStatus.NOT_FOUND));
 
@@ -205,7 +206,7 @@ public class ActivityMatchServiceTest {
                 )));
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.setParticipant(req, userId));
+                () -> activityMatchJoiningService.setParticipant(req));
 
         assertThat(exc.getStatus().equals(HttpStatus.NOT_FOUND));
 
@@ -228,7 +229,7 @@ public class ActivityMatchServiceTest {
                         new ActivityJoinQueueEntry(activityMatch.getId(), "Luigi")
                 )));
 
-        activityMatchService.setParticipant(req, userId);
+        activityMatchJoiningService.setParticipant(req);
 
         verify(activityParticipantRepository, times(1))
                 .save(new ActivityParticipant(activityMatch.getId(), userId));
@@ -243,7 +244,7 @@ public class ActivityMatchServiceTest {
         when(activityMatchRepository.findByActivityId(activityId)).thenReturn(Optional.empty());
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.addUserToJoinQueue(req, userId, "mock-token"));
+                () -> activityMatchJoiningService.addUserToJoinQueue(req, userId, "mock-token"));
 
         assertThat(exc.getStatus().equals(HttpStatus.NOT_FOUND));
 
@@ -263,7 +264,7 @@ public class ActivityMatchServiceTest {
         when(activityOfferMicroserviceAdapter.participantIsEligible(any(), any())).thenReturn(ResponseEntity.ok(false));
 
         ResponseStatusException exc = assertThrows(ResponseStatusException.class,
-                () -> activityMatchService.addUserToJoinQueue(req, userId, "mock-token"));
+                () -> activityMatchJoiningService.addUserToJoinQueue(req, userId, "mock-token"));
 
         assertThat(exc.getStatus().equals(HttpStatus.FORBIDDEN));
 
@@ -282,7 +283,7 @@ public class ActivityMatchServiceTest {
         when(activityMatchRepository.findByActivityId(activityId)).thenReturn(Optional.of(activityMatch));
         when(activityOfferMicroserviceAdapter.participantIsEligible(any(), any())).thenReturn(ResponseEntity.ok(true));
 
-        activityMatchService.addUserToJoinQueue(req, userId, "mock-token");
+        activityMatchJoiningService.addUserToJoinQueue(req, userId, "mock-token");
 
         verify(activityJoinQueueRepository, times(1))
                 .save(new ActivityJoinQueueEntry(activityMatch.getId(), userId));

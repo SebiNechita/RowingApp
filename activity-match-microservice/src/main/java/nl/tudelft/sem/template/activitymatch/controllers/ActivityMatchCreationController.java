@@ -1,6 +1,7 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
@@ -18,10 +19,12 @@ public class ActivityMatchCreationController extends ActivityMatchController {
      * Instantiates a new ActivityMatchCreationController.
      *
      * @param activityMatchService activityMatchService
+     * @param activityMatchCreationService matchCreationService
      */
     @Autowired
-    public ActivityMatchCreationController(ActivityMatchService activityMatchService) {
-        super(activityMatchService);
+    public ActivityMatchCreationController(ActivityMatchService activityMatchService,
+                                           ActivityMatchCreationService activityMatchCreationService) {
+        super(activityMatchService, activityMatchCreationService);
     }
 
     /**
@@ -35,7 +38,7 @@ public class ActivityMatchCreationController extends ActivityMatchController {
     public ResponseEntity createActivityMatch(@RequestBody MatchCreationRequestModel request)
             throws ResponseStatusException {
         try {
-            activityMatchService.createActivityMatch(request);
+            activityMatchCreationService.createActivityMatch(request);
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
@@ -54,7 +57,7 @@ public class ActivityMatchCreationController extends ActivityMatchController {
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(@RequestBody PendingOffersRequestModel request)
             throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityMatchService.getPendingOffers(request));
+            return ResponseEntity.ok(activityMatchCreationService.getPendingOffers(request));
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
