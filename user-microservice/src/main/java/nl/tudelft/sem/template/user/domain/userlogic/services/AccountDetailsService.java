@@ -147,47 +147,77 @@ public class AccountDetailsService {
      */
     public UserDetailsModel getAccountDetails(NetId netId) throws Exception {
 
-        Optional<User> userOptional = userRepository.findByNetId(netId);
-        if (userOptional.isEmpty()) {
-            throw new NetIdNotFoundException();
-        }
-        User user = userOptional.get();
+        User user = getUser(netId);
         String netIdString = user.getNetId().toString();
         String gender = user.getGender().toString().toUpperCase(Locale.ENGLISH);
         String organisation = user.getOrganization();
         boolean isPro = !user.getClass().getSimpleName().equals("AmateurUser");
-        List<TypesOfPositions> positions = userPositionRepository.findAllByNetId(netId)
-                .stream()
-                .map(PositionEntity::getPosition)
-                .collect(Collectors.toList());
+        List<TypesOfPositions> positions = getTypesOfPositions(netId);
         System.out.println(positions);
-        List<String> certificates = userCertificatesRepository.findAllByNetId(netId)
-                .stream()
-                .map(UserCertificate::getCertificate)
-                .collect(Collectors.toList());
-        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = availabilityRepository.findAllByNetId(netId)
-                .stream()
-                .map(x -> new Tuple<>(x.getStart(), x.getEnd()))
-                .collect(Collectors.toList());
-
-        //        GetUserDetailsModel model = new GetUserDetailsModel();
-        //        model.setNetId(netId.toString());
-        //        model.setUserType(user.get().getClass().getSimpleName());
-        //        model.setOrganization(user.get().getOrganization());
-        //        model.setGender(user.get().getGender().getGender());
-        //        List<String> availabilities = availabilityRepository.findAllByNetId(netId)
-        //          .stream().map(Availability::toString).collect(Collectors.toList());
-        //        List<String> certificates = userCertificatesRepository.findAllByNetId(netId)
-        //          .stream().map(UserCertificate::toString).collect(Collectors.toList());
-        //        List<String> positions = userPositionRepository.findAllByNetId(netId)
-        //          .stream().map(PositionEntity::toString).collect(Collectors.toList());
-        //        model.setAvailabilities(availabilities);
-        //        model.setCertificates(certificates);
+        List<String> certificates = getCertificates(netId);
+        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = getAvailabilities(netId);
 
         UserDetailsModel userModel = new UserDetailsModel(netIdString, gender, organisation,
                 isPro, positions, availabilities, certificates);
 
         return userModel;
+    }
+
+    /**
+     * Gets the availabilities.
+     *
+     * @param netId netID
+     * @return list of availabilities
+     */
+    private List<Tuple<LocalDateTime, LocalDateTime>> getAvailabilities(NetId netId) {
+        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = availabilityRepository.findAllByNetId(netId)
+                .stream()
+                .map(x -> new Tuple<>(x.getStart(), x.getEnd()))
+                .collect(Collectors.toList());
+        return availabilities;
+    }
+
+    /**
+     * Gets the certificates.
+     *
+     * @param netId netID
+     * @return list of certificates
+     */
+    private List<String> getCertificates(NetId netId) {
+        List<String> certificates = userCertificatesRepository.findAllByNetId(netId)
+                .stream()
+                .map(UserCertificate::getCertificate)
+                .collect(Collectors.toList());
+        return certificates;
+    }
+
+    /**
+     * Gets the positions.
+     * @param netId netID
+     * @return list of positions
+     */
+    private List<TypesOfPositions> getTypesOfPositions(NetId netId) {
+        List<TypesOfPositions> positions = userPositionRepository.findAllByNetId(netId)
+                .stream()
+                .map(PositionEntity::getPosition)
+                .collect(Collectors.toList());
+        return positions;
+    }
+
+    /**
+     * Gets the user.
+     *
+     * @param netId netID
+     * @return user
+     * @throws NetIdNotFoundException exception
+     */
+    private User getUser(NetId netId) throws NetIdNotFoundException {
+        Optional<User> userOptional = userRepository.findByNetId(netId);
+        if (userOptional.isEmpty()) {
+            throw new NetIdNotFoundException();
+        }
+        User user = userOptional.get();
+        return user;
     }
 
     /**
