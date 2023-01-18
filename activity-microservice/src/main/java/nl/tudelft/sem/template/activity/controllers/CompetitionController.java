@@ -53,26 +53,37 @@ public class CompetitionController extends ActivityOfferController {
                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
             throws Exception {
         try {
-            TypesOfPositions position = request.getPosition();
-            boolean isActive = request.isActive();
-            LocalDateTime startTime = request.getStartTime();
-            LocalDateTime endTime = request.getEndTime();
-            String ownerId = request.getOwnerId();
-            String boatCertificate = request.getBoatCertificate();
-            TypesOfActivities type = request.getType();
-            String name = request.getName();
-            String description = request.getDescription();
-            String organisation = request.getOrganisation();
-            boolean isFemale = request.isFemale();
-            boolean isPro = request.isPro();
-
-            competitionOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
-                    ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro, authToken);
+            createCompetitionUsingRequest(request, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Helper method for createCompetition().
+     *
+     * @param request   request
+     * @param authToken authentication token
+     * @throws Exception if not successful
+     */
+    private void createCompetitionUsingRequest(CompetitionCreationRequestModel request, String authToken) throws Exception {
+        TypesOfPositions position = request.getPosition();
+        boolean isActive = request.isActive();
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        String ownerId = request.getOwnerId();
+        String boatCertificate = request.getBoatCertificate();
+        TypesOfActivities type = request.getType();
+        String name = request.getName();
+        String description = request.getDescription();
+        String organisation = request.getOrganisation();
+        boolean isFemale = request.isFemale();
+        boolean isPro = request.isPro();
+
+        competitionOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
+                ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro, authToken);
     }
 
     /**
@@ -122,20 +133,33 @@ public class CompetitionController extends ActivityOfferController {
             @RequestBody NetId netId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         try {
-            UserDetailsModel request = super.userMicroserviceAdapter.getUserDetailsModel(netId, authToken).getBody();
-            String organisation = request.getOrganisation();
-            boolean isFemale = request.getGender().equals("FEMALE");
-            boolean isPro = request.isPro();
-
-            List<TypesOfPositions> positions = request.getPositions();
-            List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
-            List<String> certificates = request.getCertificates();
-
-            return ResponseEntity.ok(competitionOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
-                    certificates, positions, availabilities));
+            return getAvailableCompetitionsModelResponseEntity(netId, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    /**
+     * Helper method for getFilteredCompetitions().
+     *
+     * @param netId     netId
+     * @param authToken authentication token
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    private ResponseEntity<AvailableCompetitionsModel> getAvailableCompetitionsModelResponseEntity(
+            NetId netId, String authToken) throws Exception {
+        UserDetailsModel request = super.userMicroserviceAdapter.getUserDetailsModel(netId, authToken).getBody();
+        String organisation = request.getOrganisation();
+        boolean isFemale = request.getGender().equals("FEMALE");
+        boolean isPro = request.isPro();
+
+        List<TypesOfPositions> positions = request.getPositions();
+        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
+        List<String> certificates = request.getCertificates();
+
+        return ResponseEntity.ok(competitionOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
+                certificates, positions, availabilities));
     }
 }
