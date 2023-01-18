@@ -51,26 +51,37 @@ public class CompetitionController extends ActivityOfferController {
                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
             throws Exception {
         try {
-            TypesOfPositions position = request.getPosition();
-            boolean isActive = request.isActive();
-            LocalDateTime startTime = request.getStartTime();
-            LocalDateTime endTime = request.getEndTime();
-            String ownerId = request.getOwnerId();
-            String boatCertificate = request.getBoatCertificate();
-            TypesOfActivities type = request.getType();
-            String name = request.getName();
-            String description = request.getDescription();
-            String organisation = request.getOrganisation();
-            boolean isFemale = request.isFemale();
-            boolean isPro = request.isPro();
-
-            activityOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
-                    ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro, authToken);
+            createCompetitionUsingRequest(request, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Helper method for createCompetition().
+     *
+     * @param request   request
+     * @param authToken authentication token
+     * @throws Exception if not successful
+     */
+    private void createCompetitionUsingRequest(CompetitionCreationRequestModel request, String authToken) throws Exception {
+        TypesOfPositions position = request.getPosition();
+        boolean isActive = request.isActive();
+        LocalDateTime startTime = request.getStartTime();
+        LocalDateTime endTime = request.getEndTime();
+        String ownerId = request.getOwnerId();
+        String boatCertificate = request.getBoatCertificate();
+        TypesOfActivities type = request.getType();
+        String name = request.getName();
+        String description = request.getDescription();
+        String organisation = request.getOrganisation();
+        boolean isFemale = request.isFemale();
+        boolean isPro = request.isPro();
+
+        activityOfferService.createCompetitionOffer(position, isActive, startTime, endTime,
+                ownerId, boatCertificate, type, name, description, organisation, isFemale, isPro, authToken);
     }
 
     /**
