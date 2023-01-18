@@ -30,3 +30,4 @@ codemr/
 *.db
 .idea
 /codemr/
+.DS_Store
