@@ -131,20 +131,33 @@ public class CompetitionController extends ActivityOfferController {
             @RequestBody NetId netId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         try {
-            UserDetailsModel request = super.userMicroserviceAdapter.getUserDetailsModel(netId, authToken).getBody();
-            String organisation = request.getOrganisation();
-            boolean isFemale = request.getGender().equals("FEMALE");
-            boolean isPro = request.isPro();
-
-            List<TypesOfPositions> positions = request.getPositions();
-            List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
-            List<String> certificates = request.getCertificates();
-
-            return ResponseEntity.ok(super.activityOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
-                    certificates, positions, availabilities));
+            return getAvailableCompetitionsModelResponseEntity(netId, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    /**
+     * Helper method for getFilteredCompetitions().
+     *
+     * @param netId     netId
+     * @param authToken authentication token
+     * @return ok response if successful
+     * @throws Exception if not successful
+     */
+    private ResponseEntity<AvailableCompetitionsModel> getAvailableCompetitionsModelResponseEntity(
+            NetId netId, String authToken) throws Exception {
+        UserDetailsModel request = super.userMicroserviceAdapter.getUserDetailsModel(netId, authToken).getBody();
+        String organisation = request.getOrganisation();
+        boolean isFemale = request.getGender().equals("FEMALE");
+        boolean isPro = request.isPro();
+
+        List<TypesOfPositions> positions = request.getPositions();
+        List<Tuple<LocalDateTime, LocalDateTime>> availabilities = request.getAvailabilities();
+        List<String> certificates = request.getCertificates();
+
+        return ResponseEntity.ok(super.activityOfferService.getFilteredCompetitionOffers(organisation, isFemale, isPro,
+                certificates, positions, availabilities));
     }
 }
