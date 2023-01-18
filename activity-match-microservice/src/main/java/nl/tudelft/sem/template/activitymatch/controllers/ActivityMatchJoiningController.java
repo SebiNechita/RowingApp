@@ -1,8 +1,12 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class ActivityMatchJoiningController extends ActivityMatchController {
+public class ActivityMatchJoiningController {
+    protected final transient ActivityMatchCreationService activityMatchCreationService;
+    protected final transient ActivityMatchJoiningService activityMatchJoiningService;
+    static final Logger logger = LoggerFactory.getLogger(ActivityMatchJoiningController.class.getName());
+
 
     /**
      * Instantiates a new ActivityMatchJoiningController.
      *
-     * @param activityMatchService activityMatchService
+     * @param activityMatchCreationService activityMatchCreationService
+     * @param activityMatchJoiningService activityMatchJoiningService
      */
     @Autowired
-    public ActivityMatchJoiningController(ActivityMatchService activityMatchService) {
-        super(activityMatchService);
+    public ActivityMatchJoiningController(ActivityMatchCreationService activityMatchCreationService,
+                                          ActivityMatchJoiningService activityMatchJoiningService) {
+        this.activityMatchCreationService = activityMatchCreationService;
+        this.activityMatchJoiningService = activityMatchJoiningService;
     }
 
     /**
@@ -38,7 +49,7 @@ public class ActivityMatchJoiningController extends ActivityMatchController {
             throws ResponseStatusException {
         try {
             String ownerNetId = SecurityContextHolder.getContext().getAuthentication().getName();
-            activityMatchService.setParticipant(request, ownerNetId);
+            activityMatchJoiningService.setParticipant(request);
             return ResponseEntity.ok("Successfully set participant");
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
@@ -59,7 +70,7 @@ public class ActivityMatchJoiningController extends ActivityMatchController {
             throws ResponseStatusException {
         try {
             String userNetId = SecurityContextHolder.getContext().getAuthentication().getName();
-            activityMatchService.addUserToJoinQueue(request, userNetId, authToken);
+            activityMatchJoiningService.addUserToJoinQueue(request, userNetId, authToken);
             return ResponseEntity.ok("Successfully added participant to activity");
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());

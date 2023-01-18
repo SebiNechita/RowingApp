@@ -1,9 +1,13 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,16 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class ActivityMatchCreationController extends ActivityMatchController {
+public class ActivityMatchCreationController {
+    protected final transient ActivityMatchCreationService activityMatchCreationService;
+    static final Logger logger = LoggerFactory.getLogger(ActivityMatchCreationController.class.getName());
 
     /**
      * Instantiates a new ActivityMatchCreationController.
      *
-     * @param activityMatchService activityMatchService
+     * @param activityMatchCreationService matchCreationService
      */
     @Autowired
-    public ActivityMatchCreationController(ActivityMatchService activityMatchService) {
-        super(activityMatchService);
+    public ActivityMatchCreationController(ActivityMatchCreationService activityMatchCreationService) {
+        this.activityMatchCreationService = activityMatchCreationService;
     }
 
     /**
@@ -35,7 +41,7 @@ public class ActivityMatchCreationController extends ActivityMatchController {
     public ResponseEntity createActivityMatch(@RequestBody MatchCreationRequestModel request)
             throws ResponseStatusException {
         try {
-            activityMatchService.createActivityMatch(request);
+            activityMatchCreationService.createActivityMatch(request);
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
@@ -54,7 +60,7 @@ public class ActivityMatchCreationController extends ActivityMatchController {
     public ResponseEntity<PendingOffersResponseModel> getPendingOffers(@RequestBody PendingOffersRequestModel request)
             throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityMatchService.getPendingOffers(request));
+            return ResponseEntity.ok(activityMatchCreationService.getPendingOffers(request));
         } catch (ResponseStatusException e) {
             logger.error(e.getMessage());
             throw e;
