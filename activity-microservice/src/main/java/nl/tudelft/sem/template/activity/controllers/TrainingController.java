@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.TrainingOffer;
 import nl.tudelft.sem.template.activity.services.ActivityOfferService;
+import nl.tudelft.sem.template.activity.services.TrainingOfferService;
 import nl.tudelft.sem.template.common.communication.UserMicroserviceAdapter;
 import nl.tudelft.sem.template.common.models.activity.ManyTrainingsCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activity.TrainingCreationRequestModel;
@@ -28,16 +29,18 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class TrainingController extends ActivityOfferController {
 
+    private final transient TrainingOfferService trainingOfferService;
+
     /**
      * Instantiates a new Training Controller.
      *
-     * @param activityOfferService    activityOfferService
      * @param userMicroserviceAdapter userMicroserviceAdapter
      */
     @Autowired
-    public TrainingController(ActivityOfferService activityOfferService,
-                              UserMicroserviceAdapter userMicroserviceAdapter) {
-        super(activityOfferService, userMicroserviceAdapter);
+    public TrainingController(UserMicroserviceAdapter userMicroserviceAdapter,
+                              TrainingOfferService trainingOfferService) {
+        super(userMicroserviceAdapter);
+        this.trainingOfferService = trainingOfferService;
     }
 
     /**
@@ -62,7 +65,7 @@ public class TrainingController extends ActivityOfferController {
             String name = request.getName();
             String description = request.getDescription();
 
-            activityOfferService.createTrainingOffer(position, isActive, startTime, endTime,
+            trainingOfferService.createTrainingOffer(position, isActive, startTime, endTime,
                     ownerId, boatCertificate, type, name, description, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -93,7 +96,7 @@ public class TrainingController extends ActivityOfferController {
             String name = request.getName();
             String description = request.getDescription();
 
-            activityOfferService.createManyTrainingOffers(positions, isActive, startTime, endTime,
+            trainingOfferService.createManyTrainingOffers(positions, isActive, startTime, endTime,
                     ownerId, boatCertificate, type, name, description, authToken);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -113,7 +116,7 @@ public class TrainingController extends ActivityOfferController {
             @PathVariable("netId") NetId netId, @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken)
             throws ResponseStatusException {
         try {
-            List<TrainingOffer> trainings = activityOfferService.getFilteredTrainings(netId, authToken).stream()
+            List<TrainingOffer> trainings = trainingOfferService.getFilteredTrainings(netId, authToken).stream()
                     .filter(offer -> offer instanceof TrainingOffer)
                     .map(offer -> (TrainingOffer) offer)
                     .collect(Collectors.toList());
@@ -133,7 +136,7 @@ public class TrainingController extends ActivityOfferController {
     @GetMapping("/get/trainings")
     public ResponseEntity<List<ActivityOffer>> getTraining() throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(activityOfferService.getAllTrainingOffers().stream()
+            return ResponseEntity.ok(trainingOfferService.getAllTrainingOffers().stream()
                     .filter(offer -> offer instanceof TrainingOffer)
                     .map(offer -> (TrainingOffer) offer)
                     .collect(Collectors.toList()));
