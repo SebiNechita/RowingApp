@@ -33,7 +33,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class CompetitionOfferServiceTest {
 
     @Autowired
-    private transient ActivityOfferService activityService;
+    private transient CompetitionOfferService activityService;
     @Autowired
     private transient ActivityOfferRepository activityOfferRepository;
     @Autowired

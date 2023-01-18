@@ -61,11 +61,19 @@ public class DataValidation {
      */
     public boolean validateData(LocalDateTime startTime, LocalDateTime endTime, String name, String description,
                                 String certificate, String authToken) throws Exception {
-        boolean isTimeOk = validateTime(startTime, endTime);
-        boolean isNameDescriptionOk = validateNameAndDescription(name, description);
-        boolean isCertificateOk = validateCertificate(certificate, authToken);
-
-        return isTimeOk && isNameDescriptionOk && isCertificateOk;
+        try {
+            boolean isTimeOk = validateTime(startTime, endTime);
+            boolean isNameDescriptionOk = validateNameAndDescription(name, description);
+            boolean isCertificateOk = validateCertificate(certificate, authToken);
+            return isTimeOk && isNameDescriptionOk && isCertificateOk;
+        } catch (NotCorrectIntervalException interEx) {
+            System.err.println("Not a correct interval");
+        } catch (EmptyStringException strEx) {
+            System.err.println("Empty string was provided");
+        } catch (InvalidCertificateException certEx) {
+            System.err.println("Invalid certificate was provided");
+        }
+        return false;
     }
 
     /**
