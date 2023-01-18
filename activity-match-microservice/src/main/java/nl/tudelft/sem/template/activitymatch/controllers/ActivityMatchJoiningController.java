@@ -5,6 +5,8 @@ import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningServic
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class ActivityMatchJoiningController extends ActivityMatchController {
+public class ActivityMatchJoiningController {
+    protected final transient ActivityMatchCreationService activityMatchCreationService;
+    protected final transient ActivityMatchJoiningService activityMatchJoiningService;
+    static final Logger logger = LoggerFactory.getLogger(ActivityMatchJoiningController.class.getName());
+
 
     /**
      * Instantiates a new ActivityMatchJoiningController.
      *
-     * @param activityMatchService activityMatchService
      * @param activityMatchCreationService activityMatchCreationService
      * @param activityMatchJoiningService activityMatchJoiningService
      */
     @Autowired
-    public ActivityMatchJoiningController(ActivityMatchService activityMatchService,
-                                          ActivityMatchCreationService activityMatchCreationService,
+    public ActivityMatchJoiningController(ActivityMatchCreationService activityMatchCreationService,
                                           ActivityMatchJoiningService activityMatchJoiningService) {
-        super(activityMatchService, activityMatchCreationService, activityMatchJoiningService);
+        this.activityMatchCreationService = activityMatchCreationService;
+        this.activityMatchJoiningService = activityMatchJoiningService;
     }
 
     /**

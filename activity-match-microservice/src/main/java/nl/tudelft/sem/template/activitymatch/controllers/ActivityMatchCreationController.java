@@ -1,10 +1,13 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
+import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,18 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class ActivityMatchCreationController extends ActivityMatchController {
+public class ActivityMatchCreationController {
+    protected final transient ActivityMatchCreationService activityMatchCreationService;
+    static final Logger logger = LoggerFactory.getLogger(ActivityMatchCreationController.class.getName());
 
     /**
      * Instantiates a new ActivityMatchCreationController.
      *
-     * @param activityMatchService activityMatchService
      * @param activityMatchCreationService matchCreationService
      */
     @Autowired
-    public ActivityMatchCreationController(ActivityMatchService activityMatchService,
-                                           ActivityMatchCreationService activityMatchCreationService) {
-        super(activityMatchService, activityMatchCreationService);
+    public ActivityMatchCreationController(ActivityMatchCreationService activityMatchCreationService) {
+        this.activityMatchCreationService = activityMatchCreationService;
     }
 
     /**
