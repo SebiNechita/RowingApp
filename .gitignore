@@ -6,6 +6,7 @@ gradle-app.setting
 !gradle/wrapper/gradle-wrapper.jar
 **/build/
 .gradletasknamecache
+codemr/
 
 ### Java ###
 # Compiled class file
