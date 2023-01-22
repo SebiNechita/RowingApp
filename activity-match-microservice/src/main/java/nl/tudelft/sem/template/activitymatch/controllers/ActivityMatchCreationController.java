@@ -1,7 +1,5 @@
 package nl.tudelft.sem.template.activitymatch.controllers;
 
-import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningService;
-import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
 import nl.tudelft.sem.template.common.models.activitymatch.MatchCreationRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestModel;

@@ -1,5 +1,9 @@
 package nl.tudelft.sem.template.activitymatch.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityJoinQueueEntry;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityMatch;
 import nl.tudelft.sem.template.activitymatch.repositories.ActivityJoinQueueRepository;
@@ -10,11 +14,6 @@ import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersRequestM
 import nl.tudelft.sem.template.common.models.activitymatch.PendingOffersResponseModel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ActivityMatchCreationService {

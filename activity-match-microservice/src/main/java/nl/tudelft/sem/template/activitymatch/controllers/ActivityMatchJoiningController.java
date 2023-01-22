@@ -2,7 +2,6 @@ package nl.tudelft.sem.template.activitymatch.controllers;
 
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchCreationService;
 import nl.tudelft.sem.template.activitymatch.services.ActivityMatchJoiningService;
-import nl.tudelft.sem.template.activitymatch.services.ActivityMatchService;
 import nl.tudelft.sem.template.common.models.activitymatch.AddUserToJoinQueueRequestModel;
 import nl.tudelft.sem.template.common.models.activitymatch.SetParticipantRequestModel;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ public class ActivityMatchJoiningController {
      * Instantiates a new ActivityMatchJoiningController.
      *
      * @param activityMatchCreationService activityMatchCreationService
-     * @param activityMatchJoiningService activityMatchJoiningService
+     * @param activityMatchJoiningService  activityMatchJoiningService
      */
     @Autowired
     public ActivityMatchJoiningController(ActivityMatchCreationService activityMatchCreationService,
@@ -48,7 +47,7 @@ public class ActivityMatchJoiningController {
     public ResponseEntity<String> setParticipant(@RequestBody SetParticipantRequestModel request)
             throws ResponseStatusException {
         try {
-            String ownerNetId = SecurityContextHolder.getContext().getAuthentication().getName();
+            //          String ownerNetId = SecurityContextHolder.getContext().getAuthentication().getName();
             activityMatchJoiningService.setParticipant(request);
             return ResponseEntity.ok("Successfully set participant");
         } catch (ResponseStatusException e) {

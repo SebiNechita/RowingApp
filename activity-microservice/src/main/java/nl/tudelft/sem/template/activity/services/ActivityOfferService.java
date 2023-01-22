@@ -1,39 +1,15 @@
 package nl.tudelft.sem.template.activity.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import nl.tudelft.sem.template.activity.domain.ActivityOffer;
 import nl.tudelft.sem.template.activity.domain.CompetitionOffer;
-import nl.tudelft.sem.template.activity.domain.TrainingOffer;
-import nl.tudelft.sem.template.activity.domain.TrainingOfferBuilder;
-import nl.tudelft.sem.template.activity.domain.exceptions.EmptyStringException;
-import nl.tudelft.sem.template.activity.domain.exceptions.InvalidCertificateException;
-import nl.tudelft.sem.template.activity.domain.exceptions.NotCorrectIntervalException;
 import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
-import nl.tudelft.sem.template.common.models.activity.AvailableCompetitionsModel;
-import nl.tudelft.sem.template.common.models.activity.CompetitionResponseModel;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
-import nl.tudelft.sem.template.common.models.activity.TypesOfActivities;
-import nl.tudelft.sem.template.common.models.activity.TypesOfPositions;
-import nl.tudelft.sem.template.common.models.activity.TypesOfPositionsDeserializer;
-import nl.tudelft.sem.template.common.models.user.NetId;
-import nl.tudelft.sem.template.common.models.user.Tuple;
-import nl.tudelft.sem.template.common.models.user.TupleDeserializer;
 import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 public class ActivityOfferService {

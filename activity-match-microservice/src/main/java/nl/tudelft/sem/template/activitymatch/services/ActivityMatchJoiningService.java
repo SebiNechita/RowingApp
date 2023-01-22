@@ -1,5 +1,7 @@
 package nl.tudelft.sem.template.activitymatch.services;
 
+import java.util.List;
+import java.util.Optional;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityJoinQueueEntry;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityMatch;
 import nl.tudelft.sem.template.activitymatch.domain.ActivityParticipant;
@@ -14,9 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class ActivityMatchJoiningService {
     private final transient ActivityJoinQueueRepository activityJoinQueueRepository;
@@ -27,15 +26,15 @@ public class ActivityMatchJoiningService {
     /**
      * Instantiates a new ActivityMatchJoiningService.
      *
-     * @param activityMatchRepository activityMatchRepository
-     * @param activityJoinQueueRepository activityJoinQueueRepository
-     * @param activityParticipantRepository activityParticipantRepository
+     * @param activityMatchRepository          activityMatchRepository
+     * @param activityJoinQueueRepository      activityJoinQueueRepository
+     * @param activityParticipantRepository    activityParticipantRepository
      * @param activityOfferMicroserviceAdapter activityOfferMicroserviceAdapter
      */
     public ActivityMatchJoiningService(ActivityMatchRepository activityMatchRepository,
-                                ActivityJoinQueueRepository activityJoinQueueRepository,
-                                ActivityParticipantRepository activityParticipantRepository,
-                                ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter) {
+                                       ActivityJoinQueueRepository activityJoinQueueRepository,
+                                       ActivityParticipantRepository activityParticipantRepository,
+                                       ActivityOfferMicroserviceAdapter activityOfferMicroserviceAdapter) {
         this.activityMatchRepository = activityMatchRepository;
         this.activityJoinQueueRepository = activityJoinQueueRepository;
         this.activityParticipantRepository = activityParticipantRepository;
@@ -73,7 +72,7 @@ public class ActivityMatchJoiningService {
      *
      * @param request the request wrapped in a SetParticipantRequestModel.
      * @throw ResponseStatusException when the given activity ID does not exist, or the caller of the endpoint is not
-     *                                the owner of the activity.
+     *      the owner of the activity.
      */
     public void setParticipant(SetParticipantRequestModel request)
             throws ResponseStatusException {

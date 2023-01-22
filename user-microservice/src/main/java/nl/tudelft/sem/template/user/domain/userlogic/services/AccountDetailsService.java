@@ -83,7 +83,13 @@ public class AccountDetailsService {
         return user;
     }
 
-    private AmateurUser setupAmateurUser(NetId netId, Password password, Gender gender, List<TypesOfPositions> positions, TreeMap<LocalDateTime, LocalDateTime> availabilities, List<String> certificates, String organization) {
+    private AmateurUser setupAmateurUser(NetId netId,
+                                         Password password,
+                                         Gender gender,
+                                         List<TypesOfPositions> positions,
+                                         TreeMap<LocalDateTime, LocalDateTime> availabilities,
+                                         List<String> certificates,
+                                         String organization) {
         AmateurBuilder builder = new AmateurBuilder();
 
         // Hash password
@@ -106,13 +112,10 @@ public class AccountDetailsService {
 
     private void dataValidation(NetId netId, TreeMap<LocalDateTime, LocalDateTime> availabilities)
             throws NetIdAlreadyInUseException, AvailabilityOverlapException {
-        boolean uniqueId = checkNetIdIsUnique(netId);
-        boolean availabilitiesOverlap = Availability.overlap(availabilities);
-
-        if (!uniqueId) {
+        if (!checkNetIdIsUnique(netId)) {
             throw new NetIdAlreadyInUseException(netId);
         }
-        if (availabilitiesOverlap) {
+        if (Availability.overlap(availabilities)) {
             throw new AvailabilityOverlapException();
         }
     }
@@ -193,6 +196,7 @@ public class AccountDetailsService {
 
     /**
      * Gets the positions.
+     *
      * @param netId netID
      * @return list of positions
      */
