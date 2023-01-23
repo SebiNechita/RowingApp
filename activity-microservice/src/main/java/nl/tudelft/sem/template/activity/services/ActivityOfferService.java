@@ -10,8 +10,10 @@ import nl.tudelft.sem.template.activity.repositories.ActivityOfferRepository;
 import nl.tudelft.sem.template.common.models.activity.ParticipantIsEligibleRequestModel;
 import nl.tudelft.sem.template.common.models.user.UserDetailsModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@Service
 public class ActivityOfferService {
 
     private final transient ActivityOfferRepository activityOfferRepository;
