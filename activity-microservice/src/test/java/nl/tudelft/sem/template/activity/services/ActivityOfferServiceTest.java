@@ -43,25 +43,17 @@ public class ActivityOfferServiceTest {
     @Autowired
     private transient ActivityOfferRepository mockActivityOfferRepository;
     @Autowired
-    private transient DataValidation mockDataValidation;
-    @Autowired
     private transient ActivityClient mockActivityClient;
     @Autowired
     private transient UserModelParser mockUserModelParser;
-    @Autowired
-    private transient MockMvc mockMvc;
 
-    private TypesOfPositions position;
-    private boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String ownerId;
     private String boatCertificate;
-    private TypesOfActivities type;
     private String name;
     private String description;
     private String organisation;
-    private boolean isFemale;
     private boolean isPro;
     private String authToken;
 
@@ -70,18 +62,15 @@ public class ActivityOfferServiceTest {
      */
     @BeforeEach
     public void setup() {
-        this.isActive = true;
         this.startTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
                 LocalTime.of(10, 0, 0));
         this.endTime = LocalDateTime.of(LocalDate.of(2022, 1, 8),
                 LocalTime.of(12, 0, 0));
         this.ownerId = "papiez";
         this.boatCertificate = "C4";
-        this.type = TypesOfActivities.COMPETITION;
         this.name = "Team Blue Training";
         this.description = "Looking for a new member";
         this.organisation = "teamAlpha";
-        this.isFemale = true;
         this.isPro = true;
         this.authToken = "pwd";
     }
@@ -103,7 +92,6 @@ public class ActivityOfferServiceTest {
                 .setOrganisation(organisation)
                 .setPro(isPro)
                 .build();
-        when(mockDataValidation.validateData(any(), any(), any(), any(), any(), any())).thenCallRealMethod();
         when(mockActivityOfferRepository.findById(1)).thenReturn(Optional.of(competition));
         when(mockActivityClient.getUserDetails(anyString(), anyString())).thenReturn(new ResponseEntitySimulator());
 
@@ -112,11 +100,11 @@ public class ActivityOfferServiceTest {
         String modelOrganisation = organisation;
         boolean modelPro = true;
         List<TypesOfPositions> modelPositions = Arrays.asList(TypesOfPositions.COX, TypesOfPositions.COACH);
-        List<Tuple<LocalDateTime, LocalDateTime>> modelAvailabilities = Arrays.asList(
+        List<Tuple<LocalDateTime, LocalDateTime>> modelAvailabilities = List.of(
                 new Tuple<>((LocalDateTime.of(LocalDate.of(2022, 1, 8),
                         LocalTime.of(10, 0, 0))), (LocalDateTime.of(LocalDate.of(2022, 1, 8),
                         LocalTime.of(12, 0, 0)))));
-        List<String> modelCertificates = Arrays.asList("C4");
+        List<String> modelCertificates = List.of("C4");
         UserDetailsModel userDetailsModel = new UserDetailsModel(modelNetId,
                 modelGender,
                 modelOrganisation,
@@ -125,7 +113,7 @@ public class ActivityOfferServiceTest {
                 modelAvailabilities,
                 modelCertificates);
         when(mockUserModelParser.getModel(any())).thenReturn(userDetailsModel);
-        when(mockActivityOfferRepository.findAll()).thenReturn(Arrays.asList(competition));
+        when(mockActivityOfferRepository.findAll()).thenReturn(List.of(competition));
         ParticipantIsEligibleRequestModel model = new ParticipantIsEligibleRequestModel(1, "mihai");
         assertTrue(activityOfferService.participantIsEligible(model, authToken));
     }
