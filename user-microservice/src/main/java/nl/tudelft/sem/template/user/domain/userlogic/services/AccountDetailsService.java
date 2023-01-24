@@ -215,7 +215,7 @@ public class AccountDetailsService {
      * @return user
      * @throws NetIdNotFoundException exception
      */
-    private User getUser(NetId netId) throws NetIdNotFoundException {
+    public User getUser(NetId netId) throws NetIdNotFoundException {
         Optional<User> userOptional = userRepository.findByNetId(netId);
         if (userOptional.isEmpty()) {
             throw new NetIdNotFoundException();
